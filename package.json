@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "polkadot-dev-build-ts",
-    "build:interfaces": "ts-node packages/types/scripts/generate.ts",
+    "build:interfaces": "node -r ts-node/register packages/types/scripts/generate.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx . && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
