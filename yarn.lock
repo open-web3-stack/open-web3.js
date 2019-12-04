@@ -1865,6 +1865,16 @@
     typescript "^3.7.2"
     vuepress "^1.2.0"
 
+"@polkadot/metadata@^0.98.0-beta.9":
+  version "0.98.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@polkadot/metadata/-/metadata-0.98.0-beta.9.tgz#8e1cd69315a318d4f359aeaf34197c6f00c4b224"
+  integrity sha512-eNMekzImAQP4bF6/TOS3hlpTiRYYLfkmuRXUd67LZ8JaQP2Ufq8EI213E9Pq8sMFKrvIZkA9OsANfn8oKcMxkA==
+  dependencies:
+    "@babel/runtime" "^7.7.4"
+    "@polkadot/types" "^0.98.0-beta.9"
+    "@polkadot/util" "^1.7.1"
+    "@polkadot/util-crypto" "^1.7.1"
+
 "@polkadot/ts@^0.1.86":
   version "0.1.86"
   resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.86.tgz#aee3880c0e90750f234dfa56d5bfc49b91836abb"
