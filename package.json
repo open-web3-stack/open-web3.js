@@ -20,11 +20,11 @@
     "test": "echo no test yet"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.0",
-    "@babel/register": "^7.8.0",
-    "@babel/runtime": "^7.8.0",
+    "@babel/core": "^7.8.3",
+    "@babel/register": "^7.8.3",
+    "@babel/runtime": "^7.8.3",
     "@polkadot/dev": "^0.32.14",
     "@polkadot/ts": "^0.1.90",
-    "ts-node": "^8.6.1"
+    "ts-node": "^8.6.2"
   }
 }
