@@ -25,8 +25,82 @@ describe("Scanner", () => {
   it("getBlock", async () => {
     await expect(scanner.getBlock(-1)).rejects.toThrow();
     expect(await scanner.getBlock(1)).toBeDefined();
-    // expect(await scanner.getBlock(720000)).toBe('哈哈哈哈')
-    // await expect(scanner.getBlockHash(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
-    // await expect(scanner.getBlockHash(1000000000000000)).rejects.toThrow();
+    expect(await scanner.getBlock(0)).toBeDefined();
+    await expect(scanner.getBlock(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
+    await expect(scanner.getBlock(1000000000000000)).rejects.toThrow();
+  });
+
+  it("getHeader", async () => {
+    expect(await scanner.getHeader()).toBeDefined();
+    await expect(scanner.getHeader(-1)).rejects.toThrow();
+    expect(await scanner.getHeader(1)).toBeDefined();
+    expect(await scanner.getHeader(0)).toBeDefined();
+    await expect(scanner.getHeader(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
+    await expect(scanner.getHeader(1000000000000000)).rejects.toThrow();
+  });
+
+  it("subcribeNewHead", done => {
+    let no = 0;
+    let initBlockNumber: number;
+    const s = scanner.subscribeNewHead().subscribe(head => {
+      if (no === 0) {
+        initBlockNumber = Number(head.number);
+      }
+      if (no >= 5) {
+        s.unsubscribe();
+        expect(initBlockNumber + 5).toBe(Number(head.number));
+        done();
+      } else {
+        no++;
+      }
+    });
+  });
+
+  it("subcribeFinalizedHead", done => {
+    let no = 0;
+    let initBlockNumber: number;
+    const s = scanner.subscribeNewHead("finalize").subscribe(head => {
+      if (no === 0) {
+        initBlockNumber = Number(head.number);
+      }
+      if (no >= 5) {
+        s.unsubscribe();
+        expect(initBlockNumber + 5).toBe(Number(head.number));
+        done();
+      } else {
+        no++;
+      }
+    });
+  });
+
+  it("subcribe with a big confirmation", done => {
+    const s = scanner.subscribeNewHead(Number.MAX_SAFE_INTEGER).subscribe(head => {
+      s.unsubscribe();
+      expect(Number(head.number)).toBe(0);
+      done();
+    });
+  });
+
+  it.only("subcribe with a normal confirmation", async done => {
+    let no = 0;
+    let initBlockNumber: number;
+
+    const currentBlockNumber = Number((await scanner.getHeader()).number);
+
+    const s = scanner.subscribeNewHead(100).subscribe(head => {
+      if (no === 0) {
+        initBlockNumber = Number(head.number);
+      }
+
+      expect(currentBlockNumber - Number(head.number) > 80).toBeTruthy();
+
+      if (no >= 5) {
+        s.unsubscribe();
+        expect(initBlockNumber + 5).toBe(Number(head.number));
+        done();
+      } else {
+        no++;
+      }
+    });
   });
 });
