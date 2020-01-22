@@ -1,14 +1,26 @@
 import { isHex, isNumber } from "@polkadot/util";
+import { Metadata, TypeRegistry } from "@polkadot/types";
+import { Registry } from "@polkadot/types/types";
 import { Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
-import { ScannerOptions, RpcProvider, Hash, Block, Header, Confirmation } from "./types";
+import { ScannerOptions, RpcProvider, Hash, Block, Header, Confirmation, RuntimeVersion } from "./types";
 
 class Scanner {
   private rpcProvider: RpcProvider;
+  private metadataCache: Record<
+    string,
+    {
+      bytes: Hash;
+      metadata: Metadata;
+    }
+  >;
+  public readonly registry: Registry;
 
   constructor(options: ScannerOptions) {
     this.rpcProvider = options.provider;
+    this.metadataCache = {};
+    this.registry = options.registry || new TypeRegistry();
   }
 
   private createMethodSubscribe<T>(methods: string[], ...params: any[]) {
@@ -47,8 +59,8 @@ class Scanner {
     });
   }
 
-  public async getHeader(blockNumber?: number): Promise<Header> {
-    const blockHash = await this.getBlockHash(blockNumber);
+  public async getHeader(at?: number | Hash): Promise<Header> {
+    const blockHash = await this.getBlockHash(at);
     return this.rpcProvider.send("chain_getHeader", [blockHash]);
   }
 
@@ -60,9 +72,28 @@ class Scanner {
     }
   }
 
-  public async getBlock(blockNumber?: number | Hash): Promise<Block> {
-    const blockHash = await this.getBlockHash(blockNumber);
-    return await this.rpcProvider.send("chain_getBlock", [blockHash]);
+  public async getBlock(at?: number | Hash): Promise<Block> {
+    const blockHash = await this.getBlockHash(at);
+    return this.rpcProvider.send("chain_getBlock", [blockHash]);
+  }
+
+  public async getRuntimeVersion(at?: number | Hash): Promise<RuntimeVersion> {
+    const blockHash = await this.getBlockHash(at);
+    return this.rpcProvider.send("state_getRuntimeVersion", [blockHash]);
+  }
+
+  public async getMetadata(at?: number | Hash) {
+    const blockHash = await this.getBlockHash(at);
+    const runtimeVersion = await this.getRuntimeVersion(at);
+    const cacheKey = `${runtimeVersion.specName}-${runtimeVersion.specVersion}`;
+    if (!this.metadataCache[cacheKey]) {
+      const rpcdata: string = await this.rpcProvider.send("state_getMetadata", [blockHash]);
+      this.metadataCache[cacheKey] = {
+        bytes: rpcdata,
+        metadata: new Metadata(this.registry, rpcdata)
+      };
+    }
+    return this.metadataCache[cacheKey];
   }
 
   public subscribeNewHead(confirmation?: Confirmation) {

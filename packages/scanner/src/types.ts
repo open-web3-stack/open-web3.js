@@ -1,4 +1,5 @@
 import { ProviderInterface } from "@polkadot/rpc-provider/types";
+import { Registry } from "@polkadot/types/types";
 
 export type RpcProvider = ProviderInterface;
 
@@ -9,6 +10,7 @@ export type Confirmation = "finalize" | number | null;
 
 export interface ScannerOptions {
   provider: RpcProvider;
+  registry?: Registry;
 }
 
 export interface Header {
@@ -27,4 +29,13 @@ export interface Block {
   };
   header: Header;
   justification: null | Hash;
+}
+
+export interface RuntimeVersion {
+  apis: [Hash, number][];
+  authoringVersion: number;
+  implName: string;
+  implVersion: number;
+  specName: string;
+  specVersion: number;
 }

@@ -39,6 +39,18 @@ describe("Scanner", () => {
     await expect(scanner.getHeader(1000000000000000)).rejects.toThrow();
   });
 
+  it("getRuntimeVersion", async () => {
+    expect(await scanner.getRuntimeVersion(0)).toBeDefined();
+    expect(await scanner.getRuntimeVersion()).toBeDefined();
+  });
+
+  it.only("getMetadata", async () => {
+    const request1 = await scanner.getMetadata(0)
+    const request2 = await scanner.getMetadata(0)
+    expect(request1).toEqual(request2);
+    // expect(await scanner.getMetadata()).toBeDefined();
+  });
+
   it("subcribeNewHead", done => {
     let no = 0;
     let initBlockNumber: number;
@@ -81,7 +93,7 @@ describe("Scanner", () => {
     });
   });
 
-  it.only("subcribe with a normal confirmation", async done => {
+  it("subcribe with a normal confirmation", async done => {
     let no = 0;
     let initBlockNumber: number;
 
@@ -91,7 +103,6 @@ describe("Scanner", () => {
       if (no === 0) {
         initBlockNumber = Number(head.number);
       }
-
       expect(currentBlockNumber - Number(head.number) > 80).toBeTruthy();
 
       if (no >= 5) {
