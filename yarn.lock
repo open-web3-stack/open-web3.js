@@ -2686,16 +2686,6 @@
     "@polkadot/util" "^1.8.1"
     "@polkadot/util-crypto" "^1.8.1"
 
-"@polkadot/metadata@^1.0.0-beta.14":
-  version "1.0.0-beta.14"
-  resolved "https://registry.yarnpkg.com/@polkadot/metadata/-/metadata-1.0.0-beta.14.tgz#33487ade0cffcc4599bf6b2776027a84ed589061"
-  integrity sha512-C/rN+dLVvzognD24glD6R69NnAN1cciVGLf6sHrKb6eXiewmRRvRiKb/le8aqnWBYXHApqjlWHobEEtR0LpPYg==
-  dependencies:
-    "@babel/runtime" "^7.7.7"
-    "@polkadot/types" "^1.0.0-beta.14"
-    "@polkadot/util" "^2.0.0-beta.4"
-    "@polkadot/util-crypto" "^2.0.0-beta.4"
-
 "@polkadot/metadata@^1.0.0-beta.8":
   version "1.0.0-beta.8"
   resolved "https://registry.yarnpkg.com/@polkadot/metadata/-/metadata-1.0.0-beta.8.tgz#823fa4acd840cc2b2b3279539b261111a7f99a4d"
@@ -2731,19 +2721,6 @@
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.31"
 
-"@polkadot/rpc-provider@^1.0.0-beta.8":
-  version "1.0.0-beta.14"
-  resolved "https://registry.yarnpkg.com/@polkadot/rpc-provider/-/rpc-provider-1.0.0-beta.14.tgz#599b6be4bc44de4094cae7af4ab54e74f6ad468c"
-  integrity sha512-zzREjefXYHFmbu2BXCbqyZHAoG3meErAmoTVqAo5JSqtMqOlBn4m0VVfRd1aC6feFSilCmsqFp8NWqgGbKPxtQ==
-  dependencies:
-    "@babel/runtime" "^7.7.7"
-    "@polkadot/metadata" "^1.0.0-beta.14"
-    "@polkadot/util" "^2.0.0-beta.4"
-    "@polkadot/util-crypto" "^2.0.0-beta.4"
-    eventemitter3 "^4.0.0"
-    isomorphic-fetch "^2.2.1"
-    websocket "^1.0.31"
-
 "@polkadot/ts@^0.1.90":
   version "0.1.90"
   resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.90.tgz#b318c91b4eacc48f1d7614371c8f8a126fc2cc7e"
@@ -2760,18 +2737,6 @@
     "@polkadot/metadata" "^0.100.1"
     "@polkadot/util" "^1.8.1"
     "@polkadot/util-crypto" "^1.8.1"
-    "@types/memoizee" "^0.4.3"
-    memoizee "^0.4.14"
-
-"@polkadot/types@^1.0.0-beta.14":
-  version "1.0.0-beta.14"
-  resolved "https://registry.yarnpkg.com/@polkadot/types/-/types-1.0.0-beta.14.tgz#f675dbbdaa11f086989d86471ecc44f405a5e9ec"
-  integrity sha512-slv6ztmwHlaco2IIrROYm9W94vCxrkB1HQzvIa5dxmUYgjV8EUbqdJoAEX7XEQpceg+6PiAfsLyox1iQQzSHOw==
-  dependencies:
-    "@babel/runtime" "^7.7.7"
-    "@polkadot/metadata" "^1.0.0-beta.14"
-    "@polkadot/util" "^2.0.0-beta.4"
-    "@polkadot/util-crypto" "^2.0.0-beta.4"
     "@types/memoizee" "^0.4.3"
     memoizee "^0.4.14"
 
@@ -13159,7 +13124,7 @@ typedoc@^0.15.6:
     typedoc-default-themes "^0.6.3"
     typescript "3.7.x"
 
-typescript@3.7.x, typescript@^3.0.3, typescript@^3.6.4, typescript@^3.7.4:
+typescript@3.7.x, typescript@^3.0.3, typescript@^3.6.4, typescript@^3.7.2, typescript@^3.7.4:
   version "3.7.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.5.tgz#0692e21f65fd4108b9330238aac11dd2e177a1ae"
   integrity sha512-/P5lkRXkWHNAbcJIiHPfRoKqyd7bsyCma1hZNUGfn20qm64T6ZBlrzprymeu918H+mB/0rIg2gGK/BXkhhYgBw==

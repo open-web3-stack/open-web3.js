@@ -1,5 +1,8 @@
-import { isHex, isNumber } from "@polkadot/util";
-import { Metadata, TypeRegistry } from "@polkadot/types";
+import { isHex, isNumber, u8aToU8a } from "@polkadot/util";
+import { TypeRegistry, StorageKey, Vec, EventRecord } from "@polkadot/types";
+import Metadata from "@polkadot/metadata/Decorated";
+import { createTypeUnsafe } from "@polkadot/types/codec";
+
 import { Registry } from "@polkadot/types/types";
 import { Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
@@ -11,6 +14,7 @@ class Scanner {
   private metadataCache: Record<
     string,
     {
+      blockHash?: Hash;
       bytes: Hash;
       metadata: Metadata;
     }
@@ -64,7 +68,7 @@ class Scanner {
     return this.rpcProvider.send("chain_getHeader", [blockHash]);
   }
 
-  public async getBlockHash(blockNumberOrHash?: number | Hash): Promise<string> {
+  public async getBlockHash(blockNumberOrHash?: number | Hash): Promise<string | undefined> {
     if (typeof blockNumberOrHash === "number" && !isNaN(blockNumberOrHash as any) && !isHex(blockNumberOrHash)) {
       return this.rpcProvider.send("chain_getBlockHash", [blockNumberOrHash]);
     } else {
@@ -89,11 +93,23 @@ class Scanner {
     if (!this.metadataCache[cacheKey]) {
       const rpcdata: string = await this.rpcProvider.send("state_getMetadata", [blockHash]);
       this.metadataCache[cacheKey] = {
+        blockHash: blockHash,
         bytes: rpcdata,
         metadata: new Metadata(this.registry, rpcdata)
       };
     }
     return this.metadataCache[cacheKey];
+  }
+
+  public async getEvents(at?: number | Hash): Promise<Vec<EventRecord>> {
+    const blockHash = await this.getBlockHash(at);
+    const metadata = await this.getMetadata(blockHash);
+    const eventsStorageKey = new StorageKey(this.registry, metadata.metadata.query.system.events);
+    const raw: Hash = await this.rpcProvider.send("state_getStorage", [eventsStorageKey.toHex(), blockHash]);
+
+    return createTypeUnsafe(this.registry, eventsStorageKey.outputType as string, [u8aToU8a(raw)], true) as Vec<
+      EventRecord
+    >;
   }
 
   public subscribeNewHead(confirmation?: Confirmation) {

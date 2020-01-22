@@ -44,11 +44,19 @@ describe("Scanner", () => {
     expect(await scanner.getRuntimeVersion()).toBeDefined();
   });
 
-  it.only("getMetadata", async () => {
-    const request1 = await scanner.getMetadata(0)
-    const request2 = await scanner.getMetadata(0)
+  it("getMetadata", async () => {
+    const request1 = await scanner.getMetadata(0);
+    const request2 = await scanner.getMetadata(0);
     expect(request1).toEqual(request2);
-    // expect(await scanner.getMetadata()).toBeDefined();
+  });
+
+  it.only("getEvents", async () => {
+    await expect(scanner.getEvents(-1)).rejects.toThrow();
+    await expect(scanner.getEvents(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
+
+    expect(await scanner.getEvents(739077)).toBeDefined();
+
+    // console.log('events:',await scanner.getEvents(100))
   });
 
   it("subcribeNewHead", done => {
