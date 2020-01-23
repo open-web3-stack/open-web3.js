@@ -6,7 +6,7 @@ describe("Scanner", () => {
 
   beforeAll(async () => {
     jest.setTimeout(300000);
-    const provider = new WsProvider("wss://kusama-rpc.polkadot.io/");
+    const provider = new WsProvider("wss://cc3-5.kusama.network/");
     scanner = new Scanner({ provider });
   });
 
@@ -50,13 +50,15 @@ describe("Scanner", () => {
     expect(request1).toEqual(request2);
   });
 
-  it.only("getEvents", async () => {
+  it("getEvents", async () => {
     await expect(scanner.getEvents(-1)).rejects.toThrow();
     await expect(scanner.getEvents(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
 
     expect(await scanner.getEvents(739077)).toBeDefined();
+  });
 
-    // console.log('events:',await scanner.getEvents(100))
+  it.only("decodeTx", async () => {
+    expect(await scanner.decodeTx('0x280402000b90110eb36e01', 0)).toBeDefined();
   });
 
   it("subcribeNewHead", done => {

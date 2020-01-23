@@ -1,5 +1,4 @@
 import { ProviderInterface } from "@polkadot/rpc-provider/types";
-import { Registry } from "@polkadot/types/types";
 
 export type RpcProvider = ProviderInterface;
 
@@ -10,7 +9,6 @@ export type Confirmation = "finalize" | number | null;
 
 export interface ScannerOptions {
   provider: RpcProvider;
-  registry?: Registry;
 }
 
 export interface Header {

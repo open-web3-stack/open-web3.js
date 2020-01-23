@@ -1,7 +1,8 @@
 import { isHex, isNumber, u8aToU8a } from "@polkadot/util";
-import { TypeRegistry, StorageKey, Vec, EventRecord } from "@polkadot/types";
+import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from "@polkadot/types";
 import Metadata from "@polkadot/metadata/Decorated";
 import { createTypeUnsafe } from "@polkadot/types/codec";
+import { EventRecord } from "@polkadot/types/interfaces/system";
 
 import { Registry } from "@polkadot/types/types";
 import { Observable } from "rxjs";
@@ -11,20 +12,20 @@ import { ScannerOptions, RpcProvider, Hash, Block, Header, Confirmation, Runtime
 
 class Scanner {
   private rpcProvider: RpcProvider;
-  private metadataCache: Record<
+  private metadatas: Record<
     string,
     {
       blockHash?: Hash;
       bytes: Hash;
       metadata: Metadata;
+      runtimeVersion: RuntimeVersion;
+      registry: Registry;
     }
   >;
-  public readonly registry: Registry;
 
   constructor(options: ScannerOptions) {
     this.rpcProvider = options.provider;
-    this.metadataCache = {};
-    this.registry = options.registry || new TypeRegistry();
+    this.metadatas = {};
   }
 
   private createMethodSubscribe<T>(methods: string[], ...params: any[]) {
@@ -90,26 +91,33 @@ class Scanner {
     const blockHash = await this.getBlockHash(at);
     const runtimeVersion = await this.getRuntimeVersion(at);
     const cacheKey = `${runtimeVersion.specName}-${runtimeVersion.specVersion}`;
-    if (!this.metadataCache[cacheKey]) {
+    const registry = new TypeRegistry();
+    if (!this.metadatas[cacheKey]) {
       const rpcdata: string = await this.rpcProvider.send("state_getMetadata", [blockHash]);
-      this.metadataCache[cacheKey] = {
+      this.metadatas[cacheKey] = {
         blockHash: blockHash,
         bytes: rpcdata,
-        metadata: new Metadata(this.registry, rpcdata)
+        metadata: new Metadata(registry, rpcdata),
+        registry: registry,
+        runtimeVersion: runtimeVersion
       };
     }
-    return this.metadataCache[cacheKey];
+    return this.metadatas[cacheKey];
   }
 
   public async getEvents(at?: number | Hash): Promise<Vec<EventRecord>> {
     const blockHash = await this.getBlockHash(at);
-    const metadata = await this.getMetadata(blockHash);
-    const eventsStorageKey = new StorageKey(this.registry, metadata.metadata.query.system.events);
+    const { metadata, registry } = await this.getMetadata(blockHash);
+    const eventsStorageKey = new StorageKey(registry, metadata.metadata.query.system.events);
     const raw: Hash = await this.rpcProvider.send("state_getStorage", [eventsStorageKey.toHex(), blockHash]);
 
-    return createTypeUnsafe(this.registry, eventsStorageKey.outputType as string, [u8aToU8a(raw)], true) as Vec<
-      EventRecord
-    >;
+    return createTypeUnsafe<Vec<EventRecord>>(registry, eventsStorageKey.outputType as string, [u8aToU8a(raw)], true);
+  }
+
+  public async decodeTx(txData: Hash, at?: number | Hash) {
+    const blockHash = await this.getBlockHash(at);
+    const { registry } = await this.getMetadata(blockHash);
+    return new GenericExtrinsic(registry, txData);
   }
 
   public subscribeNewHead(confirmation?: Confirmation) {
