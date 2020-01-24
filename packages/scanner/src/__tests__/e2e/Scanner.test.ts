@@ -10,67 +10,58 @@ describe("Scanner", () => {
     scanner = new Scanner({ provider });
   });
 
-  it("getBlockHash 0", async () => {
-    const result = await scanner.getBlockHash(0);
-    // kusama genesisHash
-    expect(result).toBe("0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe");
-  });
-
-  it("getBlockHash error", async () => {
+  it("getBlockHash", async () => {
+    expect(await scanner.getBlockHash(0)).toBe("0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe");
     await expect(scanner.getBlockHash(-1)).rejects.toThrow();
     await expect(scanner.getBlockHash(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
     await expect(scanner.getBlockHash(1000000000000000)).rejects.toThrow();
   });
 
   it("getBlock", async () => {
-    await expect(scanner.getBlock(-1)).rejects.toThrow();
-    expect(await scanner.getBlock(1)).toBeDefined();
-    expect(await scanner.getBlock(0)).toBeDefined();
-    await expect(scanner.getBlock(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
-    await expect(scanner.getBlock(1000000000000000)).rejects.toThrow();
-  });
-
-  it("getHeader", async () => {
-    expect(await scanner.getHeader()).toBeDefined();
-    await expect(scanner.getHeader(-1)).rejects.toThrow();
-    expect(await scanner.getHeader(1)).toBeDefined();
-    expect(await scanner.getHeader(0)).toBeDefined();
-    await expect(scanner.getHeader(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
-    await expect(scanner.getHeader(1000000000000000)).rejects.toThrow();
+    expect(await scanner.getBlock()).toBeDefined();
   });
 
   it("getRuntimeVersion", async () => {
-    expect(await scanner.getRuntimeVersion(0)).toBeDefined();
     expect(await scanner.getRuntimeVersion()).toBeDefined();
   });
 
-  it("getMetadata", async () => {
-    const request1 = await scanner.getMetadata(0);
-    const request2 = await scanner.getMetadata(0);
-    expect(request1).toEqual(request2);
+  it("getChainInfo", async () => {
+    const request1 = await scanner.getChainInfo({ blockNumber: 1 });
+    expect(request1.min).toBe(1);
+    expect(request1.max).toBe(1);
+    const request2 = await scanner.getChainInfo({ blockNumber: 2 });
+    expect(request1.metadata).toEqual(request2.metadata);
+    expect(request1.registry).toEqual(request2.registry);
+    expect(request2.min).toBe(1);
+    expect(request2.max).toBe(2);
+    const request0 = await scanner.getChainInfo({ blockNumber: 0 });
+    expect(request2.min).toBe(0);
+    expect(request2.max).toBe(2);
+    expect(request1.metadata).toEqual(request0.metadata);
+    expect(request1.registry).toEqual(request0.registry);
   });
 
   it("getEvents", async () => {
-    await expect(scanner.getEvents(-1)).rejects.toThrow();
-    await expect(scanner.getEvents(Number.MAX_SAFE_INTEGER)).rejects.toThrow();
+    await expect(scanner.getEvents({ blockNumber: -1 })).rejects.toThrow();
+    await expect(scanner.getEvents({ blockNumber: Number.MAX_SAFE_INTEGER })).rejects.toThrow();
 
-    expect(await scanner.getEvents(739077)).toBeDefined();
+    expect(await scanner.getEvents({ blockNumber: 739077 })).toBeDefined();
   });
 
-  it.only("decodeTx", async () => {
-    expect(await scanner.decodeTx('0x280402000b90110eb36e01', 0)).toBeDefined();
+  it("decodeTx", async () => {
+    expect(await scanner.decodeTx("0x280402000b90110eb36e01", { blockNumber: 0 })).toBeDefined();
   });
 
-  it("subcribeNewHead", done => {
+  it("subscribeNewBlockNumber", done => {
     let no = 0;
     let initBlockNumber: number;
-    const s = scanner.subscribeNewHead().subscribe(head => {
+    const s = scanner.subscribeNewBlockNumber().subscribe(number => {
       if (no === 0) {
-        initBlockNumber = Number(head.number);
+        initBlockNumber = number;
       }
       if (no >= 5) {
         s.unsubscribe();
-        expect(initBlockNumber + 5).toBe(Number(head.number));
+        expect(initBlockNumber + 5).toBe(number);
         done();
       } else {
         no++;
@@ -81,13 +72,13 @@ describe("Scanner", () => {
   it("subcribeFinalizedHead", done => {
     let no = 0;
     let initBlockNumber: number;
-    const s = scanner.subscribeNewHead("finalize").subscribe(head => {
+    const s = scanner.subscribeNewBlockNumber("finalize").subscribe(number => {
       if (no === 0) {
-        initBlockNumber = Number(head.number);
+        initBlockNumber = number;
       }
       if (no >= 5) {
         s.unsubscribe();
-        expect(initBlockNumber + 5).toBe(Number(head.number));
+        expect(initBlockNumber + 5).toBe(number);
         done();
       } else {
         no++;
@@ -96,9 +87,9 @@ describe("Scanner", () => {
   });
 
   it("subcribe with a big confirmation", done => {
-    const s = scanner.subscribeNewHead(Number.MAX_SAFE_INTEGER).subscribe(head => {
+    const s = scanner.subscribeNewBlockNumber(Number.MAX_SAFE_INTEGER).subscribe(number => {
       s.unsubscribe();
-      expect(Number(head.number)).toBe(0);
+      expect(number).toBe(0);
       done();
     });
   });
@@ -107,17 +98,17 @@ describe("Scanner", () => {
     let no = 0;
     let initBlockNumber: number;
 
-    const currentBlockNumber = Number((await scanner.getHeader()).number);
+    const currentBlockNumber = Number((await scanner.getBlock()).header.number);
 
-    const s = scanner.subscribeNewHead(100).subscribe(head => {
+    const s = scanner.subscribeNewBlockNumber(100).subscribe(number => {
       if (no === 0) {
-        initBlockNumber = Number(head.number);
+        initBlockNumber = number;
       }
-      expect(currentBlockNumber - Number(head.number) > 80).toBeTruthy();
+      expect(currentBlockNumber - number > 80).toBeTruthy();
 
       if (no >= 5) {
         s.unsubscribe();
-        expect(initBlockNumber + 5).toBe(Number(head.number));
+        expect(initBlockNumber + 5).toBe(number);
         done();
       } else {
         no++;

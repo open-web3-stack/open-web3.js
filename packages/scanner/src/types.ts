@@ -21,12 +21,17 @@ export interface Header {
   stateRoot: Hash;
 }
 
-export interface Block {
+export interface BlockRaw {
   block: {
     extrinsics: Hash[];
   };
   header: Header;
   justification: null | Hash;
+}
+export interface Block {
+  raw: BlockRaw;
+  number: number;
+  hash: Hash;
 }
 
 export interface RuntimeVersion {
@@ -36,4 +41,20 @@ export interface RuntimeVersion {
   implVersion: number;
   specName: string;
   specVersion: number;
+}
+
+export interface BlockAt {
+  blockNumber: number;
+  blockHash: Hash;
+}
+
+export interface BlockAtOptions {
+  blockNumber?: number;
+  blockHash?: Hash;
+}
+
+export interface SubcribeOptions {
+  start?: number;
+  end?: number;
+  confirmation?: Confirmation;
 }
