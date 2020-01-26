@@ -1,12 +1,11 @@
 import { isHex, isNumber, u8aToU8a } from "@polkadot/util";
-import { createType, TypeRegistry, StorageKey, Vec, GenericExtrinsic } from "@polkadot/types";
+import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from "@polkadot/types";
 import Metadata from "@polkadot/metadata/Decorated";
 import { createTypeUnsafe } from "@polkadot/types/codec";
 import { EventRecord } from "@polkadot/types/interfaces/system";
-
 import { Registry } from "@polkadot/types/types";
-import { Observable } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
+import { Observable, range, from, concat, of } from "rxjs";
+import { switchMap, map, take, shareReplay, mergeMap, pairwise } from "rxjs/operators";
 
 import {
   BlockAt,
@@ -14,6 +13,7 @@ import {
   RpcProvider,
   Hash,
   BlockAtOptions,
+  Block,
   BlockRaw,
   Header,
   Confirmation,
@@ -77,8 +77,19 @@ class Scanner {
     });
   }
 
-  public async getBlock(blockHash?: Hash): Promise<BlockRaw> {
-    return this.rpcProvider.send("chain_getBlock", [blockHash]);
+  public async getBlockDetail(_blockAt?: BlockAtOptions): Promise<Block> {
+    const blockAt = await this.getBlockAt(_blockAt);
+    const blockRaw: BlockRaw = await this.rpcProvider.send("chain_getBlock", [blockAt.blockHash]);
+    const events = await this.getEvents(blockAt);
+    const extrinsics = await Promise.all(blockRaw.block.extrinsics.map(extrinsic => this.decodeTx(extrinsic, blockAt)));
+
+    return {
+      raw: blockRaw,
+      number: Number(blockRaw.block.header.number),
+      hash: blockAt.blockHash,
+      events,
+      extrinsics
+    };
   }
 
   public async getRuntimeVersion(blockHash?: Hash): Promise<RuntimeVersion> {
@@ -131,6 +142,8 @@ class Scanner {
     const runtimeVersion = await this.getRuntimeVersion(blockHash);
     const cacheKey = `${runtimeVersion.specName}-${runtimeVersion.specVersion}`;
     const registry = new TypeRegistry();
+    //@ts-ignore
+    // registry.register(laminarTypes);
     if (!this.chainInfo[cacheKey]) {
       const rpcdata: string = await this.rpcProvider.send("state_getMetadata", [blockHash]);
       this.chainInfo[cacheKey] = {
@@ -151,8 +164,7 @@ class Scanner {
   public async getEvents(_blockAt: BlockAtOptions): Promise<Vec<EventRecord>> {
     const blockAt = await this.getBlockAt(_blockAt);
     const { metadata, registry } = await this.getChainInfo(blockAt);
-    // @ts-ignore
-    const eventsStorageKey = new StorageKey(registry, metadata.metadata.query.system.events);
+    const eventsStorageKey = new StorageKey(registry, metadata.query.system.events);
     const raw: Hash = await this.rpcProvider.send("state_getStorage", [eventsStorageKey.toHex(), blockAt.blockHash]);
 
     return createTypeUnsafe<Vec<EventRecord>>(registry, eventsStorageKey.outputType as string, [u8aToU8a(raw)], true);
@@ -164,45 +176,63 @@ class Scanner {
   }
 
   public subscribeNewBlockNumber(confirmation?: Confirmation) {
+    let newBlockNumber$;
     if (confirmation === "finalize") {
-      return this.createMethodSubscribe<Header>([
+      newBlockNumber$ = this.createMethodSubscribe<Header>([
         "chain_finalizedHead",
         "chain_subscribeFinalizedHeads",
         "chain_unsubscribeFinalizedHeads"
       ]).pipe(map(header => Number(header.number)));
     } else if (typeof confirmation === "number") {
-      return this.createMethodSubscribe<Header>([
+      newBlockNumber$ = this.createMethodSubscribe<Header>([
         "chain_newHead",
         "chain_subscribeNewHead",
         "chain_unsubscribeNewHead"
       ]).pipe(map(header => (Number(header.number) - confirmation >= 0 ? Number(header.number) - confirmation : 0)));
     } else {
-      return this.createMethodSubscribe<Header>([
+      newBlockNumber$ = this.createMethodSubscribe<Header>([
         "chain_newHead",
         "chain_subscribeNewHead",
         "chain_unsubscribeNewHead"
       ]).pipe(map(header => Number(header.number)));
     }
+    return newBlockNumber$.pipe(
+      shareReplay({
+        bufferSize: 1,
+        refCount: true
+      }),
+      pairwise(),
+      mergeMap(([pre, current]) => {
+        if (pre === current) return of(current);
+        return range(current, current - pre);
+      })
+    );
   }
 
-  // public subcribe({ start, end }: SubcribeOptions = {}) {
-  //   if (start) {
-  //   }
+  public subscribe({ start = 0, end, concurrent = 1 }: SubcribeOptions = {}) {
+    let blockNumber$;
 
-  //   return newBlockNumber$.pipe(
-  //     switchMap(async blockNumber => {
-  //       const blockAt = await this.getBlockAt({ blockNumber });
-  //       const block = await this.getBlock(blockAt.blockHash);
-  //       return {
-  //         raw: block,
-  //         hash: blockAt.blockHash,
-  //         number: blockAt.blockNumber
-  //       };
-  //     })
-  //   );
+    if (start !== undefined && end !== undefined) {
+      blockNumber$ = range(start, end - start + 1);
+    } else if (end === undefined) {
+      const newBlockNumber$ = this.subscribeNewBlockNumber();
 
-  //   this.subscribeNewBlock().pipe();
-  // }
+      blockNumber$ = from(newBlockNumber$).pipe(
+        take(1),
+        switchMap(lastestNumber => {
+          return concat(range(start, lastestNumber - start + 1), newBlockNumber$);
+        })
+      );
+    } else {
+      blockNumber$ = this.subscribeNewBlockNumber();
+    }
+
+    return blockNumber$.pipe(
+      mergeMap(value => {
+        return this.getBlockDetail({ blockNumber: value });
+      }, concurrent)
+    );
+  }
 }
 
 export default Scanner;

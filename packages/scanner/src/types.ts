@@ -24,14 +24,16 @@ export interface Header {
 export interface BlockRaw {
   block: {
     extrinsics: Hash[];
+    header: Header;
   };
-  header: Header;
   justification: null | Hash;
 }
 export interface Block {
   raw: BlockRaw;
   number: number;
   hash: Hash;
+  events: any;
+  extrinsics: any;
 }
 
 export interface RuntimeVersion {
@@ -57,4 +59,5 @@ export interface SubcribeOptions {
   start?: number;
   end?: number;
   confirmation?: Confirmation;
+  concurrent?: number;
 }

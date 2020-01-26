@@ -5,8 +5,8 @@ describe("Scanner", () => {
   let scanner: Scanner;
 
   beforeAll(async () => {
-    jest.setTimeout(300000);
-    const provider = new WsProvider("wss://cc3-5.kusama.network/");
+    jest.setTimeout(300000000);
+    const provider = new WsProvider("wss://kusama-rpc.polkadot.io");
     scanner = new Scanner({ provider });
   });
 
@@ -17,8 +17,8 @@ describe("Scanner", () => {
     await expect(scanner.getBlockHash(1000000000000000)).rejects.toThrow();
   });
 
-  it("getBlock", async () => {
-    expect(await scanner.getBlock()).toBeDefined();
+  it("getBlockDetail", async () => {
+    expect(await scanner.getBlockDetail()).toBeDefined();
   });
 
   it("getRuntimeVersion", async () => {
@@ -98,7 +98,7 @@ describe("Scanner", () => {
     let no = 0;
     let initBlockNumber: number;
 
-    const currentBlockNumber = Number((await scanner.getBlock()).header.number);
+    const currentBlockNumber = Number((await scanner.getHeader()).header.number);
 
     const s = scanner.subscribeNewBlockNumber(100).subscribe(number => {
       if (no === 0) {
@@ -114,5 +114,17 @@ describe("Scanner", () => {
         no++;
       }
     });
+  });
+
+  it.only("subscribe start and end", done => {
+    scanner
+      .subscribe({
+        start: 0,
+        concurrent: 50,
+      })
+      .subscribe(no => {
+        console.error(no);
+        // done()
+      });
   });
 });

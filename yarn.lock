@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@acala-network/types@^0.2.0-beta.1":
+  version "0.2.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@acala-network/types/-/types-0.2.0-beta.1.tgz#68ee4b91f0a45766170e4681718931a64b7b3d36"
+  integrity sha512-qhwVyn9IT+gbbmKMlw09+so2XYp8sOxia0zfr2RTbcW4bGLiV7enqVWE/rKd3FA5VNrSmTTIAGCpc8wX2PYUZg==
+  dependencies:
+    "@babel/runtime" "^7.7.4"
+    "@polkadot/types" "^0.97.0-beta.33"
+
 "@babel/cli@^7.7.7":
   version "7.8.0"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.8.0.tgz#e9ed4c3dbb163de5034c18979c118ed1aa294e05"
@@ -1517,17 +1525,17 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.7.4", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.0", "@babel/runtime@^7.8.3":
+  version "7.8.3"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.8.3.tgz#0811944f73a6c926bb2ad35e918dcc1bfab279f1"
+  integrity sha512-fVHx1rzEmwB130VTkLnxR+HmxcTjGzH12LYQcFFoBwakMd3aOMD4OsRN7tGG/UOYE2ektgFrS8uACAoRk1CY0w==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/runtime@^7.7.7":
   version "7.8.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.8.0.tgz#8c81711517c56b3d00c6de706b0fb13dc3531549"
   integrity sha512-Z7ti+HB0puCcLmFE3x90kzaVgbx6TRrYIReaygW6EkBEnJh1ajS4/inhF7CypzWeDV3NFl1AfWj0eMtdihojxw==
-  dependencies:
-    regenerator-runtime "^0.13.2"
-
-"@babel/runtime@^7.8.3":
-  version "7.8.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.8.3.tgz#0811944f73a6c926bb2ad35e918dcc1bfab279f1"
-  integrity sha512-fVHx1rzEmwB130VTkLnxR+HmxcTjGzH12LYQcFFoBwakMd3aOMD4OsRN7tGG/UOYE2ektgFrS8uACAoRk1CY0w==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -1859,6 +1867,17 @@
     "@types/istanbul-lib-coverage" "^2.0.0"
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
+
+"@laminar/types@^0.2.0-beta.5":
+  version "0.2.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@laminar/types/-/types-0.2.0-beta.5.tgz#446dd9770d7f1938541a5be1437e9b3fbb2b33f6"
+  integrity sha512-FpgLFejsO8gTqLeHx9/0RQmk89YEcg/z2ZqNSRuKJMCJD2iXDWYFyo3cyjQh2f++KAXRKA3N3z3nvIW0wTHoXQ==
+  dependencies:
+    "@babel/runtime" "^7.8.0"
+    "@orml/types" "^0.2.0-beta.5"
+    "@polkadot/metadata" "^0.99.1"
+    "@polkadot/types" "^0.99.1"
+    "@polkadot/util" "^1.8.1"
 
 "@lerna/add@3.20.0":
   version "3.20.0"
@@ -2686,6 +2705,16 @@
     "@polkadot/util" "^1.8.1"
     "@polkadot/util-crypto" "^1.8.1"
 
+"@polkadot/metadata@^0.99.1":
+  version "0.99.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/metadata/-/metadata-0.99.1.tgz#26ee6478729a518eb6dd13ac23241d1fcd7d67f8"
+  integrity sha512-GJBkFCviIz/yev30gYLrCDLX7OG7goD0O+HWD9rIFe88J0OhmGL+ULu+xPVNSD+jzvBOPZ3FpxN4p60C5XFoVg==
+  dependencies:
+    "@babel/runtime" "^7.7.6"
+    "@polkadot/types" "^0.99.1"
+    "@polkadot/util" "^1.7.1"
+    "@polkadot/util-crypto" "^1.7.1"
+
 "@polkadot/metadata@^1.0.0-beta.8":
   version "1.0.0-beta.8"
   resolved "https://registry.yarnpkg.com/@polkadot/metadata/-/metadata-1.0.0-beta.8.tgz#823fa4acd840cc2b2b3279539b261111a7f99a4d"
@@ -2740,6 +2769,29 @@
     "@types/memoizee" "^0.4.3"
     memoizee "^0.4.14"
 
+"@polkadot/types@^0.97.0-beta.33":
+  version "0.97.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/types/-/types-0.97.1.tgz#382bcc1ec392ebd8d1e6bccba3c80c395df4e4b9"
+  integrity sha512-0NkE8/d2m2BQSwvnfVAsEkTFs9l1R4ao15D8lAtJZeAe/B5ohs0rcg9bndK8PntGZZ5dUW+Xmy+JqnLCjLiPwQ==
+  dependencies:
+    "@babel/runtime" "^7.7.4"
+    "@polkadot/util" "^1.7.1"
+    "@polkadot/util-crypto" "^1.7.1"
+    "@types/memoizee" "^0.4.3"
+    memoizee "^0.4.14"
+
+"@polkadot/types@^0.99.1":
+  version "0.99.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/types/-/types-0.99.1.tgz#a14f2d38f82e2e4cfd042922df5d70a7f78d86c5"
+  integrity sha512-iuN+GNS9bd3h+9/EodFPtzm6a+jzoLVpDbmxfDnEiyGrzf2JfQK08P/5v1H+9cCmNbcK8fP9LQdG4vBWvJPDmw==
+  dependencies:
+    "@babel/runtime" "^7.7.6"
+    "@polkadot/metadata" "^0.99.1"
+    "@polkadot/util" "^1.7.1"
+    "@polkadot/util-crypto" "^1.7.1"
+    "@types/memoizee" "^0.4.3"
+    memoizee "^0.4.14"
+
 "@polkadot/types@^1.0.0-beta.8":
   version "1.0.0-beta.8"
   resolved "https://registry.yarnpkg.com/@polkadot/types/-/types-1.0.0-beta.8.tgz#60104657c810e948a52997c8c28d9812e76931fd"
@@ -2752,7 +2804,7 @@
     "@types/memoizee" "^0.4.3"
     memoizee "^0.4.14"
 
-"@polkadot/util-crypto@^1.8.1":
+"@polkadot/util-crypto@^1.7.1", "@polkadot/util-crypto@^1.8.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-1.8.1.tgz#dbc3f75c4a780bd31cd37e63cf27bade54728646"
   integrity sha512-ypUs10hV1HPvYc0ZsEu+LTGSEh0rkr0as/FUh7+Z9v3Bxibn3aO+EOxJPQuDbZZ59FSMRmc9SeOSa0wn9ddrnw==
@@ -2796,7 +2848,7 @@
     tweetnacl "^1.0.1"
     xxhashjs "^0.2.2"
 
-"@polkadot/util@^1.8.1":
+"@polkadot/util@^1.7.1", "@polkadot/util@^1.8.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-1.8.1.tgz#7473383a1eb26bec59cca53643cf07bc078fe052"
   integrity sha512-sFpr+JLCG9d+epjboXsmJ1qcKa96r8ZYzXmVo8+aPzI/9jKKyez6Unox/dnfnpKppZB2nJuLcsxQm6nocp2Caw==

@@ -15,7 +15,9 @@
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
+    "@acala-network/types": "^0.2.0-beta.1",
     "@babel/runtime": "^7.8.3",
+    "@laminar/types": "^0.2.0-beta.5",
     "@polkadot/metadata": "^0.100.1",
     "@polkadot/rpc-core": "^0.100.1",
     "@polkadot/rpc-provider": "^0.100.1",
