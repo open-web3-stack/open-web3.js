@@ -3,7 +3,6 @@ import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from '@polkadot/types
 import Metadata from '@polkadot/metadata/Decorated';
 import { createTypeUnsafe } from '@polkadot/types/codec';
 import { EventRecord } from '@polkadot/types/interfaces/system';
-import { Registry } from '@polkadot/types/types';
 import { Observable, range, from, concat, of } from 'rxjs';
 import { switchMap, map, take, shareReplay, mergeMap, pairwise } from 'rxjs/operators';
 
@@ -18,40 +17,30 @@ import {
   Header,
   Confirmation,
   RuntimeVersion,
-  SubcribeOptions
+  SubcribeOptions,
+  ChainInfo
 } from './types';
 
 class Scanner {
   private rpcProvider: RpcProvider;
-  private chainInfo: Record<
-    string,
-    {
-      blockHash?: Hash;
-      min?: number;
-      max?: number;
-      bytes: Hash;
-      metadata: Metadata;
-      runtimeVersion: RuntimeVersion;
-      registry: Registry;
-    }
-  >;
+  private chainInfo: Record<string, ChainInfo>;
 
   constructor(options: ScannerOptions) {
     this.rpcProvider = options.provider;
     this.chainInfo = {};
   }
 
-  private createMethodSubscribe<T>(methods: string[], ...params: any[]) {
+  private createMethodSubscribe<T>(methods: string[], ...params: any[]): Observable<T> {
     const [updateType, subMethod, unsubMethod] = methods;
 
     return new Observable<T>(observer => {
       let subscriptionPromise: Promise<number | void> = Promise.resolve();
-      const errorHandler = (error: Error) => {
+      const errorHandler = (error: Error): void => {
         observer.error(error);
       };
 
       try {
-        const update = (error?: Error, result?: any) => {
+        const update = (error?: Error, result?: any): void => {
           if (error) {
             // errorHandler(error)
             return;
@@ -66,7 +55,7 @@ class Scanner {
         errorHandler(error);
       }
 
-      return () => {
+      return (): void => {
         subscriptionPromise.then(
           (subscriptionId): Promise<boolean> =>
             isNumber(subscriptionId)
@@ -137,13 +126,11 @@ class Scanner {
     }
   }
 
-  public async getChainInfo(_blockAt?: BlockAtOptions) {
+  public async getChainInfo(_blockAt?: BlockAtOptions): Promise<ChainInfo> {
     const { blockHash, blockNumber } = await this.getBlockAt(_blockAt);
     const runtimeVersion = await this.getRuntimeVersion(blockHash);
     const cacheKey = `${runtimeVersion.specName}-${runtimeVersion.specVersion}`;
     const registry = new TypeRegistry();
-    //@ts-ignore
-    // registry.register(laminarTypes);
     if (!this.chainInfo[cacheKey]) {
       const rpcdata: string = await this.rpcProvider.send('state_getMetadata', [blockHash]);
       this.chainInfo[cacheKey] = {
@@ -170,12 +157,12 @@ class Scanner {
     return createTypeUnsafe<Vec<EventRecord>>(registry, eventsStorageKey.outputType as string, [u8aToU8a(raw)], true);
   }
 
-  public async decodeTx(txData: Hash, _blockAt: BlockAtOptions) {
+  public async decodeTx(txData: Hash, _blockAt: BlockAtOptions): Promise<GenericExtrinsic> {
     const { registry } = await this.getChainInfo(_blockAt);
     return new GenericExtrinsic(registry, txData);
   }
 
-  public subscribeNewBlockNumber(confirmation?: Confirmation) {
+  public subscribeNewBlockNumber(confirmation?: Confirmation): Observable<number> {
     let newBlockNumber$;
     if (confirmation === 'finalize') {
       newBlockNumber$ = this.createMethodSubscribe<Header>([
@@ -209,7 +196,7 @@ class Scanner {
     );
   }
 
-  public subscribe({ start = 0, end, concurrent = 1 }: SubcribeOptions = {}) {
+  public subscribe({ start = 0, end, concurrent = 1 }: SubcribeOptions = {}): Observable<Block> {
     let blockNumber$;
 
     if (start !== undefined && end !== undefined) {

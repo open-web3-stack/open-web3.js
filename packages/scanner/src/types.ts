@@ -1,4 +1,6 @@
 import { ProviderInterface } from '@polkadot/rpc-provider/types';
+import { Registry } from '@polkadot/types/types';
+import Metadata from '@polkadot/metadata/Decorated';
 
 export type RpcProvider = ProviderInterface;
 
@@ -61,3 +63,13 @@ export interface SubcribeOptions {
   confirmation?: Confirmation;
   concurrent?: number;
 }
+
+export type ChainInfo = {
+  blockHash?: Hash;
+  min?: number;
+  max?: number;
+  bytes: Hash;
+  metadata: Metadata;
+  runtimeVersion: RuntimeVersion;
+  registry: Registry;
+};
