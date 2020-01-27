@@ -1,3 +1,3 @@
-import Scanner from "./Scanner";
+import Scanner from './Scanner';
 
 export default Scanner;

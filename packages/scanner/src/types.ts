@@ -1,11 +1,11 @@
-import { ProviderInterface } from "@polkadot/rpc-provider/types";
+import { ProviderInterface } from '@polkadot/rpc-provider/types';
 
 export type RpcProvider = ProviderInterface;
 
 export type Hex = string;
 export type Hash = string;
 
-export type Confirmation = "finalize" | number | null;
+export type Confirmation = 'finalize' | number | null;
 
 export interface ScannerOptions {
   provider: RpcProvider;

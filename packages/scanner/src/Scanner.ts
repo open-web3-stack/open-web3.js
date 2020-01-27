@@ -1,11 +1,11 @@
-import { isHex, isNumber, u8aToU8a } from "@polkadot/util";
-import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from "@polkadot/types";
-import Metadata from "@polkadot/metadata/Decorated";
-import { createTypeUnsafe } from "@polkadot/types/codec";
-import { EventRecord } from "@polkadot/types/interfaces/system";
-import { Registry } from "@polkadot/types/types";
-import { Observable, range, from, concat, of } from "rxjs";
-import { switchMap, map, take, shareReplay, mergeMap, pairwise } from "rxjs/operators";
+import { isHex, isNumber, u8aToU8a } from '@polkadot/util';
+import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from '@polkadot/types';
+import Metadata from '@polkadot/metadata/Decorated';
+import { createTypeUnsafe } from '@polkadot/types/codec';
+import { EventRecord } from '@polkadot/types/interfaces/system';
+import { Registry } from '@polkadot/types/types';
+import { Observable, range, from, concat, of } from 'rxjs';
+import { switchMap, map, take, shareReplay, mergeMap, pairwise } from 'rxjs/operators';
 
 import {
   BlockAt,
@@ -19,7 +19,7 @@ import {
   Confirmation,
   RuntimeVersion,
   SubcribeOptions
-} from "./types";
+} from './types';
 
 class Scanner {
   private rpcProvider: RpcProvider;
@@ -79,7 +79,7 @@ class Scanner {
 
   public async getBlockDetail(_blockAt?: BlockAtOptions): Promise<Block> {
     const blockAt = await this.getBlockAt(_blockAt);
-    const blockRaw: BlockRaw = await this.rpcProvider.send("chain_getBlock", [blockAt.blockHash]);
+    const blockRaw: BlockRaw = await this.rpcProvider.send('chain_getBlock', [blockAt.blockHash]);
     const events = await this.getEvents(blockAt);
     const extrinsics = await Promise.all(blockRaw.block.extrinsics.map(extrinsic => this.decodeTx(extrinsic, blockAt)));
 
@@ -93,12 +93,12 @@ class Scanner {
   }
 
   public async getRuntimeVersion(blockHash?: Hash): Promise<RuntimeVersion> {
-    return this.rpcProvider.send("state_getRuntimeVersion", [blockHash]);
+    return this.rpcProvider.send('state_getRuntimeVersion', [blockHash]);
   }
 
   public async getBlockHash(at: number | Hash): Promise<Hash> {
-    if (typeof at === "number" && !isNaN(at as any) && !isHex(at)) {
-      const blockHash = this.rpcProvider.send("chain_getBlockHash", [at]);
+    if (typeof at === 'number' && !isNaN(at as any) && !isHex(at)) {
+      const blockHash = this.rpcProvider.send('chain_getBlockHash', [at]);
       return blockHash;
     } else {
       return at as Hash;
@@ -113,27 +113,27 @@ class Scanner {
       };
     }
     if (!blockAt) {
-      const header = await this.rpcProvider.send("chain_getHeader", []);
+      const header = await this.rpcProvider.send('chain_getHeader', []);
       const blockNumber = Number(header.number);
-      const blockHash = await this.rpcProvider.send("chain_getBlockHash", []);
+      const blockHash = await this.rpcProvider.send('chain_getBlockHash', []);
       return {
         blockNumber: blockNumber,
         blockHash: blockHash
       };
     } else if (blockAt.blockNumber !== undefined) {
-      const blockHash = await this.rpcProvider.send("chain_getBlockHash", [blockAt.blockNumber]);
+      const blockHash = await this.rpcProvider.send('chain_getBlockHash', [blockAt.blockNumber]);
       return {
         blockNumber: blockAt.blockNumber,
         blockHash: blockHash
       };
     } else if (blockAt.blockHash) {
-      const header = await this.rpcProvider.send("chain_getHeader", [blockAt.blockHash]);
+      const header = await this.rpcProvider.send('chain_getHeader', [blockAt.blockHash]);
       return {
         blockNumber: Number(header.number),
         blockHash: blockAt.blockHash
       };
     } else {
-      throw new Error("expect blockHash or blockNumber");
+      throw new Error('expect blockHash or blockNumber');
     }
   }
 
@@ -145,7 +145,7 @@ class Scanner {
     //@ts-ignore
     // registry.register(laminarTypes);
     if (!this.chainInfo[cacheKey]) {
-      const rpcdata: string = await this.rpcProvider.send("state_getMetadata", [blockHash]);
+      const rpcdata: string = await this.rpcProvider.send('state_getMetadata', [blockHash]);
       this.chainInfo[cacheKey] = {
         min: blockNumber,
         max: blockNumber,
@@ -165,7 +165,7 @@ class Scanner {
     const blockAt = await this.getBlockAt(_blockAt);
     const { metadata, registry } = await this.getChainInfo(blockAt);
     const eventsStorageKey = new StorageKey(registry, metadata.query.system.events);
-    const raw: Hash = await this.rpcProvider.send("state_getStorage", [eventsStorageKey.toHex(), blockAt.blockHash]);
+    const raw: Hash = await this.rpcProvider.send('state_getStorage', [eventsStorageKey.toHex(), blockAt.blockHash]);
 
     return createTypeUnsafe<Vec<EventRecord>>(registry, eventsStorageKey.outputType as string, [u8aToU8a(raw)], true);
   }
@@ -177,23 +177,23 @@ class Scanner {
 
   public subscribeNewBlockNumber(confirmation?: Confirmation) {
     let newBlockNumber$;
-    if (confirmation === "finalize") {
+    if (confirmation === 'finalize') {
       newBlockNumber$ = this.createMethodSubscribe<Header>([
-        "chain_finalizedHead",
-        "chain_subscribeFinalizedHeads",
-        "chain_unsubscribeFinalizedHeads"
+        'chain_finalizedHead',
+        'chain_subscribeFinalizedHeads',
+        'chain_unsubscribeFinalizedHeads'
       ]).pipe(map(header => Number(header.number)));
-    } else if (typeof confirmation === "number") {
+    } else if (typeof confirmation === 'number') {
       newBlockNumber$ = this.createMethodSubscribe<Header>([
-        "chain_newHead",
-        "chain_subscribeNewHead",
-        "chain_unsubscribeNewHead"
+        'chain_newHead',
+        'chain_subscribeNewHead',
+        'chain_unsubscribeNewHead'
       ]).pipe(map(header => (Number(header.number) - confirmation >= 0 ? Number(header.number) - confirmation : 0)));
     } else {
       newBlockNumber$ = this.createMethodSubscribe<Header>([
-        "chain_newHead",
-        "chain_subscribeNewHead",
-        "chain_unsubscribeNewHead"
+        'chain_newHead',
+        'chain_subscribeNewHead',
+        'chain_unsubscribeNewHead'
       ]).pipe(map(header => Number(header.number)));
     }
     return newBlockNumber$.pipe(
