@@ -98,7 +98,7 @@ describe("Scanner", () => {
     let no = 0;
     let initBlockNumber: number;
 
-    const currentBlockNumber = Number((await scanner.getHeader()).header.number);
+    const currentBlockNumber = Number((await scanner.getBlockDetail()).number);
 
     const s = scanner.subscribeNewBlockNumber(100).subscribe(number => {
       if (no === 0) {

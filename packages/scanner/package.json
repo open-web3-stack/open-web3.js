@@ -24,5 +24,8 @@
     "@polkadot/types": "^0.100.1",
     "@polkadot/util": "^1.8.1",
     "rxjs": "^6.5.4"
+  },
+  "devDependencies": {
+    "@polkadot/keyring": "^1.8.1"
   }
 }
