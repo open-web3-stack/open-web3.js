@@ -5,7 +5,7 @@ import Metadata from '@polkadot/metadata/Decorated';
 export type RpcProvider = ProviderInterface;
 
 export type Hex = string;
-export type Hash = string;
+export type Bytes = string;
 
 export type Confirmation = 'finalize' | number | null;
 
@@ -15,31 +15,31 @@ export interface ScannerOptions {
 
 export interface Header {
   digest: {
-    logs: Hash[];
+    logs: Bytes[];
   };
-  extrinsicsRoot: Hash;
+  extrinsicsRoot: Bytes;
   number: Hex;
-  parentHash: Hash;
-  stateRoot: Hash;
+  parentHash: Bytes;
+  stateRoot: Bytes;
 }
 
 export interface BlockRaw {
   block: {
-    extrinsics: Hash[];
+    extrinsics: Bytes[];
     header: Header;
   };
-  justification: null | Hash;
+  justification: null | Bytes;
 }
 export interface Block {
   raw: BlockRaw;
   number: number;
-  hash: Hash;
+  Bytes: Bytes;
   events: any;
   extrinsics: any;
 }
 
 export interface RuntimeVersion {
-  apis: [Hash, number][];
+  apis: [Bytes, number][];
   authoringVersion: number;
   implName: string;
   implVersion: number;
@@ -49,12 +49,12 @@ export interface RuntimeVersion {
 
 export interface BlockAt {
   blockNumber: number;
-  blockHash: Hash;
+  blockHash: Bytes;
 }
 
 export interface BlockAtOptions {
   blockNumber?: number;
-  blockHash?: Hash;
+  blockHash?: Bytes;
 }
 
 export interface SubcribeOptions {
@@ -65,10 +65,10 @@ export interface SubcribeOptions {
 }
 
 export type ChainInfo = {
-  blockHash?: Hash;
+  blockHash?: Bytes;
   min?: number;
   max?: number;
-  bytes: Hash;
+  bytes: Bytes;
   metadata: Metadata;
   runtimeVersion: RuntimeVersion;
   registry: Registry;

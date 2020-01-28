@@ -10,7 +10,7 @@ import {
   BlockAt,
   ScannerOptions,
   RpcProvider,
-  Hash,
+  Bytes,
   BlockAtOptions,
   Block,
   BlockRaw,
@@ -75,26 +75,26 @@ class Scanner {
     return {
       raw: blockRaw,
       number: Number(blockRaw.block.header.number),
-      hash: blockAt.blockHash,
+      Bytes: blockAt.blockHash,
       events,
       extrinsics
     };
   }
 
-  public async getRuntimeVersion(blockHash?: Hash): Promise<RuntimeVersion> {
+  public async getRuntimeVersion(blockHash?: Bytes): Promise<RuntimeVersion> {
     return this.rpcProvider.send('state_getRuntimeVersion', [blockHash]);
   }
 
-  public async getBlockHash(at: number | Hash): Promise<Hash> {
+  public async getBlockHash(at: number | Bytes): Promise<Bytes> {
     if (typeof at === 'number' && !isNaN(at as any) && !isHex(at)) {
       const blockHash = this.rpcProvider.send('chain_getBlockHash', [at]);
       return blockHash;
     } else {
-      return at as Hash;
+      return at as Bytes;
     }
   }
 
-  public async getBlockAt(blockAt?: { blockHash?: Hash; blockNumber?: number }): Promise<BlockAt> {
+  public async getBlockAt(blockAt?: { blockHash?: Bytes; blockNumber?: number }): Promise<BlockAt> {
     if (blockAt?.blockHash && blockAt?.blockNumber !== undefined) {
       return {
         blockHash: blockAt.blockHash,
@@ -152,12 +152,12 @@ class Scanner {
     const blockAt = await this.getBlockAt(_blockAt);
     const { metadata, registry } = await this.getChainInfo(blockAt);
     const eventsStorageKey = new StorageKey(registry, metadata.query.system.events);
-    const raw: Hash = await this.rpcProvider.send('state_getStorage', [eventsStorageKey.toHex(), blockAt.blockHash]);
+    const raw: Bytes = await this.rpcProvider.send('state_getStorage', [eventsStorageKey.toHex(), blockAt.blockHash]);
 
     return createTypeUnsafe<Vec<EventRecord>>(registry, eventsStorageKey.outputType as string, [u8aToU8a(raw)], true);
   }
 
-  public async decodeTx(txData: Hash, _blockAt: BlockAtOptions): Promise<GenericExtrinsic> {
+  public async decodeTx(txData: Bytes, _blockAt: BlockAtOptions): Promise<GenericExtrinsic> {
     const { registry } = await this.getChainInfo(_blockAt);
     return new GenericExtrinsic(registry, txData);
   }

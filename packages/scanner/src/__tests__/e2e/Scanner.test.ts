@@ -6,7 +6,7 @@ describe('Scanner', () => {
 
   beforeAll(async () => {
     jest.setTimeout(300000000);
-    const provider = new WsProvider('wss://kusama-rpc.polkadot.io');
+    const provider = new WsProvider('wss://testnet-node-1.acala.laminar.one/ws');
     scanner = new Scanner({ provider });
   });
 
