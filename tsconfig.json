@@ -10,6 +10,8 @@
       {
         "@orml/api": ["packages/api/src"],
         "@orml/api/*": ["packages/api/src/*"],
+        "@orml/scanner": ["packages/scanner/src"],
+        "@orml/scanner/*": ["packages/scanner/src/*"],
         "@orml/types": ["packages/types/src"],
         "@orml/types/*": ["packages/types/src/*"],
       },
@@ -20,4 +22,3 @@
       ]
     }
   }
-  
