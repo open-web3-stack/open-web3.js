@@ -15,17 +15,15 @@
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
-    "@acala-network/types": "^0.2.0-beta.1",
-    "@babel/runtime": "^7.8.3",
-    "@laminar/types": "^0.2.0-beta.5",
-    "@polkadot/metadata": "^0.100.1",
-    "@polkadot/rpc-core": "^0.100.1",
-    "@polkadot/rpc-provider": "^0.100.1",
-    "@polkadot/types": "^0.100.1",
-    "@polkadot/util": "^1.8.1",
+    "@babel/runtime": "^7.8.4",
+    "@polkadot/metadata": "beta",
+    "@polkadot/rpc-core": "beta",
+    "@polkadot/rpc-provider": "beta",
+    "@polkadot/types": "beta",
+    "@polkadot/util": "beta",
     "rxjs": "^6.5.4"
   },
   "devDependencies": {
-    "@polkadot/keyring": "^1.8.1"
+    "@polkadot/keyring": "beta"
   }
 }

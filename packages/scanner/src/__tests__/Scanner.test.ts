@@ -9,8 +9,10 @@ import Scanner from '../Scanner';
 function hackMock() {
   const path = require('path');
   const fs = require('fs');
-  const filePath = path.resolve(require.resolve('@polkadot/types'), '../json/SignedBlock.004.immortal.json');
-  fs.copyFileSync(path.resolve(__dirname, './SignedBlock.004.immortal.json'), filePath);
+  const filePathSignedBlock = path.resolve(require.resolve('@polkadot/types'), '../json/SignedBlock.004.immortal.json');
+  fs.copyFileSync(path.resolve(__dirname, './json/SignedBlock.004.immortal.json'), filePathSignedBlock);
+  const filePathHeader = path.resolve(require.resolve('@polkadot/types'), '../json/Header.004.json');
+  fs.copyFileSync(path.resolve(__dirname, './json/Header.004.json'), filePathHeader);
   return require('@polkadot/rpc-provider/mock/index').default;
 }
 
