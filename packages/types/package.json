@@ -19,5 +19,8 @@
     "@polkadot/metadata": "beta",
     "@polkadot/types": "beta",
     "@polkadot/util": "beta"
+  },
+  "devDependencies": {
+    "@yarnpkg/lockfile": "^1.1.0"
   }
 }
