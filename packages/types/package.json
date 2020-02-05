@@ -14,6 +14,9 @@
     "url": "https://github.com/laminar-protocol/orml.js/issues"
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
+  "bin": {
+    "check-deps": "./scripts/check-lock.js"
+  },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "@polkadot/metadata": "beta",
