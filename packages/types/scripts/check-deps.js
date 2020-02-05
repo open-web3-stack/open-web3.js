@@ -8,7 +8,7 @@ const lockfile = require('@yarnpkg/lockfile');
 const [, , lockfilePath, ...packages] = process.argv;
 
 if (!lockfile || !packages || packages.length === 0) {
-  console.log('USAGE: check-lock.js path/to/yarn.lock package-prefix-to-check');
+  console.log('USAGE: orml-check-deps path/to/yarn.lock package-prefix-to-check');
   process.exit(1);
 }
 
