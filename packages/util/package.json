@@ -19,6 +19,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@polkadot/types": "beta"
+    "@yarnpkg/lockfile": "^1.1.0"
   }
 }
