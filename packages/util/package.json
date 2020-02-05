@@ -1,7 +1,7 @@
 {
-  "name": "@orml/types",
+  "name": "@orml/util",
   "version": "0.2.0-beta.14",
-  "description": "ORML JS types",
+  "description": "ORML JS API",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -14,12 +14,11 @@
     "url": "https://github.com/laminar-protocol/orml.js/issues"
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
+  "bin": {
+    "orml-check-deps": "./src/scripts/check-deps.js"
+  },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@polkadot/metadata": "beta",
     "@polkadot/types": "beta"
-  },
-  "devDependencies": {
-    "@yarnpkg/lockfile": "^1.1.0"
   }
 }
