@@ -1,0 +1,22 @@
+{
+  "name": "@orml/jsonrpc",
+  "version": "0.2.0-beta.16",
+  "description": "ORML JSON RPC Type",
+  "main": "index.js",
+  "author": "Laminar Developers <hello@laminar.one>",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": "https://github.com/laminar-protocol/orml.js.git",
+  "bugs": {
+    "url": "https://github.com/laminar-protocol/orml.js/issues"
+  },
+  "homepage": "https://github.com/laminar-protocol/orml.js",
+  "dependencies": {
+    "@babel/runtime": "^7.8.3",
+    "@polkadot/jsonrpc": "^1.0.0-beta.8",
+    "@polkadot/rpc-core": "^1.0.0-beta.8"
+  }
+}
