@@ -6,7 +6,7 @@ import { memo } from '../util';
 
 export function balance(
   api: ApiInterfaceRx
-): (address: AccountIndex | AccountId | Address | string, token: any) => Observable<Balance> {
+): (address:  | AccountId | Address | string, token: any) => Observable<Balance> {
   return memo(
     (address: AccountIndex | AccountId | Address | string, token: any): Observable<Balance> => {
       const CurrencyId = api.registry.get('CurrencyId');
