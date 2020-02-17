@@ -1,4 +1,26 @@
 /* eslint-disable */
+
+import {
+  AccountId,
+  AccountIndex,
+  Balance,
+  BlockNumber,
+  CurrencyId,
+  Hash,
+  Index,
+  LiquidityPoolId,
+  LiquidityPoolOption,
+  Moment,
+  OracleKey,
+  Permill,
+  Position,
+  Weight
+} from '@laminar/types/interfaces/runtime';
+import { Option, Vec } from '@polkadot/types/codec';
+import { Bytes, bool, u32 } from '@polkadot/types/primitive';
+import { AnyNumber, ITuple } from '@polkadot/types/types';
+import { Observable } from 'rxjs';
+
 declare module '@polkadot/api/types/storage' {
   export interface AugmentedQueries<ApiType> {
     tokens: {

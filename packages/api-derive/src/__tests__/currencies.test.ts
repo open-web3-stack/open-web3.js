@@ -1,20 +1,13 @@
-import { ApiRx, WsProvider } from '@polkadot/api';
+import { ApiPromise, WsProvider } from '@polkadot/api';
 import { types } from '@laminar/types';
 import { derive } from '..';
 
-interface ExactDerive {
-  test?: boolean
-}
-
-const Foo: ExactDerive = {}
-Foo.
-
 describe('derive', () => {
-  let api: ApiRx;
+  let api: ApiPromise;
 
   beforeAll(async () => {
     const provider = new WsProvider('ws://127.0.0.1:9944');
-    api = await ApiRx.create({
+    api = await ApiPromise.create({
       provider,
       derives: derive,
       types: types as any
