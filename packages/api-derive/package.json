@@ -1,0 +1,23 @@
+{
+  "name": "@orml/api-derive",
+  "version": "0.2.0-beta.18",
+  "description": "ORML JS API DERIVE",
+  "main": "index.js",
+  "author": "Laminar Developers <hello@laminar.one>",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": "https://github.com/laminar-protocol/orml.js.git",
+  "bugs": {
+    "url": "https://github.com/laminar-protocol/orml.js/issues"
+  },
+  "homepage": "https://github.com/laminar-protocol/orml.js",
+  "dependencies": {
+    "@polkadot/api": "^1.2.1"
+  },
+  "devDependencies": {
+    "@laminar/types": "^0.2.0-beta.5"
+  }
+}
