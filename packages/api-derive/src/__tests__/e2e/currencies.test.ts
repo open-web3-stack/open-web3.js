@@ -1,6 +1,6 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { types } from '@laminar/types';
-import { derive } from '..';
+import { derive } from '../..';
 
 describe('derive', () => {
   let api: ApiPromise;
