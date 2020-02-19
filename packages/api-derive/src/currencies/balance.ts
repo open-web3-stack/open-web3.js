@@ -13,7 +13,7 @@ export function balance(
       const currencyId = new (CurrencyId as any)(api.registry, token);
       const nativeCurrencyId = api.consts.currencies.nativeCurrencyId;
 
-      if (currencyId.toHex() === nativeCurrencyId.toHex()) {
+      if (currencyId.eq(nativeCurrencyId)) {
         return api.query.balances.freeBalance<Balance>(address);
       } else {
         return api.query.tokens.balance<Balance>(token, address);
