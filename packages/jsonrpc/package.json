@@ -16,7 +16,6 @@
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
     "@babel/runtime": "^7.8.3",
-    "@polkadot/jsonrpc": "beta",
-    "@polkadot/rpc-core": "beta"
+    "@polkadot/api": "beta"
   }
 }

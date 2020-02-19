@@ -1,7 +1,7 @@
 import { isHex, isNumber, u8aToU8a } from '@polkadot/util';
 import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from '@polkadot/types';
 import Metadata from '@polkadot/metadata/Decorated';
-import { createTypeUnsafe } from '@polkadot/types/codec';
+import { createTypeUnsafe } from '@polkadot/types/create';
 import { EventRecord } from '@polkadot/types/interfaces/system';
 import { Observable, range, from, concat, of } from 'rxjs';
 import { switchMap, map, take, shareReplay, mergeMap, pairwise } from 'rxjs/operators';
