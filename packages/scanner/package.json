@@ -20,10 +20,10 @@
     "@polkadot/rpc-core": "beta",
     "@polkadot/rpc-provider": "beta",
     "@polkadot/types": "beta",
-    "@polkadot/util": "beta",
+    "@polkadot/util": "^2.4.1",
     "rxjs": "^6.5.4"
   },
   "devDependencies": {
-    "@polkadot/keyring": "beta"
+    "@polkadot/keyring": "^2.4.1"
   }
 }
