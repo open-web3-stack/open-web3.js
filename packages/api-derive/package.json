@@ -1,7 +1,7 @@
 {
-  "name": "@orml/jsonrpc",
+  "name": "@orml/api-derive",
   "version": "0.2.0-beta.19",
-  "description": "ORML JSON RPC Type",
+  "description": "ORML JS API DERIVE",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -15,7 +15,10 @@
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
-    "@babel/runtime": "^7.8.3",
-    "@polkadot/api": "beta"
+    "@polkadot/api": "beta",
+    "memoizee": "^0.4.14"
+  },
+  "devDependencies": {
+    "@types/memoizee": "^0.4.3"
   }
 }
