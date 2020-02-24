@@ -5,7 +5,7 @@ import * as defaultDefinations from '@polkadot/types/interfaces/definitions';
 import * as ormlDefinations from '../src/interfaces/definitions';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { runtime, ...substrateDefinations } = defaultDefinations;
+const { runtime, deprecated, ...substrateDefinations } = defaultDefinations;
 
 const definations = {
   '@polkadot/types/interfaces': substrateDefinations,
