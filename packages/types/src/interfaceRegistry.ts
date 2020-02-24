@@ -13,7 +13,6 @@ import { AliveContractInfo, CodeHash, ContractCallRequest, ContractExecResult, C
 import { Conviction, PropIndex, Proposal, ReferendumIndex, ReferendumInfo } from '@polkadot/types/interfaces/democracy';
 import { AccountInfo, Amount, AssetOf, InherentOfflineReport, LockPeriods, NewAccountOutcome, OpaqueKey, SessionKey } from '@polkadot/types/interfaces/deprecated';
 import { ApprovalFlag, SetIndex, Vote, VoteIndex, VoteThreshold, VoterInfo } from '@polkadot/types/interfaces/elections';
-import { CreatedBlock, ImportedAux } from '@polkadot/types/interfaces/engine';
 import { Account, Log } from '@polkadot/types/interfaces/evm';
 import { AssetOptions, Owner, PermissionLatest, PermissionVersions, PermissionsV1 } from '@polkadot/types/interfaces/genericAsset';
 import { AuthorityIndex, AuthorityList, AuthorityWeight, NextAuthority, PendingPause, PendingResume, SetId, StoredPendingChange, StoredState } from '@polkadot/types/interfaces/grandpa';
@@ -329,12 +328,6 @@ export interface InterfaceRegistry {
   VoteThreshold: VoteThreshold;
   'Option<VoteThreshold>': Option<VoteThreshold>;
   'Vec<VoteThreshold>': Vec<VoteThreshold>;
-  CreatedBlock: CreatedBlock;
-  'Option<CreatedBlock>': Option<CreatedBlock>;
-  'Vec<CreatedBlock>': Vec<CreatedBlock>;
-  ImportedAux: ImportedAux;
-  'Option<ImportedAux>': Option<ImportedAux>;
-  'Vec<ImportedAux>': Vec<ImportedAux>;
   Account: Account;
   'Option<Account>': Option<Account>;
   'Vec<Account>': Vec<Account>;
