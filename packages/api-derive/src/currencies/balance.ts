@@ -1,4 +1,5 @@
 import { ApiInterfaceRx } from '@polkadot/api/types';
+import { AccountInfo } from '@polkadot/types/interfaces';
 import { AccountId, Balance } from '@orml/types/interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,9 +16,9 @@ export function balance(
       const nativeCurrencyId = api.consts.currencies.nativeCurrencyId;
 
       if (currencyId.eq(nativeCurrencyId)) {
-        return api.query.balances.account(address).pipe(
+        return api.query.system.account<AccountInfo>(address).pipe(
           map(result => {
-            return result.free;
+            return result.data.free;
           })
         );
       } else {
