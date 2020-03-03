@@ -16,6 +16,10 @@
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@orml/scanner": "beta"
+    "@orml/scanner": "beta",
+    "@polkadot/api": "^1.4.2",
+    "@types/sequelize": "^4.28.8",
+    "pg": "^7.18.2",
+    "sequelize": "^5.21.5"
   }
 }

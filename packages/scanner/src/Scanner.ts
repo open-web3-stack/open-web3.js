@@ -18,15 +18,18 @@ import {
   Confirmation,
   RuntimeVersion,
   SubcribeOptions,
-  ChainInfo
+  ChainInfo,
+  TypeProvider
 } from './types';
 
 class Scanner {
   private rpcProvider: RpcProvider;
+  private typeProvider?: TypeProvider;
   private chainInfo: Record<string, ChainInfo>;
 
   constructor(options: ScannerOptions) {
     this.rpcProvider = options.provider;
+    this.typeProvider = options.types;
     this.chainInfo = {};
   }
 
@@ -130,8 +133,16 @@ class Scanner {
     const { blockHash, blockNumber } = await this.getBlockAt(_blockAt);
     const runtimeVersion = await this.getRuntimeVersion(blockHash);
     const cacheKey = `${runtimeVersion.specName}-${runtimeVersion.specVersion}`;
-    const registry = new TypeRegistry();
     if (!this.chainInfo[cacheKey]) {
+      const registry = new TypeRegistry();
+      const typeProvider = this.typeProvider;
+      if (typeProvider) {
+        if (typeof typeProvider === 'function') {
+          registry.register(typeProvider(runtimeVersion.specVersion));
+        } else {
+          registry.register(typeProvider);
+        }
+      }
       const rpcdata: string = await this.rpcProvider.send('state_getMetadata', [blockHash]);
       this.chainInfo[cacheKey] = {
         min: blockNumber,
