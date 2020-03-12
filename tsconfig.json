@@ -5,6 +5,7 @@
       "**/build/**/*"
     ],
     "compilerOptions": {
+      "target": "es2018",
       "baseUrl": ".",
       "paths":
       {
@@ -14,6 +15,8 @@
         "@orml/scanner/*": ["packages/scanner/src/*"],
         "@orml/types": ["packages/types/src"],
         "@orml/types/*": ["packages/types/src/*"],
+        "@orml/indexer": ["packages/indexer/src"],
+        "@orml/indexer/*": ["packages/indexer/src/*"],
       },
       "skipLibCheck": true,
       "typeRoots": [

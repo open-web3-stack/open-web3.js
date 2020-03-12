@@ -1,4 +1,4 @@
-import { Sequelize, Model, DataTypes, SyncOptions } from 'sequelize';
+import { Sequelize, Model, DataTypes } from 'sequelize';
 
 export class Block extends Model {
   hash!: string;
@@ -47,7 +47,7 @@ export class Status extends Model {
   lastBlock!: number;
 }
 
-export default async function init(db: Sequelize, options: SyncOptions): Promise<void> {
+export default function init(db: Sequelize): void {
   Block.init({
     hash: {
       type: DataTypes.STRING,
@@ -207,6 +207,4 @@ export default async function init(db: Sequelize, options: SyncOptions): Promise
   }, {
     sequelize: db
   });
-
-  await db.sync(options);
 }

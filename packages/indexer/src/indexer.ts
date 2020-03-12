@@ -1,24 +1,35 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, SyncOptions } from 'sequelize';
 import init, { Status } from './models';
-import Scanner from '@orml/scanner';
+import Scanner from '../../scanner/src';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { TypeProvider } from '@orml/scanner/types';
+import { TypeProvider } from '../../scanner/src/types';
+
+type IndexerOptions = {
+  dbUrl: string;
+  apiUrl: string;
+  types?: TypeProvider;
+  sync?: boolean;
+  syncOptions?: SyncOptions;
+}
 
 export default class Indexer {
   // eslint-disable-next-line
   protected constructor(private readonly db: Sequelize, private readonly scanner: Scanner) {
   }
 
-  static async create(dbUrl: string, apiUrl: string, types?: TypeProvider): Promise<Indexer> {
-    const db = new Sequelize(dbUrl);
+  static async create(options: IndexerOptions): Promise<Indexer> {
+    const db = new Sequelize(options.dbUrl);
     await db.authenticate();
-    const provider = new WsProvider(apiUrl);
-    await init(db, { force: true });
-    return new Indexer(db, new Scanner({ provider, types }));
+    const provider = new WsProvider(options.apiUrl);
+    init(db);
+    if (options.sync) {
+      await db.sync(options.syncOptions);
+    }
+    return new Indexer(db, new Scanner({ provider, types: options.types }));
   }
 
   async start(): Promise<void> {
-    const [status] = await Status.findOrBuild({ where: { id: 0 }, defaults: { lastBlock: 0 } });
+    const [status] = await Status.findOrBuild({ where: { id: 0 }, defaults: { id: 0 } });
     const block = status.lastBlock;
     this.scanner.subscribe({ start: block }).subscribe(block => {
       console.log(block);

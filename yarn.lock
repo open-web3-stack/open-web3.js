@@ -2,6 +2,15 @@
 # yarn lockfile v1
 
 
+"@acala-network/types@beta":
+  version "0.2.0-beta.19"
+  resolved "https://registry.yarnpkg.com/@acala-network/types/-/types-0.2.0-beta.19.tgz#13a1a3529178cf4e23fd1b826f86a38349bd045c"
+  integrity sha512-/gC7RqjRFsr7Hwe8AYfVNghKOw5tzCLoRYZD4Lxd2NAItr5qpw+Uzrbenk6TWYBSAkaeR36/XjJ/g8aT3ksWpQ==
+  dependencies:
+    "@babel/runtime" "^7.8.0"
+    "@orml/types" beta
+    "@polkadot/api" beta
+
 "@babel/cli@^7.8.3":
   version "7.8.4"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.8.4.tgz#505fb053721a98777b2b175323ea4f090b7d3c1c"
@@ -816,7 +825,7 @@
     pirates "^4.0.0"
     source-map-support "^0.5.16"
 
-"@babel/runtime@^7.8.3", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.8.0", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.4":
   version "7.8.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.8.4.tgz#d79f5a2040f7caa24d53e563aad49cbc05581308"
   integrity sha512-neAp3zt80trRVBI1x0azq6c57aNBqYZH8KhMm3TaB7wEI5Q4A2SHfBHE8w9gOhI/lrqxtEbXZgQIrHP+wvSGwQ==
@@ -1924,6 +1933,13 @@
   dependencies:
     "@babel/runtime" "^7.8.4"
     "@polkadot/api" beta
+
+"@orml/types@beta":
+  version "0.2.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@orml/types/-/types-0.2.0-beta.23.tgz#1058e154fe45db3b9bf3cb373747b5d6e966f832"
+  integrity sha512-l8OdpsMb5QbVjzvfHWm/VCexiTOz8OFIbMLpRzA/0BzWJjIeAmBZ9PBB+7kEedGwtLiPu3QRhYZG7BRB5HmhNA==
+  dependencies:
+    "@babel/runtime" "^7.8.4"
 
 "@polkadot/api-derive@1.4.0-beta.50":
   version "1.4.0-beta.50"
@@ -13139,7 +13155,7 @@ typedoc@^0.16.8:
     typedoc-default-themes "^0.7.2"
     typescript "3.7.x"
 
-typescript@3.7.x, typescript@^3.0.3, typescript@^3.6.4, typescript@^3.7.2, typescript@^3.7.5:
+typescript@3.7.x, typescript@^3.0.3, typescript@^3.6.4, typescript@^3.7.5, typescript@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
