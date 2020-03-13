@@ -5,7 +5,7 @@ export class Block extends Model {
   number!: number;
   parentHash!: string;
   author!: string;
-  bytes!: Buffer;
+  raw!: object;
 }
 
 export class Extrinsic extends Model {
@@ -14,12 +14,12 @@ export class Extrinsic extends Model {
   blockHash!: string;
   blockNumber!: number;
   index!: number;
-  module!: string;
+  section!: string;
   method!: string;
   args!: object;
   nonce!: number;
-  tip!: number;
-  origin?: string;
+  tip!: string;
+  signer?: string;
   bytes!: Buffer;
 }
 
@@ -28,183 +28,208 @@ export class Events extends Model {
   blockHash!: string;
   blockNumber!: number;
   index!: number;
-  module!: string;
-  name!: string;
+  section!: string;
+  method!: string;
   args!: object;
   bytes!: Buffer;
-  phase!: string;
-  extrinsic?: string;
+  phaseType!: string;
+  phaseIndex!: number;
 }
 
 export class Metadata extends Model {
-  blockHash!: string;
-  blockNumber!: number;
+  minBlockNumber!: number;
+  maxBlockNumber!: number;
   bytes!: Buffer;
   json!: object;
+  runtimeVersion!: object;
 }
 
 export class Status extends Model {
-  lastBlock!: number;
+  lastBlockNumber!: number;
 }
 
 export default function init(db: Sequelize): void {
-  Block.init({
-    hash: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      primaryKey: true
+  Block.init(
+    {
+      hash: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+      },
+      number: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      parentHash: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      author: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      raw: {
+        type: DataTypes.JSONB,
+        allowNull: false
+      }
     },
-    number: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    parentHash: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    author: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    bytes: {
-      type: DataTypes.BLOB,
-      allowNull: false
+    {
+      sequelize: db
     }
-  }, {
-    sequelize: db
-  });
+  );
 
-  Extrinsic.init({
-    id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      primaryKey: true
+  Extrinsic.init(
+    {
+      id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+      },
+      hash: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      blockHash: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      blockNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      index: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      section: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      method: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      args: {
+        type: DataTypes.JSONB,
+        allowNull: false
+      },
+      nonce: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      tip: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      signer: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      bytes: {
+        type: DataTypes.BLOB,
+        allowNull: false
+      }
     },
-    hash: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    blockHash: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    blockNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    index: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    module: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    method: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    args: {
-      type: DataTypes.JSONB,
-      allowNull: false
-    },
-    nonce: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    tip: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    origin: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    bytes: {
-      type: DataTypes.BLOB,
-      allowNull: false
+    {
+      sequelize: db
     }
-  }, {
-    sequelize: db
-  });
+  );
 
-  Events.init({
-    id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      primaryKey: true
+  Events.init(
+    {
+      id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+      },
+      blockHash: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      blockNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      index: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      section: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      method: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      args: {
+        type: DataTypes.JSONB,
+        allowNull: false
+      },
+      bytes: {
+        type: DataTypes.BLOB,
+        allowNull: false
+      },
+      phaseType: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      phaseIndex: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      }
     },
-    blockHash: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    blockNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    index: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    module: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    args: {
-      type: DataTypes.JSONB,
-      allowNull: false
-    },
-    bytes: {
-      type: DataTypes.BLOB,
-      allowNull: false
-    },
-    phase: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    extrinsic: {
-      type: DataTypes.STRING,
-      allowNull: true
+    {
+      sequelize: db
     }
-  }, {
-    sequelize: db
-  });
+  );
 
-  Metadata.init({
-    blockHash: {
-      type: DataTypes.STRING,
-      allowNull: false
+  Metadata.init(
+    {
+      id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+      },
+      minBlockNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      maxBlockNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      bytes: {
+        type: DataTypes.BLOB,
+        allowNull: false
+      },
+      json: {
+        type: DataTypes.JSONB,
+        allowNull: false
+      },
+      runtimeVersion: {
+        type: DataTypes.JSONB,
+        allowNull: false
+      }
     },
-    blockNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    bytes: {
-      type: DataTypes.BLOB,
-      allowNull: false
-    },
-    json: {
-      type: DataTypes.JSONB,
-      allowNull: false
+    {
+      sequelize: db
     }
-  }, {
-    sequelize: db
-  });
+  );
 
-  Status.init({
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true
+  Status.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true
+      },
+      lastBlockNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      }
     },
-    lastBlock: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    {
+      sequelize: db
     }
-  }, {
-    sequelize: db
-  });
+  );
 }

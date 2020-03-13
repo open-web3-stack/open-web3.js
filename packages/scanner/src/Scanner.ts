@@ -1,5 +1,7 @@
-import { isHex, isNumber, u8aToU8a } from '@polkadot/util';
+import { isHex, isNumber, u8aToU8a, u8aToHex } from '@polkadot/util';
 import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from '@polkadot/types';
+import { ValidatorId, Header as _Header } from '@polkadot/types/interfaces';
+import { HeaderExtended } from '@polkadot/api-derive/type';
 import Metadata from '@polkadot/metadata/Decorated';
 import { createTypeUnsafe } from '@polkadot/types/create';
 import { EventRecord } from '@polkadot/types/interfaces/system';
@@ -13,22 +15,29 @@ import {
   Bytes,
   BlockAtOptions,
   Block,
-  BlockRaw,
   Header,
+  BlockRaw,
   Confirmation,
   RuntimeVersion,
   SubcribeOptions,
   ChainInfo,
-  TypeProvider
+  TypeProvider,
+  Extrinsic,
+  SubscribeBlock,
+  Event,
+  WsProvider,
+  Meta
 } from './types';
 
 class Scanner {
   private rpcProvider: RpcProvider;
+  private wsProvider: WsProvider;
   private typeProvider?: TypeProvider;
   private chainInfo: Record<string, ChainInfo>;
 
   constructor(options: ScannerOptions) {
-    this.rpcProvider = options.provider;
+    this.wsProvider = options.wsProvider;
+    this.rpcProvider = options.rpcProvider || options.wsProvider;
     this.typeProvider = options.types;
     this.chainInfo = {};
   }
@@ -51,7 +60,7 @@ class Scanner {
           observer.next(result);
         };
 
-        subscriptionPromise = this.rpcProvider
+        subscriptionPromise = this.wsProvider
           .subscribe(updateType, subMethod, params, update)
           .catch(error => errorHandler(error));
       } catch (error) {
@@ -62,7 +71,7 @@ class Scanner {
         subscriptionPromise.then(
           (subscriptionId): Promise<boolean> =>
             isNumber(subscriptionId)
-              ? this.rpcProvider.unsubscribe(updateType, unsubMethod, subscriptionId)
+              ? this.wsProvider.unsubscribe(updateType, unsubMethod, subscriptionId)
               : Promise.resolve(false)
         );
       };
@@ -71,17 +80,60 @@ class Scanner {
 
   public async getBlockDetail(_blockAt?: BlockAtOptions): Promise<Block> {
     const blockAt = await this.getBlockAt(_blockAt);
+    const chainInfo = await this.getChainInfo(blockAt);
+    const requestes = [];
+
+    requestes.push(
+      this.getEvents(blockAt, chainInfo).then(eventRecords => {
+        return eventRecords.map((event, index) => {
+          return {
+            index,
+            bytes: event.toHex(),
+            section: event.event.section,
+            method: event.event.method,
+            phaseType: event.phase.type,
+            phaseIndex: event.phase.index,
+            args: event.event.data.toJSON() as any[]
+          } as Event;
+        });
+      })
+    );
+
     const blockRaw: BlockRaw = await this.rpcProvider.send('chain_getBlock', [blockAt.blockHash]);
-    const events = await this.getEvents(blockAt);
-    const extrinsics = await Promise.all(blockRaw.block.extrinsics.map(extrinsic => this.decodeTx(extrinsic, blockAt)));
+
+    requestes.push(
+      this.getHeader(blockRaw.block.header, blockAt, chainInfo).then(header => {
+        return header.author?.toString();
+      })
+    );
+
+    const extrinsics = blockRaw.block.extrinsics.map((extrinsic, index) => {
+      return {
+        index,
+        ...this.decodeTx(extrinsic, blockAt, chainInfo)
+      };
+    });
+
+    const [events, author] = await Promise.all(requestes as [Promise<Event[]>, Promise<string>]);
 
     return {
       raw: blockRaw,
       number: Number(blockRaw.block.header.number),
-      Bytes: blockAt.blockHash,
+      hash: blockAt.blockHash,
+      author,
       events,
-      extrinsics
+      extrinsics,
+      chainInfo
     };
+  }
+
+  public async getHeader(header: Header, _blockAt: BlockAtOptions, meta: Meta) {
+    const validators = await this.getSessionValidators(_blockAt);
+    return new HeaderExtended(
+      meta.registry,
+      createTypeUnsafe<_Header>(meta.registry, 'Header', [header]),
+      validators
+    );
   }
 
   public async getRuntimeVersion(blockHash?: Bytes): Promise<RuntimeVersion> {
@@ -132,7 +184,7 @@ class Scanner {
   public async getChainInfo(_blockAt?: BlockAtOptions): Promise<ChainInfo> {
     const { blockHash, blockNumber } = await this.getBlockAt(_blockAt);
     const runtimeVersion = await this.getRuntimeVersion(blockHash);
-    const cacheKey = `${runtimeVersion.specName}-${runtimeVersion.specVersion}`;
+    const cacheKey = `${runtimeVersion.specName}/${runtimeVersion.specVersion}`;
     if (!this.chainInfo[cacheKey]) {
       const registry = new TypeRegistry();
       const typeProvider = this.typeProvider;
@@ -145,6 +197,7 @@ class Scanner {
       }
       const rpcdata: string = await this.rpcProvider.send('state_getMetadata', [blockHash]);
       this.chainInfo[cacheKey] = {
+        id: cacheKey,
         min: blockNumber,
         max: blockNumber,
         bytes: rpcdata,
@@ -153,24 +206,46 @@ class Scanner {
         runtimeVersion: runtimeVersion
       };
     } else {
-      this.chainInfo[cacheKey].min = Math.min(this.chainInfo[cacheKey].min || Number.MAX_SAFE_INTEGER, blockNumber);
-      this.chainInfo[cacheKey].max = Math.max(this.chainInfo[cacheKey].max || Number.MIN_SAFE_INTEGER, blockNumber);
+      this.chainInfo[cacheKey].min = Math.min(this.chainInfo[cacheKey].min, blockNumber);
+      this.chainInfo[cacheKey].max = Math.max(this.chainInfo[cacheKey].max, blockNumber);
     }
     return this.chainInfo[cacheKey];
   }
 
-  public async getEvents(_blockAt: BlockAtOptions): Promise<Vec<EventRecord>> {
-    const blockAt = await this.getBlockAt(_blockAt);
-    const { metadata, registry } = await this.getChainInfo(blockAt);
-    const eventsStorageKey = new StorageKey(registry, metadata.query.system.events);
-    const raw: Bytes = await this.rpcProvider.send('state_getStorage', [eventsStorageKey.toHex(), blockAt.blockHash]);
-
-    return createTypeUnsafe<Vec<EventRecord>>(registry, eventsStorageKey.outputType as string, [u8aToU8a(raw)], true);
+  public async getSessionValidators(_blockAt: BlockAtOptions): Promise<Vec<ValidatorId>> {
+    const { metadata, registry } = await this.getChainInfo(_blockAt);
+    const storageKey = new StorageKey(registry, metadata.query.session.validators);
+    return this.getStorageValue<Vec<ValidatorId>>(storageKey, _blockAt);
   }
 
-  public async decodeTx(txData: Bytes, _blockAt: BlockAtOptions): Promise<GenericExtrinsic> {
+  public async getEvents(_blockAt: BlockAtOptions, meta: Meta): Promise<Vec<EventRecord>> {
+    const storageKey = new StorageKey(meta.registry, meta.metadata.query.system.events);
+    return this.getStorageValue<Vec<EventRecord>>(storageKey, _blockAt);
+  }
+
+  public async getStorageValue<T>(storageKey: StorageKey, _blockAt: BlockAtOptions): Promise<T> {
+    const blockAt = await this.getBlockAt(_blockAt);
     const { registry } = await this.getChainInfo(_blockAt);
-    return new GenericExtrinsic(registry, txData);
+    const raw: Bytes = await this.rpcProvider.send('state_getStorage', [storageKey.toHex(), blockAt.blockHash]);
+
+    return createTypeUnsafe(registry, storageKey.outputType as string, [u8aToU8a(raw)], true) as any;
+  }
+
+  public decodeTx(txData: Bytes, _blockAt: BlockAtOptions, meta: Meta): Extrinsic {
+    const extrinsic = new GenericExtrinsic(meta.registry, txData);
+    const { callIndex, args } = extrinsic.method.toJSON() as any;
+
+    return {
+      bytes: txData,
+      hash: u8aToHex(extrinsic.hash),
+      tip: extrinsic.tip.toString(),
+      nonce: extrinsic.nonce.toNumber(),
+      method: extrinsic.method.methodName,
+      section: extrinsic.method.sectionName,
+      signer: extrinsic.isSigned ? extrinsic.signer.toString() : null,
+      callIndex,
+      args
+    };
   }
 
   public subscribeNewBlockNumber(confirmation?: Confirmation): Observable<number> {
@@ -207,7 +282,7 @@ class Scanner {
     );
   }
 
-  public subscribe({ start = 0, end, concurrent = 1 }: SubcribeOptions = {}): Observable<Block> {
+  public subscribe({ start = 0, end, concurrent = 10 }: SubcribeOptions = {}): Observable<SubscribeBlock> {
     let blockNumber$;
 
     if (start !== undefined && end !== undefined) {
@@ -225,11 +300,7 @@ class Scanner {
       blockNumber$ = this.subscribeNewBlockNumber();
     }
 
-    return blockNumber$.pipe(
-      mergeMap(value => {
-        return this.getBlockDetail({ blockNumber: value });
-      }, concurrent)
-    );
+    return blockNumber$.pipe(mergeMap(value => this.getBlockDetail({ blockNumber: value }), concurrent));
   }
 }
 

@@ -1,8 +1,9 @@
-import { ProviderInterface } from '@polkadot/rpc-provider/types';
+import { WsProvider as _WsProvider, HttpProvider } from '@polkadot/rpc-provider';
 import { Registry, RegistryTypes } from '@polkadot/types/types';
 import Metadata from '@polkadot/metadata/Decorated';
 
-export type RpcProvider = ProviderInterface;
+export type WsProvider = _WsProvider;
+export type RpcProvider = _WsProvider | HttpProvider;
 
 export type Hex = string;
 export type Bytes = string;
@@ -12,7 +13,8 @@ export type Confirmation = 'finalize' | number | null;
 export type TypeProvider = RegistryTypes | ((specVersion: number) => RegistryTypes);
 
 export interface ScannerOptions {
-  provider: RpcProvider;
+  wsProvider: WsProvider;
+  rpcProvider?: RpcProvider;
   types?: TypeProvider;
 }
 
@@ -36,9 +38,33 @@ export interface BlockRaw {
 export interface Block {
   raw: BlockRaw;
   number: number;
-  Bytes: Bytes;
-  events: any;
-  extrinsics: any;
+  hash: Bytes;
+  extrinsics: (Extrinsic & { index: number })[];
+  events: Event[];
+  author?: string;
+  chainInfo: ChainInfo;
+}
+
+export interface Event {
+  index: number;
+  bytes: string;
+  section: string;
+  method: string;
+  phaseType: string;
+  phaseIndex: number;
+  args: any[];
+}
+
+export interface Extrinsic {
+  bytes: Bytes;
+  callIndex: Bytes;
+  hash: Bytes;
+  args: Record<string, any>;
+  tip: string;
+  nonce: number;
+  method: string;
+  section: string;
+  signer: string | null;
 }
 
 export interface RuntimeVersion {
@@ -67,12 +93,22 @@ export interface SubcribeOptions {
   concurrent?: number;
 }
 
-export type ChainInfo = {
+export interface ChainInfo {
+  id: string;
   blockHash?: Bytes;
-  min?: number;
-  max?: number;
+  min: number;
+  max: number;
   bytes: Bytes;
   metadata: Metadata;
   runtimeVersion: RuntimeVersion;
   registry: Registry;
+}
+
+export interface Meta {
+  metadata: Metadata;
+  registry: Registry;
+}
+
+export type SubscribeBlock = Block & {
+  chainInfo: ChainInfo;
 };
