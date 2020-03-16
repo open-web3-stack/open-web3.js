@@ -35,7 +35,7 @@ export default class Indexer {
     const statuses = await Status.findOne({ order: [['blockNumber', 'DESC']] });
     const lastBlockNumber = statuses ? statuses.blockNumber : 0;
 
-    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200 }).subscribe(result => {
+    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 100 }).subscribe(result => {
       if (result.result) {
         const block = result.result;
         Promise.all([
