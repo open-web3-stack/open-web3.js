@@ -91,6 +91,7 @@ export interface SubcribeOptions {
   end?: number;
   confirmation?: Confirmation;
   concurrent?: number;
+  timeout?: number;
 }
 
 export interface ChainInfo {

@@ -1,7 +1,7 @@
 import { Sequelize, SyncOptions } from 'sequelize';
 import init, { Status, Block, Metadata, Extrinsic, Events } from './models';
 import Scanner from '../../scanner/src';
-import { WsProvider, HttpProvider } from '@polkadot/rpc-provider';
+import { WsProvider } from '@polkadot/rpc-provider';
 import { TypeProvider, ChainInfo, SubscribeBlock } from '../../scanner/src/types';
 
 type IndexerOptions = {
@@ -23,19 +23,18 @@ export default class Indexer {
     });
     await db.authenticate();
     const wsProvider = new WsProvider(options.wsUrl);
-    const rpcProvider = new HttpProvider(options.httpUrl);
-    console.log(rpcProvider);
+
     init(db);
     if (options.sync) {
       await db.sync(options.syncOptions);
     }
-    return new Indexer(db, new Scanner({ wsProvider, rpcProvider: wsProvider, types: options.types }));
+    return new Indexer(db, new Scanner({ wsProvider, types: options.types }));
   }
 
   async start(): Promise<void> {
     const statuses = await Status.findOne({ order: [['blockNumber', 'DESC']] });
     const lastBlockNumber = statuses ? statuses.blockNumber : 0;
-    console.log(lastBlockNumber);
+
     this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200 }).subscribe(result => {
       if (result.result) {
         const block = result.result;
@@ -49,7 +48,7 @@ export default class Indexer {
             this.syncStatus(block.number, block.hash, 0);
           })
           .catch(error => {
-            console.error(result.error);
+            console.log(error);
             this.syncStatus(block.number, block.hash, 2);
           });
       } else {
@@ -123,27 +122,14 @@ export default class Indexer {
   }
 
   async syncMetadata(chainInfo: ChainInfo) {
-    const find = await Metadata.findOne({
-      where: {
-        id: chainInfo.id
-      },
-      attributes: ['id', 'minBlockNumber', 'maxBlockNumber']
+    await Metadata.upsert({
+      id: chainInfo.id,
+      minBlockNumber: chainInfo.min,
+      maxBlockNumber: chainInfo.max,
+      bytes: chainInfo.bytes,
+      json: chainInfo.metadata.metadata.toJSON(),
+      runtimeVersion: chainInfo.runtimeVersion
     });
-    if (!find) {
-      await Metadata.create({
-        id: chainInfo.id,
-        minBlockNumber: chainInfo.min,
-        maxBlockNumber: chainInfo.max,
-        bytes: chainInfo.bytes,
-        json: chainInfo.metadata.metadata.toJSON(),
-        runtimeVersion: chainInfo.runtimeVersion
-      });
-    } else {
-      await find.update({
-        minBlockNumber: Math.min(chainInfo.min, find.minBlockNumber),
-        maxBlockNumber: Math.max(chainInfo.max, find.maxBlockNumber)
-      });
-    }
   }
 
   close(): void {

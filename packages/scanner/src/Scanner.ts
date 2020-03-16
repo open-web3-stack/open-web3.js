@@ -35,12 +35,14 @@ class Scanner {
   private wsProvider: WsProvider;
   private typeProvider?: TypeProvider;
   private chainInfo: Record<string, ChainInfo>;
+  private metadataRequest: Record<string, Promise<ChainInfo>>;
 
   constructor(options: ScannerOptions) {
     this.wsProvider = options.wsProvider;
     this.rpcProvider = options.rpcProvider || options.wsProvider;
     this.typeProvider = options.types;
     this.chainInfo = {};
+    this.metadataRequest = {};
   }
 
   private createMethodSubscribe<T>(methods: string[], ...params: any[]): Observable<T> {
@@ -196,16 +198,24 @@ class Scanner {
           registry.register(typeProvider);
         }
       }
-      const rpcdata: string = await this.rpcProvider.send('state_getMetadata', [blockHash]);
-      this.chainInfo[cacheKey] = {
-        id: cacheKey,
-        min: blockNumber,
-        max: blockNumber,
-        bytes: rpcdata,
-        metadata: new Metadata(registry, rpcdata),
-        registry: registry,
-        runtimeVersion: runtimeVersion
-      };
+
+      if (!this.metadataRequest[cacheKey]) {
+        this.metadataRequest[cacheKey] = this.rpcProvider
+          .send('state_getMetadata', [blockHash])
+          .then((rpcdata: string) => {
+            return {
+              id: cacheKey,
+              min: blockNumber,
+              max: blockNumber,
+              bytes: rpcdata,
+              metadata: new Metadata(registry, rpcdata),
+              registry: registry,
+              runtimeVersion: runtimeVersion
+            };
+          });
+      }
+
+      this.chainInfo[cacheKey] = await this.metadataRequest[cacheKey];
     } else {
       this.chainInfo[cacheKey].min = Math.min(this.chainInfo[cacheKey].min, blockNumber);
       this.chainInfo[cacheKey].max = Math.max(this.chainInfo[cacheKey].max, blockNumber);
@@ -283,9 +293,9 @@ class Scanner {
     );
   }
 
-  public subscribe({ start, end, concurrent = 10 }: SubcribeOptions = {}): Observable<
-    SubscribeBlock | SubscribeBlockError
-  > {
+  public subscribe(options: SubcribeOptions = {}): Observable<SubscribeBlock | SubscribeBlockError> {
+    const { start, end, concurrent = 10 } = options;
+
     let blockNumber$;
 
     if (start !== undefined && end !== undefined) {
@@ -319,7 +329,7 @@ class Scanner {
             subscriber.error(error);
           });
       }).pipe(
-        timeout(60000),
+        timeout(options.timeout || 60000),
         retryWhen(errors =>
           errors.pipe(
             mergeMap((error, i) => {
@@ -331,7 +341,6 @@ class Scanner {
           )
         ),
         catchError((err: any) => {
-          console.error(err)
           return of({
             blockNumber,
             error: err,
@@ -341,19 +350,7 @@ class Scanner {
       );
     };
 
-    const init$ = blockNumber$.pipe(
-      take(1),
-      switchMap(number => {
-        return this.getChainInfo({ blockNumber: number });
-      })
-    );
-    const blockNumberSeq$ = blockNumber$;
-
-    return init$.pipe(
-      switchMap(() => {
-        return blockNumberSeq$.pipe(mergeMap(value => getBlockDetail(value), concurrent));
-      })
-    );
+    return blockNumber$.pipe(mergeMap(value => getBlockDetail(value), concurrent));
   }
 }
 
