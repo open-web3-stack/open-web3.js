@@ -16,6 +16,7 @@ type IndexerOptions = {
 export default class Indexer {
   // eslint-disable-next-line
   protected constructor(private readonly db: Sequelize, private readonly scanner: Scanner) {}
+  private metadataVersion: Record<string, any> = {};
 
   static async create(options: IndexerOptions): Promise<Indexer> {
     const db = new Sequelize(options.dbUrl, {
@@ -28,6 +29,7 @@ export default class Indexer {
     if (options.sync) {
       await db.sync(options.syncOptions);
     }
+
     return new Indexer(db, new Scanner({ wsProvider, types: options.types }));
   }
 
@@ -35,7 +37,7 @@ export default class Indexer {
     const statuses = await Status.findOne({ order: [['blockNumber', 'DESC']] });
     const lastBlockNumber = statuses ? statuses.blockNumber : 0;
 
-    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 10 }).subscribe(result => {
+    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200 }).subscribe(result => {
       if (result.result) {
         const block = result.result;
         Promise.all([
@@ -122,14 +124,41 @@ export default class Indexer {
   }
 
   async syncMetadata(chainInfo: ChainInfo) {
-    await Metadata.upsert({
-      id: chainInfo.id,
-      minBlockNumber: chainInfo.min,
-      maxBlockNumber: chainInfo.max,
-      bytes: chainInfo.bytes,
-      json: chainInfo.metadata.metadata.toJSON(),
-      runtimeVersion: chainInfo.runtimeVersion
-    });
+    if (!this.metadataVersion[chainInfo.id]) {
+      const info = chainInfo;
+      this.metadataVersion[info.id] = Metadata.upsert({
+        id: info.id,
+        minBlockNumber: info.min,
+        maxBlockNumber: info.max,
+        bytes: info.bytes,
+        json: info.metadata.metadata.toJSON(),
+        runtimeVersion: info.runtimeVersion
+      });
+    } else {
+      await this.metadataVersion[chainInfo.id];
+      const find = await Metadata.findOne({
+        where: {
+          id: chainInfo.id
+        },
+        attributes: ['id', 'minBlockNumber', 'maxBlockNumber']
+      });
+
+      if (!find) {
+        await Metadata.upsert({
+          id: chainInfo.id,
+          minBlockNumber: chainInfo.min,
+          maxBlockNumber: chainInfo.max,
+          bytes: chainInfo.bytes,
+          json: chainInfo.metadata.metadata.toJSON(),
+          runtimeVersion: chainInfo.runtimeVersion
+        });
+      } else {
+        await find.update({
+          minBlockNumber: Math.min(chainInfo.min, find.minBlockNumber),
+          maxBlockNumber: Math.max(chainInfo.max, find.maxBlockNumber)
+        });
+      }
+    }
   }
 
   close(): void {
