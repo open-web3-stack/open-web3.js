@@ -18,11 +18,13 @@ export default class Indexer {
   protected constructor(private readonly db: Sequelize, private readonly scanner: Scanner) {}
 
   static async create(options: IndexerOptions): Promise<Indexer> {
-    const db = new Sequelize(options.dbUrl);
+    const db = new Sequelize(options.dbUrl, {
+      logging: false
+    });
     await db.authenticate();
     const wsProvider = new WsProvider(options.wsUrl);
     const rpcProvider = new HttpProvider(options.httpUrl);
-    console.log(rpcProvider)
+    console.log(rpcProvider);
     init(db);
     if (options.sync) {
       await db.sync(options.syncOptions);
@@ -31,18 +33,42 @@ export default class Indexer {
   }
 
   async start(): Promise<void> {
-    const [status] = await Status.findOrBuild({ where: { id: 0 }, defaults: { id: 0 } });
-    const block = status.lastBlockNumber;
-    console.log(block)
-    this.scanner.subscribe({ start: 64000, concurrent: 1000 }).subscribe(block => {
-      this.syncBlock(block);
-      this.syncEvents(block);
-      this.syncExtrinsics(block);
-      this.syncMetadata(block.chainInfo);
+    const statuses = await Status.findOne({ order: [['blockNumber', 'DESC']] });
+    const lastBlockNumber = statuses ? statuses.blockNumber : 0;
+    console.log(lastBlockNumber);
+    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200 }).subscribe(result => {
+      if (result.result) {
+        const block = result.result;
+        Promise.all([
+          this.syncBlock(block),
+          this.syncEvents(block),
+          this.syncExtrinsics(block),
+          this.syncMetadata(block.chainInfo)
+        ])
+          .then(() => {
+            this.syncStatus(block.number, block.hash, 0);
+          })
+          .catch(error => {
+            console.error(result.error);
+            this.syncStatus(block.number, block.hash, 2);
+          });
+      } else {
+        console.error(result.error);
+        const blockNumber = result.blockNumber;
+        this.syncStatus(blockNumber, null, 1);
+      }
     });
   }
 
-  async syncEvents(block: SubscribeBlock) {
+  async syncStatus(blockNumber: number, blockHash: string | null, status: number) {
+    Status.upsert({
+      blockNumber: blockNumber,
+      blockHash: blockHash,
+      status: status
+    });
+  }
+
+  async syncEvents(block: SubscribeBlock['result']) {
     const request = [];
     for (const event of block.events) {
       request.push(
@@ -63,7 +89,7 @@ export default class Indexer {
     await Promise.all(request);
   }
 
-  async syncBlock(block: SubscribeBlock) {
+  async syncBlock(block: SubscribeBlock['result']) {
     await Block.upsert({
       hash: block.hash,
       number: block.number,
@@ -73,7 +99,7 @@ export default class Indexer {
     });
   }
 
-  async syncExtrinsics(block: SubscribeBlock) {
+  async syncExtrinsics(block: SubscribeBlock['result']) {
     const request = [];
     for (const extrinsic of block.extrinsics) {
       request.push(

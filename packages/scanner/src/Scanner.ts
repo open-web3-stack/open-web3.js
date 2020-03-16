@@ -5,8 +5,8 @@ import { HeaderExtended } from '@polkadot/api-derive/type';
 import Metadata from '@polkadot/metadata/Decorated';
 import { createTypeUnsafe } from '@polkadot/types/create';
 import { EventRecord } from '@polkadot/types/interfaces/system';
-import { Observable, range, from, concat, of } from 'rxjs';
-import { switchMap, map, take, shareReplay, mergeMap, pairwise } from 'rxjs/operators';
+import { Observable, range, from, concat, of, throwError, timer } from 'rxjs';
+import { switchMap, map, take, shareReplay, mergeMap, pairwise, catchError, timeout, retryWhen } from 'rxjs/operators';
 
 import {
   BlockAt,
@@ -24,6 +24,7 @@ import {
   TypeProvider,
   Extrinsic,
   SubscribeBlock,
+  SubscribeBlockError,
   Event,
   WsProvider,
   Meta
@@ -282,12 +283,14 @@ class Scanner {
     );
   }
 
-  public subscribe({ start = 0, end, concurrent = 10 }: SubcribeOptions = {}): Observable<SubscribeBlock> {
+  public subscribe({ start, end, concurrent = 10 }: SubcribeOptions = {}): Observable<
+    SubscribeBlock | SubscribeBlockError
+  > {
     let blockNumber$;
 
     if (start !== undefined && end !== undefined) {
       blockNumber$ = range(start, end - start + 1);
-    } else if (end === undefined) {
+    } else if (start !== undefined && end === undefined) {
       const newBlockNumber$ = this.subscribeNewBlockNumber();
 
       blockNumber$ = from(newBlockNumber$).pipe(
@@ -300,7 +303,57 @@ class Scanner {
       blockNumber$ = this.subscribeNewBlockNumber();
     }
 
-    return blockNumber$.pipe(mergeMap(value => this.getBlockDetail({ blockNumber: value }), concurrent));
+    const getBlockDetail = (blockNumber: number) => {
+      return new Observable<SubscribeBlock>(subscriber => {
+        console.log('request', blockNumber, new Date());
+        this.getBlockDetail({ blockNumber })
+          .then(data => {
+            subscriber.next({
+              blockNumber,
+              result: data,
+              error: null
+            });
+            subscriber.complete();
+          })
+          .catch(error => {
+            subscriber.error(error);
+          });
+      }).pipe(
+        timeout(60000),
+        retryWhen(errors =>
+          errors.pipe(
+            mergeMap((error, i) => {
+              if (error.name !== 'TimeoutError') {
+                return throwError(error);
+              }
+              return timer(5000);
+            })
+          )
+        ),
+        catchError((err: any) => {
+          console.error(err)
+          return of({
+            blockNumber,
+            error: err,
+            result: null
+          });
+        })
+      );
+    };
+
+    const init$ = blockNumber$.pipe(
+      take(1),
+      switchMap(number => {
+        return this.getChainInfo({ blockNumber: number });
+      })
+    );
+    const blockNumberSeq$ = blockNumber$;
+
+    return init$.pipe(
+      switchMap(() => {
+        return blockNumberSeq$.pipe(mergeMap(value => getBlockDetail(value), concurrent));
+      })
+    );
   }
 }
 

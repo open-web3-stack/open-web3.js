@@ -45,7 +45,9 @@ export class Metadata extends Model {
 }
 
 export class Status extends Model {
-  lastBlockNumber!: number;
+  blockNumber!: number;
+  blockHash?: string;
+  status!: number;
 }
 
 export default function init(db: Sequelize): void {
@@ -219,11 +221,16 @@ export default function init(db: Sequelize): void {
 
   Status.init(
     {
-      id: {
+      blockNumber: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        allowNull: false
       },
-      lastBlockNumber: {
+      blockHash: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      status: {
         type: DataTypes.INTEGER,
         allowNull: false
       }

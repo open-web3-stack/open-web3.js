@@ -109,6 +109,16 @@ export interface Meta {
   registry: Registry;
 }
 
-export type SubscribeBlock = Block & {
-  chainInfo: ChainInfo;
+export type SubscribeBlock = {
+  blockNumber: number;
+  result: Block & {
+    chainInfo: ChainInfo;
+  };
+  error: null;
+};
+
+export type SubscribeBlockError = {
+  blockNumber: number;
+  error: any;
+  result: null;
 };

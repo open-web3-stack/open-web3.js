@@ -6,8 +6,9 @@ describe('Scanner', () => {
   let scanner: Scanner;
 
   beforeAll(async () => {
-    jest.setTimeout(300000000);
+    jest.setTimeout(30000);
     const provider = new WsProvider('wss://node-6640517791634960384.jm.onfinality.io/ws');
+    console.log('hhh');
     scanner = new Scanner({ wsProvider: provider, types });
   });
 
@@ -128,6 +129,17 @@ describe('Scanner', () => {
       .subscribe(no => {
         console.error(no);
         // done()
+      });
+  });
+
+  it.only('subscribe', done => {
+    console.log('start');
+    scanner
+      .subscribe({
+        start: 0
+      })
+      .subscribe(no => {
+        console.log(no.result?.number);
       });
   });
 });
