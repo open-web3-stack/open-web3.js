@@ -1,4 +1,4 @@
-import { Sequelize, SyncOptions } from 'sequelize';
+import { Sequelize, Op, SyncOptions } from 'sequelize';
 import init, { Status, Block, Metadata, Extrinsic, Events } from './models';
 import Scanner from '../../scanner/src';
 import { WsProvider } from '@polkadot/rpc-provider';
@@ -36,8 +36,9 @@ export default class Indexer {
   async start(): Promise<void> {
     const statuses = await Status.findOne({ order: [['blockNumber', 'DESC']] });
     const lastBlockNumber = statuses ? statuses.blockNumber : 0;
+    await this.deleteBlocks(lastBlockNumber);
 
-    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200 }).subscribe(result => {
+    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 }).subscribe(result => {
       if (result.result) {
         const block = result.result;
         Promise.all([
@@ -159,6 +160,23 @@ export default class Indexer {
         });
       }
     }
+  }
+
+  async deleteBlocks(minBlockNumber: number) {
+    Promise.all([
+      Block.destroy({
+        where: { number: { [Op.gte]: minBlockNumber } }
+      }),
+      Events.destroy({
+        where: { blockNumber: { [Op.gte]: minBlockNumber } }
+      }),
+      Extrinsic.destroy({
+        where: { blockNumber: { [Op.gte]: minBlockNumber } }
+      }),
+      Status.destroy({
+        where: { blockNumber: { [Op.gte]: minBlockNumber } }
+      })
+    ]);
   }
 
   close(): void {

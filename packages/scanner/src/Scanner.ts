@@ -294,14 +294,14 @@ class Scanner {
   }
 
   public subscribe(options: SubcribeOptions = {}): Observable<SubscribeBlock | SubscribeBlockError> {
-    const { start, end, concurrent = 10 } = options;
+    const { start, end, concurrent = 10, confirmation } = options;
 
     let blockNumber$;
 
     if (start !== undefined && end !== undefined) {
       blockNumber$ = range(start, end - start + 1);
     } else if (start !== undefined && end === undefined) {
-      const newBlockNumber$ = this.subscribeNewBlockNumber();
+      const newBlockNumber$ = this.subscribeNewBlockNumber(confirmation);
 
       blockNumber$ = from(newBlockNumber$).pipe(
         take(1),
@@ -310,7 +310,7 @@ class Scanner {
         })
       );
     } else {
-      blockNumber$ = this.subscribeNewBlockNumber();
+      blockNumber$ = this.subscribeNewBlockNumber(confirmation);
     }
 
     const getBlockDetail = (blockNumber: number) => {
