@@ -31,8 +31,8 @@ import {
 } from './types';
 
 class Scanner {
+  public wsProvider: WsProvider;
   private rpcProvider: RpcProvider;
-  private wsProvider: WsProvider;
   private typeProvider?: TypeProvider;
   private chainInfo: Record<string, ChainInfo>;
   private metadataRequest: Record<string, Promise<ChainInfo>>;
@@ -287,8 +287,8 @@ class Scanner {
       }),
       pairwise(),
       mergeMap(([pre, current]) => {
-        if (pre === current) return of(current);
-        return range(current, current - pre);
+        if (pre >= current) return of(current);
+        return of(...[...Array(current - pre).keys()].map(i => i + 1 + pre));
       })
     );
   }

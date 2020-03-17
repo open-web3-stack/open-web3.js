@@ -6,7 +6,7 @@ describe('Scanner', () => {
   let scanner: Scanner;
 
   beforeAll(async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(30000000);
     const provider = new WsProvider('wss://node-6640517791634960384.jm.onfinality.io/ws');
     console.log('hhh');
     scanner = new Scanner({ wsProvider: provider, types });
@@ -56,21 +56,21 @@ describe('Scanner', () => {
     expect(await scanner.decodeTx('0x280402000b90110eb36e01', { blockNumber: 0 }, chainInfo)).toBeDefined();
   });
 
-  it('subscribeNewBlockNumber', done => {
+  it.only('subscribeNewBlockNumber', done => {
     let no = 0;
     let initBlockNumber: number;
     const s = scanner.subscribeNewBlockNumber().subscribe(number => {
-      if (no === 0) {
-        initBlockNumber = number;
-      }
-      if (no >= 5) {
-        s.unsubscribe();
-        expect(initBlockNumber + 5).toBe(number);
-        done();
-      } else {
-        no++;
-      }
+      console.log(number)
     });
+
+    setTimeout(() => {
+      scanner.wsProvider.disconnect()
+      console.log('disconnect')
+    }, 30000)
+    setTimeout(() => {
+      scanner.wsProvider.connect()
+      console.log('connect')
+    }, 60000)
   });
 
   it('subcribeFinalizedHead', done => {
@@ -132,7 +132,7 @@ describe('Scanner', () => {
       });
   });
 
-  it.only('subscribe', done => {
+  it('subscribe', done => {
     console.log('start');
     scanner
       .subscribe({

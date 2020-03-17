@@ -179,6 +179,23 @@ export default class Indexer {
     ]);
   }
 
+  async deleteBlock(blockNumber: number) {
+    Promise.all([
+      Block.destroy({
+        where: { number: blockNumber }
+      }),
+      Events.destroy({
+        where: { blockNumber: blockNumber }
+      }),
+      Extrinsic.destroy({
+        where: { blockNumber: blockNumber }
+      }),
+      Status.destroy({
+        where: { blockNumber: blockNumber }
+      })
+    ]);
+  }
+
   close(): void {
     this.db.close();
   }
