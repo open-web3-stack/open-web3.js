@@ -1,13 +1,15 @@
 import { WsProvider } from '@polkadot/rpc-provider';
 import Scanner from '../../Scanner';
+import { types } from '@acala-network/types';
 
 describe('Scanner', () => {
   let scanner: Scanner;
 
   beforeAll(async () => {
-    jest.setTimeout(300000000);
-    const provider = new WsProvider('wss://testnet-node-1.acala.laminar.one/ws');
-    scanner = new Scanner({ provider });
+    jest.setTimeout(30000000);
+    const provider = new WsProvider('wss://node-6640517791634960384.jm.onfinality.io/ws');
+    console.log('hhh');
+    scanner = new Scanner({ wsProvider: provider, types });
   });
 
   it('getBlockHash', async () => {
@@ -42,31 +44,33 @@ describe('Scanner', () => {
   });
 
   it('getEvents', async () => {
-    await expect(scanner.getEvents({ blockNumber: -1 })).rejects.toThrow();
-    await expect(scanner.getEvents({ blockNumber: Number.MAX_SAFE_INTEGER })).rejects.toThrow();
-
-    expect(await scanner.getEvents({ blockNumber: 739077 })).toBeDefined();
+    // await expect(scanner.getEvents({ blockNumber: -1 })).rejects.toThrow();
+    // await expect(scanner.getEvents({ blockNumber: Number.MAX_SAFE_INTEGER })).rejects.toThrow();
+    const chainInfo = await scanner.getChainInfo({ blockNumber: 111 });
+    const events = await scanner.getEvents({ blockNumber: 111 }, chainInfo);
+    expect(events).toBeDefined();
   });
 
   it('decodeTx', async () => {
-    expect(await scanner.decodeTx('0x280402000b90110eb36e01', { blockNumber: 0 })).toBeDefined();
+    const chainInfo = await scanner.getChainInfo({ blockNumber: 0 });
+    expect(await scanner.decodeTx('0x280402000b90110eb36e01', { blockNumber: 0 }, chainInfo)).toBeDefined();
   });
 
-  it('subscribeNewBlockNumber', done => {
+  it.only('subscribeNewBlockNumber', done => {
     let no = 0;
     let initBlockNumber: number;
     const s = scanner.subscribeNewBlockNumber().subscribe(number => {
-      if (no === 0) {
-        initBlockNumber = number;
-      }
-      if (no >= 5) {
-        s.unsubscribe();
-        expect(initBlockNumber + 5).toBe(number);
-        done();
-      } else {
-        no++;
-      }
+      console.log(number)
     });
+
+    setTimeout(() => {
+      scanner.wsProvider.disconnect()
+      console.log('disconnect')
+    }, 30000)
+    setTimeout(() => {
+      scanner.wsProvider.connect()
+      console.log('connect')
+    }, 60000)
   });
 
   it('subcribeFinalizedHead', done => {
@@ -116,7 +120,7 @@ describe('Scanner', () => {
     });
   });
 
-  it.only('subscribe start and end', done => {
+  it('subscribe start and end', done => {
     scanner
       .subscribe({
         start: 0,
@@ -125,6 +129,17 @@ describe('Scanner', () => {
       .subscribe(no => {
         console.error(no);
         // done()
+      });
+  });
+
+  it('subscribe', done => {
+    console.log('start');
+    scanner
+      .subscribe({
+        start: 0
+      })
+      .subscribe(no => {
+        console.log(no.result?.number);
       });
   });
 });

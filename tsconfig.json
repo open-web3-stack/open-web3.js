@@ -1,24 +1,21 @@
 {
-    "extends": "./node_modules/@polkadot/dev/config/tsconfig",
-    "exclude": [
-      "build/**/*",
-      "**/build/**/*"
-    ],
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths":
-      {
-        "@orml/api": ["packages/api/src"],
-        "@orml/api/*": ["packages/api/src/*"],
-        "@orml/scanner": ["packages/scanner/src"],
-        "@orml/scanner/*": ["packages/scanner/src/*"],
-        "@orml/types": ["packages/types/src"],
-        "@orml/types/*": ["packages/types/src/*"],
-      },
-      "skipLibCheck": true,
-      "typeRoots": [
-        "./node_modules/@polkadot/ts",
-        "./node_modules/@types"
-      ]
-    }
+  "extends": "./node_modules/@polkadot/dev/config/tsconfig",
+  "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*"],
+  "compilerOptions": {
+    "target": "es2018",
+    "baseUrl": ".",
+    "noUnusedLocals": false,
+    "paths": {
+      "@orml/api": ["packages/api/src"],
+      "@orml/api/*": ["packages/api/src/*"],
+      "@orml/scanner": ["packages/scanner/src"],
+      "@orml/scanner/*": ["packages/scanner/src/*"],
+      "@orml/types": ["packages/types/src"],
+      "@orml/types/*": ["packages/types/src/*"],
+      "@orml/indexer": ["packages/indexer/src"],
+      "@orml/indexer/*": ["packages/indexer/src/*"]
+    },
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types"]
   }
+}
