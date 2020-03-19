@@ -9,6 +9,8 @@ module.exports = {
   rules: {
     ...base.rules,
     '@typescript-eslint/indent': 'off', // prettier
-    'space-before-function-paren': 'off' // prettier
+    'space-before-function-paren': 'off', // prettier
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 };
