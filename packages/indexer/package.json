@@ -14,12 +14,14 @@
     "url": "https://github.com/laminar-protocol/orml.js/issues"
   },
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "start:acala": "NETWORK=acala ts-node ./src/index.ts",
+    "start:laminar": "NETWORK=laminar ts-node ./src/index.ts"
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
     "@acala-network/types": "beta",
     "@babel/runtime": "^7.8.4",
+    "@laminar/api": "beta",
     "@orml/scanner": "beta",
     "@polkadot/api": "1.4.0-beta.50",
     "@types/sequelize": "^4.28.8",

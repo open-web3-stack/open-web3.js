@@ -119,10 +119,13 @@ class Scanner {
 
     const [events, author] = await Promise.all(requestes as [Promise<Event[]>, Promise<string>]);
 
+    const timestamp = extrinsics?.[0]?.args?.now;
+
     return {
       raw: blockRaw,
       number: Number(blockRaw.block.header.number),
       hash: blockAt.blockHash,
+      timestamp,
       author,
       events,
       extrinsics,
@@ -199,6 +202,7 @@ class Scanner {
         }
       }
 
+      // eslint-disable-next-line
       if (!this.metadataRequest[cacheKey]) {
         this.metadataRequest[cacheKey] = this.rpcProvider
           .send('state_getMetadata', [blockHash])
@@ -239,6 +243,7 @@ class Scanner {
     const { registry } = await this.getChainInfo(_blockAt);
     const raw: Bytes = await this.rpcProvider.send('state_getStorage', [storageKey.toHex(), blockAt.blockHash]);
 
+    // eslint-disable-next-line
     return createTypeUnsafe(registry, storageKey.outputType as string, [u8aToU8a(raw)], true) as any;
   }
 
@@ -332,7 +337,7 @@ class Scanner {
         timeout(options.timeout || 60000),
         retryWhen(errors =>
           errors.pipe(
-            mergeMap((error, i) => {
+            mergeMap(error => {
               if (error.name !== 'TimeoutError') {
                 return throwError(error);
               }

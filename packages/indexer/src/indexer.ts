@@ -7,7 +7,6 @@ import { TypeProvider, ChainInfo, SubscribeBlock } from '../../scanner/src/types
 type IndexerOptions = {
   dbUrl: string;
   wsUrl: string;
-  httpUrl: string;
   types?: TypeProvider;
   sync?: boolean;
   syncOptions?: SyncOptions;
@@ -48,11 +47,11 @@ export default class Indexer {
           this.syncMetadata(block.chainInfo)
         ])
           .then(() => {
-            this.syncStatus(block.number, block.hash, 0);
+            return this.syncStatus(block.number, block.hash, 0);
           })
           .catch(error => {
             console.log(error);
-            this.syncStatus(block.number, block.hash, 2);
+            return this.syncStatus(block.number, block.hash, 2);
           });
       } else {
         console.error(result.error);
@@ -63,7 +62,7 @@ export default class Indexer {
   }
 
   async syncStatus(blockNumber: number, blockHash: string | null, status: number) {
-    Status.upsert({
+    await Status.upsert({
       blockNumber: blockNumber,
       blockHash: blockHash,
       status: status
@@ -93,8 +92,9 @@ export default class Indexer {
 
   async syncBlock(block: SubscribeBlock['result']) {
     await Block.upsert({
-      hash: block.hash,
-      number: block.number,
+      blockHash: block.hash,
+      blockNumber: block.number,
+      timestamp: block.timestamp,
       parentHash: block.raw.block.header.parentHash,
       author: block.author,
       raw: block.raw
@@ -163,9 +163,9 @@ export default class Indexer {
   }
 
   async deleteBlocks(minBlockNumber: number) {
-    Promise.all([
+    await Promise.all([
       Block.destroy({
-        where: { number: { [Op.gte]: minBlockNumber } }
+        where: { blockNumber: { [Op.gte]: minBlockNumber } }
       }),
       Events.destroy({
         where: { blockNumber: { [Op.gte]: minBlockNumber } }
@@ -180,9 +180,9 @@ export default class Indexer {
   }
 
   async deleteBlock(blockNumber: number) {
-    Promise.all([
+    await Promise.all([
       Block.destroy({
-        where: { number: blockNumber }
+        where: { blockNumber: blockNumber }
       }),
       Events.destroy({
         where: { blockNumber: blockNumber }

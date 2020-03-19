@@ -43,6 +43,7 @@ export interface Block {
   events: Event[];
   author?: string;
   chainInfo: ChainInfo;
+  timestamp: number;
 }
 
 export interface Event {

@@ -1,10 +1,11 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
 
 export class Block extends Model {
-  hash!: string;
-  number!: number;
+  blockHash!: string;
+  blockNumber!: number;
+  timestamp?: number;
   parentHash!: string;
-  author!: string;
+  author?: string;
   raw!: object;
 }
 
@@ -53,14 +54,18 @@ export class Status extends Model {
 export default function init(db: Sequelize): void {
   Block.init(
     {
-      hash: {
+      blockHash: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true
       },
-      number: {
-        type: DataTypes.INTEGER,
+      blockNumber: {
+        type: DataTypes.BIGINT,
         allowNull: false
+      },
+      timestamp: {
+        type: DataTypes.BIGINT,
+        allowNull: true
       },
       parentHash: {
         type: DataTypes.STRING,
@@ -96,7 +101,7 @@ export default function init(db: Sequelize): void {
         allowNull: false
       },
       blockNumber: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       index: {
@@ -149,7 +154,7 @@ export default function init(db: Sequelize): void {
         allowNull: false
       },
       blockNumber: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       index: {
@@ -194,11 +199,11 @@ export default function init(db: Sequelize): void {
         primaryKey: true
       },
       minBlockNumber: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       maxBlockNumber: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false
       },
       bytes: {
@@ -222,7 +227,7 @@ export default function init(db: Sequelize): void {
   Status.init(
     {
       blockNumber: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         allowNull: false
       },
