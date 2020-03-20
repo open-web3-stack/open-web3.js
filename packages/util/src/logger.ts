@@ -3,7 +3,7 @@ export enum LoggerLevel {
   Log = 'log',
   Info = 'info',
   Warn = 'warn',
-  Error = 'error',
+  Error = 'error'
 }
 
 export const levelToNumber = (level: LoggerLevel) => {
@@ -75,12 +75,18 @@ export class Logger {
 
   public logRaw(level: LoggerLevel, args: any[]) {
     this.output({
-      level, args, timestamp: new Date(), namespaces: this.namespaces
+      level,
+      args,
+      timestamp: new Date(),
+      namespaces: this.namespaces
     });
   }
 
   public addMiddleware(...middlewares: LoggerMiddleware[]) {
-    const output = middlewares.reduceRight((output: LoggerOutput, middleware) => payload => middleware(payload, output), this.output);
+    const output = middlewares.reduceRight(
+      (output: LoggerOutput, middleware) => payload => middleware(payload, output),
+      this.output
+    );
     this.output = output;
   }
 
@@ -89,10 +95,16 @@ export class Logger {
   }
 
   public createLogger(namespace?: string) {
-    return new Logger(namespace || Math.random().toString(36).substr(2, 5), this);
+    return new Logger(
+      namespace ||
+        Math.random()
+          .toString(36)
+          .substr(2, 5),
+      this
+    );
   }
 
-  public static defaultInstance = new Logger('')
+  public static defaultInstance = new Logger('');
 }
 
 export const consoleOutput = (payload: LoggerPayload, next: LoggerOutput) => {
