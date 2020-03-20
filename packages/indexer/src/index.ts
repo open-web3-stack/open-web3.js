@@ -2,6 +2,7 @@ import Indexer from './indexer';
 import dotenv from 'dotenv';
 import { options } from '@laminar/api';
 import { types as acalaTypes } from '@acala-network/types';
+import log from './log';
 
 dotenv.config();
 
@@ -20,13 +21,13 @@ const runLaminarNetwork = async (): Promise<void> => {
 };
 
 if (process.env.NETWORK === 'acala') {
-  console.log('run acala');
+  log.info('run acala');
   runAcalaNetwork().catch(err => {
-    console.error(err);
+    log.error(err);
   });
 } else if (process.env.NETWORK === 'laminar') {
-  console.log('run laminar');
+  log.info('run laminar');
   runLaminarNetwork().catch(err => {
-    console.error(err);
+    log.error(err);
   });
 }

@@ -3,6 +3,7 @@ import init, { Status, Block, Metadata, Extrinsic, Events } from './models';
 import Scanner from '../../scanner/src';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { TypeProvider, ChainInfo, SubscribeBlock } from '../../scanner/src/types';
+import log from './log';
 
 type IndexerOptions = {
   dbUrl: string;
@@ -49,12 +50,22 @@ export default class Indexer {
           .then(() => {
             return this.syncStatus(block.number, block.hash, 0);
           })
-          .catch(error => {
-            console.log(error);
-            return this.syncStatus(block.number, block.hash, 2);
+          .then(() => {
+            return log.info(`${block.number}-${block.hash}`);
+          })
+          .catch(async error => {
+            try {
+              await this.deleteBlock(block.number);
+              log.error(`${block.number}-${block.hash}`, error, { errorCode: 2 });
+              await this.syncStatus(block.number, block.hash, 2);
+            } catch (error) {
+              log.error(`${block.number}-${block.hash}`, error, { errorCode: 3 });
+              await this.syncStatus(block.number, block.hash, 3);
+            }
           });
       } else {
-        console.error(result.error);
+        log.error(`${result.blockNumber}-unknown`, result.error, { errorCode: 1 });
+
         const blockNumber = result.blockNumber;
         this.syncStatus(blockNumber, null, 1);
       }
@@ -188,9 +199,6 @@ export default class Indexer {
         where: { blockNumber: blockNumber }
       }),
       Extrinsic.destroy({
-        where: { blockNumber: blockNumber }
-      }),
-      Status.destroy({
         where: { blockNumber: blockNumber }
       })
     ]);
