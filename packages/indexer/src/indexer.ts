@@ -2,7 +2,7 @@ import { Sequelize, Op, SyncOptions } from 'sequelize';
 import init, { Status, Block, Metadata, Extrinsic, Events } from './models';
 import Scanner from '../../scanner/src';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { TypeProvider, ChainInfo, SubscribeBlock } from '../../scanner/src/types';
+import { TypeProvider, ChainInfo, SubscribeBlock, SubscribeBlockError } from '../../scanner/src/types';
 import log from './log';
 
 type IndexerOptions = {
@@ -38,22 +38,30 @@ export default class Indexer {
     const lastBlockNumber = statuses ? statuses.blockNumber : 0;
     await this.deleteBlocks(lastBlockNumber);
 
-    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 }).subscribe(result => {
-      if (result.result) {
-        const block = result.result;
-        Promise.all([
-          this.syncBlock(block),
-          this.syncEvents(block),
-          this.syncExtrinsics(block),
-          this.syncMetadata(block.chainInfo)
-        ])
-          .then(() => {
-            return this.syncStatus(block.number, block.hash, 0);
-          })
-          .then(() => {
-            return log.info(`${block.number}-${block.hash}`);
-          })
-          .catch(async error => {
+    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 }).subscribe(async result => {
+      this.pushData(result, true);
+    });
+  }
+
+  async pushData(result: SubscribeBlock | SubscribeBlockError, retry: boolean) {
+    if (result.result) {
+      const block = result.result;
+      await Promise.all([
+        this.syncBlock(block),
+        this.syncEvents(block),
+        this.syncExtrinsics(block),
+        this.syncMetadata(block.chainInfo)
+      ])
+        .then(() => {
+          return this.syncStatus(block.number, block.hash, 0);
+        })
+        .then(() => {
+          return log.info(`${block.number}-${block.hash}`);
+        })
+        .catch(async error => {
+          if (retry) {
+            await this.retrySync(block.number);
+          } else {
             try {
               await this.deleteBlock(block.number);
               log.error(`${block.number}-${block.hash}`, error, { errorCode: 2 });
@@ -62,14 +70,37 @@ export default class Indexer {
               log.error(`${block.number}-${block.hash}`, error, { errorCode: 3 });
               await this.syncStatus(block.number, block.hash, 3);
             }
-          });
-      } else {
-        log.error(`${result.blockNumber}-unknown`, result.error, { errorCode: 1 });
+          }
+        });
+    } else {
+      log.error(`${result.blockNumber}-unknown`, result.error, { errorCode: 1 });
 
-        const blockNumber = result.blockNumber;
-        this.syncStatus(blockNumber, null, 1);
-      }
-    });
+      const blockNumber = result.blockNumber;
+      this.syncStatus(blockNumber, null, 1);
+    }
+  }
+
+  async retrySync(blockNumber: number) {
+    let result: SubscribeBlock | SubscribeBlockError;
+    log.warn(`${blockNumber} retry`);
+
+    try {
+      await this.deleteBlock(blockNumber);
+      const blockDetail = await this.scanner.getBlockDetail({ blockNumber });
+      result = {
+        blockNumber: blockDetail.number,
+        result: blockDetail,
+        error: null
+      };
+    } catch (error) {
+      result = {
+        blockNumber: blockNumber,
+        error: error,
+        result: null
+      };
+    }
+
+    await this.pushData(result, false);
   }
 
   async syncStatus(blockNumber: number, blockHash: string | null, status: number) {
