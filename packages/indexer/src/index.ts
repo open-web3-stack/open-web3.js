@@ -8,14 +8,14 @@ dotenv.config();
 
 const runAcalaNetwork = async (): Promise<void> => {
   const dbUrl = process.env.ACALA_DB_URI as string;
-  const wsUrl = 'wss://node-6640517791634960384.jm.onfinality.io/ws';
+  const wsUrl = process.env.ACALA_WS_URL || 'wss://node-6640517791634960384.jm.onfinality.io/ws';
   const indexer = await Indexer.create({ dbUrl, wsUrl, types: acalaTypes, sync: true });
   await indexer.start();
 };
 
 const runLaminarNetwork = async (): Promise<void> => {
   const dbUrl = process.env.LAMINAR_DB_URI as string;
-  const wsUrl = 'wss://node-6636393196323627008.jm.onfinality.io/ws?apikey=20cf0fa0-c7ee-4545-8227-4d488f71c6d2';
+  const wsUrl = process.env.LAMINAR_WS_URL || 'wss://testnet-node-1.laminar-chain.laminar.one/ws';
   const indexer = await Indexer.create({ dbUrl, wsUrl, types: options({}).types, sync: true });
   await indexer.start();
 };
