@@ -15,7 +15,9 @@
       "@orml/indexer": ["packages/indexer/src"],
       "@orml/indexer/*": ["packages/indexer/src/*"],
       "@orml/util": ["packages/util/src"],
-      "@orml/util/*": ["packages/util/src/*"]
+      "@orml/util/*": ["packages/util/src/*"],
+      "@orml/dispatcher": ["packages/dispatcher/src"],
+      "@orml/dispatcher/*": ["packages/dispatcher/src/*"]
     },
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types"]
