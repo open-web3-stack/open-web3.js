@@ -38,7 +38,7 @@ export default class Indexer {
     const lastBlockNumber = statuses ? statuses.blockNumber : 0;
     await this.deleteBlocks(lastBlockNumber);
 
-    this.scanner.subscribe({ start: 68276, end: 68276, concurrent: 200, confirmation: 4 }).subscribe(result => {
+    this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 }).subscribe(result => {
       if (result.result) {
         const block = result.result;
         Promise.all([
