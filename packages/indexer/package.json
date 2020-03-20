@@ -27,7 +27,8 @@
     "@types/sequelize": "^4.28.8",
     "dotenv": "^8.2.0",
     "pg": "^7.18.2",
-    "sequelize": "^5.21.5"
+    "sequelize": "^5.21.5",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "ts-node": "^8.6.2"

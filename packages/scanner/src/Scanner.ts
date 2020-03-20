@@ -320,7 +320,6 @@ class Scanner {
 
     const getBlockDetail = (blockNumber: number) => {
       return new Observable<SubscribeBlock>(subscriber => {
-        console.log('block: ', blockNumber, new Date());
         this.getBlockDetail({ blockNumber })
           .then(data => {
             subscriber.next({
