@@ -31,9 +31,6 @@ export interface LoggerPayload {
 export type LoggerMiddleware = (payload: LoggerPayload, next: LoggerOutput) => void;
 export type LoggerOutput = (payload: LoggerPayload) => void;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const noop = () => {};
-
 export class Logger {
   private output: LoggerOutput;
   private readonly namespaces: string[] = [];
@@ -49,7 +46,7 @@ export class Logger {
     if (parent) {
       this.output = payload => parent.output(payload);
     } else {
-      this.output = noop;
+      this.output = () => {};
     }
   }
 
@@ -147,5 +144,6 @@ export const createBufferedOutput = (level = LoggerLevel.Warn, size = 50) => {
 };
 
 Logger.defaultInstance.addMiddleware(consoleOutput);
+Logger.defaultInstance.addMiddleware(createFilterOutput(LoggerLevel.Log));
 
 export default Logger.defaultInstance;
