@@ -5,7 +5,9 @@ import { SignatureOptions } from '@polkadot/types/types';
 
 import defaultLogger from '@orml/util/logger';
 
-export const logger = defaultLogger.createLogger('@orml/util');
+export { defaultLogger };
+
+export const moduleLogger = defaultLogger.createLogger('@orml/util');
 
 export function deferred<T>() {
   const deferred: {
@@ -20,7 +22,7 @@ export function deferred<T>() {
   return deferred;
 }
 
-const sendTransactionLogger = logger.createLogger('sendTransaction');
+const sendTransactionLogger = moduleLogger.createLogger('sendTransaction');
 
 export const sendTransaction = (
   tx: SubmittableExtrinsic<'promise'>,
