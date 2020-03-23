@@ -39,9 +39,9 @@ export class Dispatcher {
   private readonly handlerProps: Map<DispatchEventHandler, { running: number }> = new Map();
 
   public constructor(handlers: DispatchEventHandler[]) {
-    const set = new Set(handlers.map(h => h.source));
+    const set = new Set(handlers.map((h) => h.source));
 
-    this.closeHandlers = [...set].map(source => source.register(event => this.handle(event)) || (() => {}));
+    this.closeHandlers = [...set].map((source) => source.register((event) => this.handle(event)) || (() => {}));
 
     for (const handler of handlers) {
       const arr = this.handlers[handler.kind as any] || [];
@@ -53,7 +53,7 @@ export class Dispatcher {
   private async handle(event: DispatchEvent) {
     logger.debug('handle', event.kind);
     const handlers = this.handlers[event.kind as any];
-    await Promise.all(handlers.map(h => this.callHandler(h, event)));
+    await Promise.all(handlers.map((h) => this.callHandler(h, event)));
   }
 
   private getHandlerProps(handler: DispatchEventHandler) {

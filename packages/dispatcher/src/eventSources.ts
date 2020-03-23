@@ -13,7 +13,7 @@ export class SetIntervalEventSource implements DispatchEventSource {
   }
 
   public handler(...callbacks: (() => any)[]): DispatchEventHandler {
-    return new DispatchEventHandler(this, this.kind, () => Promise.all(callbacks.map(c => c())));
+    return new DispatchEventHandler(this, this.kind, () => Promise.all(callbacks.map((c) => c())));
   }
 }
 export interface SingleEvent<E> extends DispatchEvent {
@@ -38,12 +38,12 @@ export class SingleEventSource<E> implements DispatchEventSource {
 
   public handler(...callbacks: ((payload: E) => any)[]): DispatchEventHandler<SingleEvent<E>> {
     return new DispatchEventHandler(this, this.kind, (e: SingleEvent<E>) =>
-      Promise.all(callbacks.map(c => c(e.payload)))
+      Promise.all(callbacks.map((c) => c(e.payload)))
     );
   }
 
   public emit(event: E) {
-    return Promise.all(this.callbacks.map(c => c({ kind: this.kind, payload: event })));
+    return Promise.all(this.callbacks.map((c) => c({ kind: this.kind, payload: event })));
   }
 }
 
@@ -78,7 +78,7 @@ export class MultiEventSource<E> implements DispatchEventSource {
   }
 
   public emit<T extends keyof E>(kind: T, event: E[T]) {
-    return Promise.all(this.callbacks.map(c => c({ kind: this.kinds[kind], payload: event })));
+    return Promise.all(this.callbacks.map((c) => c({ kind: this.kinds[kind], payload: event })));
   }
 }
 
