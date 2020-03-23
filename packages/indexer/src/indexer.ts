@@ -40,7 +40,7 @@ export default class Indexer {
 
     await this.fixLostBlock(lastBlockNumber);
 
-    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 });
+    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 50, confirmation: 4 });
 
     source$.pipe(mergeMap(result => this.pushData(result), 5)).subscribe();
 
