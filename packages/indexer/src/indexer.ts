@@ -42,7 +42,7 @@ export default class Indexer {
     const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 });
 
     source$.subscribe(async result => {
-      this.pushData(result, true);
+      this.pushData(result);
     });
 
     source$.pipe(auditTime(4000 * 10)).subscribe(() => {
