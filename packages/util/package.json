@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@yarnpkg/lockfile": "^1.1.0"
+    "@yarnpkg/lockfile": "^1.1.0",
+    "rxjs": "^6.5.4"
   }
 }
