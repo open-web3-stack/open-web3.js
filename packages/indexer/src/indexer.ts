@@ -21,7 +21,10 @@ export default class Indexer {
 
   static async create(options: IndexerOptions): Promise<Indexer> {
     const db = new Sequelize(options.dbUrl, {
-      logging: false
+      logging: false,
+      pool: {
+        max: 20
+      }
     });
     await db.authenticate();
     const wsProvider = new WsProvider(options.wsUrl);
@@ -40,7 +43,7 @@ export default class Indexer {
 
     await this.fixLostBlock(lastBlockNumber);
 
-    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 100, confirmation: 4 });
+    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 });
 
     source$.pipe(mergeMap(result => this.pushData(result), 5)).subscribe();
 
