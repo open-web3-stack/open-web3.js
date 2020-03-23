@@ -1,6 +1,6 @@
 {
   "name": "@orml/util",
-  "version": "0.2.0-beta.30",
+  "version": "0.2.0-beta.31",
   "description": "ORML JS API",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
