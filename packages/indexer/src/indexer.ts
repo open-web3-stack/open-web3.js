@@ -104,7 +104,7 @@ export default class Indexer {
 
   async getBlock(blockNumber: number) {
     let result: SubscribeBlock | SubscribeBlockError;
-    log.info(`${blockNumber} retry`);
+    log.warn(`${blockNumber} retry`);
 
     try {
       const blockDetail = await this.scanner.getBlockDetail({ blockNumber });
