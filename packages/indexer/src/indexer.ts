@@ -82,7 +82,7 @@ export default class Indexer {
     }
 
     while (!(await this.noMissBlock(lastBlockNumber))) {
-      const start = await this.findFirstLossBlock(lastBlockNumber, low);
+      const start = await this.findFirstLostBlock(lastBlockNumber, low);
       if (start < 0) return;
       const end = Math.min(start + 200, lastBlockNumber);
       const source$ = this.scanner.subscribe({ start, end, concurrent: 100, confirmation: 4 }).pipe(
@@ -103,7 +103,7 @@ export default class Indexer {
     }
   }
 
-  async findFirstLossBlock(high: number, low = 0) {
+  async findFirstLostBlock(high: number, low = 0) {
     if (await this.noMissBlock(high)) return -1;
 
     let result = low;
