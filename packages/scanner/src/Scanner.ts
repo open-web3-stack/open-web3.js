@@ -31,11 +31,12 @@ import {
 } from './types';
 
 class Scanner {
-  public wsProvider: WsProvider;
   private rpcProvider: RpcProvider;
   private typeProvider?: TypeProvider;
-  private chainInfo: Record<string, ChainInfo>;
   private metadataRequest: Record<string, Promise<ChainInfo>>;
+
+  public wsProvider: WsProvider;
+  public chainInfo: Record<string, ChainInfo>;
 
   constructor(options: ScannerOptions) {
     this.wsProvider = options.wsProvider;
