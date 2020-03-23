@@ -105,6 +105,7 @@ export default class Indexer {
 
   async findFirstLossBlock(high: number, low = 0) {
     if (await this.noMissBlock(high)) return -1;
+
     let result = low;
 
     while (high - low > 200) {
@@ -119,6 +120,7 @@ export default class Indexer {
       }
     }
 
+    log.warn(`From ${result}`)
     return result;
   }
 
