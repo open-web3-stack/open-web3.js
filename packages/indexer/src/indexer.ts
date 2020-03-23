@@ -41,7 +41,7 @@ export default class Indexer {
 
     const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 });
 
-    source$.subscribe(async result => {
+    source$.subscribe(result => {
       this.pushData(result);
     });
 
@@ -51,6 +51,7 @@ export default class Indexer {
       }
     });
 
+    // eslint-disable-next-line
     source$.pipe(auditTime(3999)).subscribe(async () => {
       const blockNumbers = await this.queryFailBlock();
 
@@ -92,7 +93,7 @@ export default class Indexer {
     }
   }
 
-  async queryFailBlock(limit: number = 10) {
+  async queryFailBlock(limit = 10) {
     const result = await Status.findAll({
       where: { status: { [Op.not]: 0 } },
       limit,
