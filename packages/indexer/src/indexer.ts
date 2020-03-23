@@ -120,7 +120,7 @@ export default class Indexer {
       }
     }
 
-    log.warn(`From ${result}`)
+    log.warn(`From ${result}`);
     return result;
   }
 
