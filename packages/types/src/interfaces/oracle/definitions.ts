@@ -5,11 +5,10 @@ export default {
       params: [
         {
           name: 'key',
-          type: 'OracleKey' as 'u8',
-          isOptional: true
+          type: 'OracleKey' as 'u8'
         }
       ],
-      type: 'TimestampedValue'
+      type: 'Option<TimestampedValue>'
     }
   },
   types: {
