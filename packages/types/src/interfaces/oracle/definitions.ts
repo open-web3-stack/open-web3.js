@@ -6,10 +6,9 @@ export default {
         {
           name: 'key',
           type: 'OracleKey' as 'u8',
-          isOptional: true
         }
       ],
-      type: 'TimestampedValue'
+      type: 'Option<TimestampedValue>'
     }
   },
   types: {
