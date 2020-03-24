@@ -1,6 +1,6 @@
 import { Sequelize, Op, SyncOptions } from 'sequelize';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { auditTime, mergeMap, pairwise } from 'rxjs/operators';
+import { auditTime, mergeMap } from 'rxjs/operators';
 import Scanner from '@orml/scanner';
 import { TypeProvider, ChainInfo, SubscribeBlock, SubscribeBlockError } from '@orml/scanner/types';
 

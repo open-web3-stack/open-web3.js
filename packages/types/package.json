@@ -1,6 +1,6 @@
 {
   "name": "@orml/types",
-  "version": "0.2.0-beta.37",
+  "version": "0.2.0-beta.36",
   "description": "ORML JS types",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -19,5 +19,8 @@
   },
   "devDependencies": {
     "@polkadot/typegen": "1.8.1"
+  },
+  "peerDependencies": {
+    "@polkadot/api": "1.8.1"
   }
 }
