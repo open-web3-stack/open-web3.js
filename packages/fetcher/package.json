@@ -1,5 +1,5 @@
 {
-  "name": "@orml/util",
+  "name": "@orml/fetcher",
   "version": "0.2.0-beta.31",
   "description": "ORML JS API",
   "main": "index.js",
@@ -14,12 +14,8 @@
     "url": "https://github.com/laminar-protocol/orml.js/issues"
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
-  "bin": {
-    "orml-check-deps": "./src/scripts/check-deps.js"
-  },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@yarnpkg/lockfile": "^1.1.0",
-    "rxjs": "^6.5.4"
+    "axios": "^0.19.2"
   }
 }

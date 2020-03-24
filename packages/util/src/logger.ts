@@ -1,3 +1,5 @@
+import { Subject } from 'rxjs';
+
 export enum LoggerLevel {
   Debug = 'debug',
   Log = 'log',
@@ -44,7 +46,7 @@ export class Logger {
     }
 
     if (parent) {
-      this.output = payload => parent.output(payload);
+      this.output = (payload) => parent.output(payload);
     } else {
       this.output = () => {};
     }
@@ -81,7 +83,7 @@ export class Logger {
 
   public addMiddleware(...middlewares: LoggerMiddleware[]) {
     const output = middlewares.reduceRight(
-      (output: LoggerOutput, middleware) => payload => middleware(payload, output),
+      (output: LoggerOutput, middleware) => (payload) => middleware(payload, output),
       this.output
     );
     this.output = output;
@@ -92,13 +94,7 @@ export class Logger {
   }
 
   public createLogger(namespace?: string) {
-    return new Logger(
-      namespace ||
-        Math.random()
-          .toString(36)
-          .substr(2, 5),
-      this
-    );
+    return new Logger(namespace || Math.random().toString(36).substr(2, 5), this);
   }
 
   public static defaultInstance = new Logger('');
@@ -140,6 +136,13 @@ export const createBufferedOutput = (level = LoggerLevel.Warn, size = 50) => {
         buffer.shift();
       }
     }
+  };
+};
+
+export const connectSubjectOutput = (subject: Subject<LoggerPayload>) => {
+  return (payload: LoggerPayload, next: LoggerOutput) => {
+    subject.next(payload);
+    next(payload);
   };
 };
 
