@@ -1,6 +1,6 @@
 {
   "name": "@orml/indexer",
-  "version": "0.2.0-beta.34",
+  "version": "0.2.0-beta.35",
   "description": "ORML JS API",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@orml/scanner": "^0.2.0-beta.34",
+    "@orml/scanner": "^0.2.0-beta.35",
     "@polkadot/api": "1.4.0-beta.50",
     "@types/sequelize": "^4.28.8",
     "dotenv": "^8.2.0",
