@@ -1,6 +1,6 @@
 import { Sequelize, Op, SyncOptions } from 'sequelize';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { auditTime } from 'rxjs/operators';
+import { auditTime, mergeMap, pairwise } from 'rxjs/operators';
 
 import init, { Status, Block, Metadata, Extrinsic, Events } from './models';
 import Scanner from '../../scanner/src';
@@ -35,15 +35,14 @@ export default class Indexer {
   }
 
   async start(): Promise<void> {
-    const statuses = await Status.findOne({ order: [['blockNumber', 'DESC']] });
-    const lastBlockNumber = statuses ? statuses.blockNumber : 0;
-    await this.deleteBlocks(lastBlockNumber);
+    const statuses = await Status.findOne({ where: { status: 0 }, order: [['blockNumber', 'DESC']] });
+    const lastBlockNumber = statuses ? Number(statuses.blockNumber) : 0;
 
-    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 200, confirmation: 4 });
+    await this.fixLostBlock(lastBlockNumber);
 
-    source$.subscribe(result => {
-      this.pushData(result);
-    });
+    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 100, confirmation: 4 });
+
+    source$.pipe(mergeMap(result => this.pushData(result), 5)).subscribe();
 
     source$.pipe(auditTime(4000 * 10)).subscribe(() => {
       for (const id of Object.keys(this.scanner.chainInfo)) {
@@ -54,42 +53,117 @@ export default class Indexer {
     // eslint-disable-next-line
     source$.pipe(auditTime(3999)).subscribe(async () => {
       const blockNumbers = await this.queryFailBlock();
-
       for (const number of blockNumbers) {
         await this.deleteBlock(number);
         const blockDetail = await this.getBlock(number);
         await this.pushData(blockDetail);
       }
     });
+
+    // affect performance
+    // source$
+    //   .pipe(
+    //     auditTime(3999),
+    //     pairwise(),
+    //     mergeMap(([pre, current]) => {
+    //       return this.fixLostBlock(Number(current.blockNumber), Number(pre.blockNumber));
+    //     })
+    //   )
+    //   .subscribe();
+  }
+
+  async fixLostBlock(lastBlockNumber: number, low = 0) {
+    if (!low) {
+      if (!(await this.noMissBlock(low))) {
+        low = 0;
+      }
+    }
+
+    while (!(await this.noMissBlock(lastBlockNumber))) {
+      const start = await this.findFirstLostBlock(lastBlockNumber, low);
+      if (start < 0) return;
+      const end = Math.min(start + 200, lastBlockNumber);
+      const source$ = this.scanner.subscribe({ start, end, concurrent: 50, confirmation: 4 }).pipe(
+        mergeMap(result => {
+          return this.pushData(result);
+        })
+      );
+
+      source$.subscribe();
+
+      await source$.toPromise();
+
+      if (await this.noMissBlock(end)) {
+        low = end;
+      } else {
+        low = start;
+      }
+    }
+  }
+
+  async findFirstLostBlock(high: number, low = 0) {
+    if (await this.noMissBlock(high)) return -1;
+
+    let result = low;
+
+    while (high - low > 200) {
+      const mid = low + ((high - low) >> 2);
+      const value = await this.noMissBlock(mid);
+
+      if (value) {
+        result = mid;
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+
+    log.warn(`From ${result}`);
+    return result;
+  }
+
+  async noMissBlock(blockNumber: number) {
+    const count = await Status.count({
+      where: {
+        blockNumber: {
+          [Op.lt]: blockNumber
+        }
+      }
+    });
+    return count === blockNumber;
   }
 
   async pushData(result: SubscribeBlock | SubscribeBlockError) {
-    if (result.result) {
-      const t = await this.db.transaction();
+    try {
+      if (result.result) {
+        const t = await this.db.transaction();
 
-      const block = result.result;
-      await Promise.all([
-        this.syncBlock(block, { transaction: t }),
-        this.syncEvents(block, { transaction: t }),
-        this.syncExtrinsics(block, { transaction: t }),
-        this.syncStatus(block.number, block.hash, 0, { transaction: t })
-      ])
-        .then(() => {
-          return t.commit();
-        })
-        .then(() => {
-          return log.info(`${block.number}-${block.hash}`);
-        })
-        .catch(async error => {
-          t.rollback();
-          log.error(`${block.number}-${block.hash}`, error, { errorCode: 2 });
-          await this.syncStatus(block.number, block.hash, 2);
-        });
-    } else {
-      log.error(`${result.blockNumber}-unknown`, result.error, { errorCode: 1 });
+        const block = result.result;
+        await Promise.all([
+          this.syncBlock(block, { transaction: t }),
+          this.syncEvents(block, { transaction: t }),
+          this.syncExtrinsics(block, { transaction: t }),
+          this.syncStatus(block.number, block.hash, 0, { transaction: t })
+        ])
+          .then(() => {
+            return t.commit();
+          })
+          .then(() => {
+            return log.info(`${block.number}-${block.hash}`);
+          })
+          .catch(async error => {
+            t.rollback();
+            log.error(`${block.number}-${block.hash}`, error, { errorCode: 2 });
+            await this.syncStatus(block.number, block.hash, 2);
+          });
+      } else {
+        log.error(`${result.blockNumber}-unknown`, result.error, { errorCode: 1 });
 
-      const blockNumber = result.blockNumber;
-      this.syncStatus(blockNumber, null, 1);
+        const blockNumber = result.blockNumber;
+        this.syncStatus(blockNumber, null, 1);
+      }
+    } catch (error) {
+      log.error(`${result.blockNumber}`, error);
     }
   }
 
