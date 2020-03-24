@@ -1,10 +1,10 @@
 import { Sequelize, Op, SyncOptions } from 'sequelize';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap, pairwise } from 'rxjs/operators';
+import Scanner from '@orml/scanner';
+import { TypeProvider, ChainInfo, SubscribeBlock, SubscribeBlockError } from '@orml/scanner/types';
 
 import init, { Status, Block, Metadata, Extrinsic, Events } from './models';
-import Scanner from '../../scanner/src';
-import { TypeProvider, ChainInfo, SubscribeBlock, SubscribeBlockError } from '../../scanner/src/types';
 import log from './log';
 
 type IndexerOptions = {
