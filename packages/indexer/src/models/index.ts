@@ -1,54 +1,54 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
 
 export class Block extends Model {
-  blockHash!: string;
-  blockNumber!: number;
-  timestamp?: number;
-  parentHash!: string;
-  author?: string;
-  raw!: object;
+  // public blockHash!: string;
+  // public blockNumber!: number;
+  // public timestamp!: number | null;
+  // public parentHash!: string;
+  // public author!: string | null;
+  // public raw!: object;
 }
 
 export class Extrinsic extends Model {
-  id!: string;
-  hash!: string;
-  blockHash!: string;
-  blockNumber!: number;
-  index!: number;
-  section!: string;
-  method!: string;
-  args!: object;
-  nonce!: number;
-  tip!: string;
-  signer?: string;
-  bytes!: Buffer;
+  // public id!: string;
+  // public hash!: string;
+  // public blockHash!: string;
+  // public blockNumber!: number;
+  // public index!: number;
+  // public section!: string;
+  // public method!: string;
+  // public args!: object;
+  // public nonce!: number;
+  // public tip!: string;
+  // public signer?: string;
+  // public bytes!: Buffer;
 }
 
 export class Events extends Model {
-  id!: string;
-  blockHash!: string;
-  blockNumber!: number;
-  index!: number;
-  section!: string;
-  method!: string;
-  args!: object;
-  bytes!: Buffer;
-  phaseType!: string;
-  phaseIndex!: number;
+  // public id!: string;
+  // public blockHash!: string;
+  // public blockNumber!: number;
+  // public index!: number;
+  // public section!: string;
+  // public method!: string;
+  // public args!: object;
+  // public bytes!: Buffer;
+  // public phaseType!: string;
+  // public phaseIndex!: number;
 }
 
 export class Metadata extends Model {
-  minBlockNumber!: number;
-  maxBlockNumber!: number;
-  bytes!: Buffer;
-  json!: object;
-  runtimeVersion!: object;
+  // public minBlockNumber!: number;
+  // public maxBlockNumber!: number;
+  // public bytes!: Buffer;
+  // public json!: object;
+  // public runtimeVersion!: object;
 }
 
 export class Status extends Model {
-  blockNumber!: number;
-  blockHash?: string;
-  status!: number;
+  // public blockNumber!: number;
+  // public blockHash?: string;
+  // public status!: number;
 }
 
 export default function init(db: Sequelize): void {

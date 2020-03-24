@@ -35,14 +35,14 @@ export default class Indexer {
   }
 
   async start(): Promise<void> {
-    const statuses = await Status.findOne({ where: { status: 0 }, order: [['blockNumber', 'DESC']] });
+    const statuses = (await Status.findOne({ where: { status: 0 }, order: [['blockNumber', 'DESC']] })) as any;
     const lastBlockNumber = statuses ? Number(statuses.blockNumber) : 0;
 
     await this.fixLostBlock(lastBlockNumber);
 
     const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 100, confirmation: 4 });
 
-    source$.pipe(mergeMap(result => this.pushData(result), 5)).subscribe();
+    source$.pipe(mergeMap((result) => this.pushData(result), 5)).subscribe();
 
     source$.pipe(auditTime(4000 * 10)).subscribe(() => {
       for (const id of Object.keys(this.scanner.chainInfo)) {
@@ -84,7 +84,7 @@ export default class Indexer {
       if (start < 0) return;
       const end = Math.min(start + 200, lastBlockNumber);
       const source$ = this.scanner.subscribe({ start, end, concurrent: 50, confirmation: 4 }).pipe(
-        mergeMap(result => {
+        mergeMap((result) => {
           return this.pushData(result);
         })
       );
@@ -151,7 +151,7 @@ export default class Indexer {
           .then(() => {
             return log.info(`${block.number}-${block.hash}`);
           })
-          .catch(async error => {
+          .catch(async (error) => {
             t.rollback();
             log.error(`${block.number}-${block.hash}`, error, { errorCode: 2 });
             await this.syncStatus(block.number, block.hash, 2);
@@ -174,7 +174,7 @@ export default class Indexer {
       order: [['updatedAt', 'asc']],
       attributes: ['blockNumber']
     });
-    return result.map(r => r.toJSON()).map((r: any) => Number(r.blockNumber));
+    return result.map((r) => r.toJSON()).map((r: any) => Number(r.blockNumber));
   }
 
   async getBlock(blockNumber: number) {
@@ -275,12 +275,12 @@ export default class Indexer {
   }
 
   async syncMetadata(chainInfo: ChainInfo) {
-    const find = await Metadata.findOne({
+    const find = (await Metadata.findOne({
       where: {
         id: chainInfo.id
       },
       attributes: ['id', 'minBlockNumber', 'maxBlockNumber']
-    });
+    })) as any;
 
     if (!find) {
       await Metadata.upsert({
