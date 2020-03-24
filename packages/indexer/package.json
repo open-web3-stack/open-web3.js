@@ -19,10 +19,7 @@
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
-    "@acala-network/types": "beta",
     "@babel/runtime": "^7.8.4",
-    "@laminar/api": "beta",
-    "@orml/scanner": "beta",
     "@polkadot/api": "1.4.0-beta.50",
     "@types/sequelize": "^4.28.8",
     "dotenv": "^8.2.0",
