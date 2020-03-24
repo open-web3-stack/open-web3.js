@@ -17,9 +17,8 @@
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "@orml/scanner": "^0.2.0-beta.36",
-    "@polkadot/api": "1.4.0-beta.50",
+    "@polkadot/api": "1.8.1",
     "@types/sequelize": "^4.28.8",
-    "dotenv": "^8.2.0",
     "pg": "^7.18.2",
     "rxjs": "^6.5.4",
     "sequelize": "^5.21.5",

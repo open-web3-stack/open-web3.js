@@ -1,5 +1,5 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
-/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable */
 
 import { ITuple } from '@polkadot/types/types';
 import { Option, Struct } from '@polkadot/types/codec';
@@ -11,3 +11,5 @@ export interface AuctionInfo extends Struct {
   readonly start: BlockNumber;
   readonly end: Option<BlockNumber>;
 }
+
+export type PHANTOM_TRAITS = 'traits';
