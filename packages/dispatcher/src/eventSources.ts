@@ -68,7 +68,7 @@ export class MultiEventSource<E> implements DispatchEventSource {
   public handler<T extends { [K in keyof E]: (event: E[K]) => any }>(
     callbacks: T
   ): DispatchEventHandler<MultiEvent<E>>[] {
-    const ret = [];
+    const ret: DispatchEventHandler<MultiEvent<E>>[] = [];
     for (const [key, callback] of Object.entries(callbacks)) {
       const kind = Symbol(key);
       this.kinds[key as keyof E] = kind;

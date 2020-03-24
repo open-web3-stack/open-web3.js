@@ -56,7 +56,7 @@ class Scanner {
       };
 
       try {
-        const update = (error?: Error, result?: any): void => {
+        const update = (error: Error | null, result?: any): void => {
           if (error) {
             // errorHandler(error)
             return;
@@ -85,7 +85,7 @@ class Scanner {
   public async getBlockDetail(_blockAt?: BlockAtOptions): Promise<Block> {
     const blockAt = await this.getBlockAt(_blockAt);
     const chainInfo = await this.getChainInfo(blockAt);
-    const requestes = [];
+    const requestes: any[] = [];
 
     requestes.push(
       this.getEvents(blockAt, chainInfo).then(eventRecords => {
@@ -134,7 +134,7 @@ class Scanner {
     };
   }
 
-  public async getHeader(header: Header, _blockAt: BlockAtOptions, meta: Meta) {
+  public async getHeader(header: Header, _blockAt: BlockAtOptions, meta: Meta): Promise<HeaderExtended> {
     const validators = await this.getSessionValidators(_blockAt);
     return new HeaderExtended(
       meta.registry,
@@ -302,7 +302,7 @@ class Scanner {
   public subscribe(options: SubcribeOptions = {}): Observable<SubscribeBlock | SubscribeBlockError> {
     const { start, end, concurrent = 10, confirmation } = options;
 
-    let blockNumber$;
+    let blockNumber$: Observable<number>;
 
     if (start !== undefined && end !== undefined) {
       blockNumber$ = range(start, end - start + 1);

@@ -1,5 +1,5 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
-/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable */
 
 import { Struct } from '@polkadot/types/codec';
 import { Moment, OracleValue } from '@orml/types/interfaces/runtime';
@@ -12,3 +12,5 @@ export interface TimestampedValue extends Struct {
 
 /** @name TimestampedValueOf */
 export interface TimestampedValueOf extends TimestampedValue {}
+
+export type PHANTOM_ORACLE = 'oracle';

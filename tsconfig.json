@@ -4,6 +4,7 @@
   "compilerOptions": {
     "target": "es2018",
     "baseUrl": ".",
+    "noImplicitAny": false,
     "noUnusedLocals": false,
     "paths": {
       "@orml/api": ["packages/api/src"],

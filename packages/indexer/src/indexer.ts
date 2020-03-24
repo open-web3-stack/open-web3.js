@@ -211,7 +211,7 @@ export default class Indexer {
   }
 
   async syncEvents(block: SubscribeBlock['result'], options: any) {
-    const request = [];
+    const request: any[] = [];
     for (const event of block.events) {
       request.push(
         Events.upsert(
@@ -249,7 +249,7 @@ export default class Indexer {
   }
 
   async syncExtrinsics(block: SubscribeBlock['result'], options: any) {
-    const request = [];
+    const request: any[] = [];
     for (const extrinsic of block.extrinsics) {
       request.push(
         Extrinsic.upsert(
