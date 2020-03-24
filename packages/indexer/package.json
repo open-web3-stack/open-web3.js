@@ -13,10 +13,6 @@
   "bugs": {
     "url": "https://github.com/laminar-protocol/orml.js/issues"
   },
-  "scripts": {
-    "start:acala": "NETWORK=acala ts-node ./src/index.ts",
-    "start:laminar": "NETWORK=laminar ts-node ./src/index.ts"
-  },
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
