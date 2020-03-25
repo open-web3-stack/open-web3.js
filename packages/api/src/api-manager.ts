@@ -11,6 +11,7 @@ import logger from './logger';
 export interface ApiManagerOptions extends ApiOptions {
   keyring?: Keyring;
   account?: string | KeyringPair;
+  wsEndpoint?: string;
 }
 
 export interface SigningOptions {
@@ -44,8 +45,8 @@ export default class ApiManager {
   private txId = 0;
   private txDeps: Record<number, Promise<any>> = {};
 
-  private constructor({ keyring, account, ...options }: ApiManagerOptions) {
-    const provider = typeof options.provider === 'string' ? new WsProvider(options.provider) : options.provider;
+  private constructor({ keyring, account, wsEndpoint, ...options }: ApiManagerOptions) {
+    const provider = wsEndpoint ? new WsProvider(wsEndpoint) : options.provider;
     this.api = new ApiPromise({ provider });
     this.keyring = keyring || new Keyring();
     if (typeof account === 'string') {
