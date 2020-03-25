@@ -15,9 +15,8 @@
   },
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
-    "@babel/runtime": "^7.8.4"
-  },
-  "devDependencies": {
+    "@babel/runtime": "^7.8.4",
+    "@orml/util": "0.2.0-beta.40",
     "@polkadot/api": "1.8.1"
   }
 }
