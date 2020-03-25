@@ -1,6 +1,6 @@
 {
   "name": "@orml/api",
-  "version": "0.2.0-beta.40",
+  "version": "0.2.0-beta.41",
   "description": "ORML JS API",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -16,7 +16,7 @@
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@orml/util": "0.2.0-beta.40",
+    "@orml/util": "^0.2.0-beta.41",
     "@polkadot/api": "1.8.1"
   }
 }
