@@ -47,7 +47,7 @@ export default class ApiManager {
 
   private constructor({ keyring, account, wsEndpoint, ...options }: ApiManagerOptions) {
     const provider = wsEndpoint ? new WsProvider(wsEndpoint) : options.provider;
-    this.api = new ApiPromise({ provider });
+    this.api = new ApiPromise({ provider, ...options });
     this.keyring = keyring || new Keyring();
     if (typeof account === 'string') {
       // suri
