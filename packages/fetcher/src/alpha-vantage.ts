@@ -14,7 +14,7 @@ export default class AlphaVantage {
   // eslint-disable-next-line no-useless-constructor
   public constructor(private readonly apiKey: string) {}
 
-  private async getPrice (query: string, bodyToPrice: BodyParser): Promise<string> {
+  private async _getPrice(query: string, bodyToPrice: BodyParser): Promise<string> {
     const res = await axios.get(`https://www.alphavantage.co/query?${query}&apikey=${this.apiKey}`);
     const resBody = res.data;
     const price = bodyToPrice(resBody);
@@ -26,11 +26,22 @@ export default class AlphaVantage {
 
   public async getForexPrice(from: string, to: string): Promise<string> {
     const query = `function=CURRENCY_EXCHANGE_RATE&from_currency=${from}&to_currency=${to}`;
-    return this.getPrice(query, forexBodyParser);
+    return this._getPrice(query, forexBodyParser);
   }
 
   public async getStockPrice(symbol: string): Promise<string> {
     const query = `function=GLOBAL_QUOTE&symbol=${symbol}`;
-    return this.getPrice(query, stockBodyParser);
+    return this._getPrice(query, stockBodyParser);
+  }
+
+  public getPrice(symbol: string | [string, string]) {
+    if (typeof symbol === 'string') {
+      return this.getStockPrice(symbol);
+    }
+    return this.getForexPrice(symbol[0], symbol[1]);
+  }
+
+  public getAll(symbols: Array<string | [string, string]>) {
+    return Promise.all(symbols.map((s) => this.getPrice(s)));
   }
 }
