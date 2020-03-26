@@ -13,22 +13,22 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
-    - uses: actions/checkout@v1
-      with:
-        token: ${{ secrets.GH_PAT }}
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: build
-      env:
-        GH_PAT: ${{ secrets.GH_PAT }}
-        GH_TOKEN: ${{ secrets.GH_PAT }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      run: |
-        yarn install --frozen-lockfile
-        yarn polkadot-dev-ghact-build
+      - uses: actions/checkout@v1
+        with:
+          token: ${{ secrets.GH_PAT }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: build
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          yarn install --frozen-lockfile
+          yarn polkadot-ci-ghact-build
 
   dummy:
     name: Dummy
@@ -38,6 +38,6 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
-    - name: dummy
-      run: |
-        echo "Dummy skip step"
+      - name: dummy
+        run: |
+          echo "Dummy skip step"
