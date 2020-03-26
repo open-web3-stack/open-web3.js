@@ -63,8 +63,3 @@ typings/
 .npmrc
 
 build/
-
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
-.pnp.*
