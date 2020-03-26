@@ -16,6 +16,7 @@
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
+    "@orml/util": "^0.2.0-beta.45",
     "axios": "^0.19.2"
   }
 }
