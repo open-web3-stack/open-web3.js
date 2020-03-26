@@ -1,4 +1,4 @@
-import { Logger, LoggerPayload, createFilterOutput, LoggerLevel, createBufferedOutput } from '../logger';
+import { Logger, LoggerPayload, createFilterOutput, LoggerLevel, createBufferedOutput, toLevel } from '../logger';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -7,7 +7,7 @@ describe('Logger', () => {
   beforeEach(() => {
     logs = [];
     logger = new Logger();
-    logger.addMiddleware(payload => logs.push(payload));
+    logger.addMiddleware((payload) => logs.push(payload));
   });
 
   it('logs with different levels', () => {
@@ -219,6 +219,26 @@ describe('Logger', () => {
           namespaces: ['child', 'nested']
         }
       ]);
+    });
+  });
+
+  describe('toLevel', () => {
+    it('convert number to levels', () => {
+      expect(toLevel('0')).toEqual(LoggerLevel.Debug);
+      expect(toLevel('1')).toEqual(LoggerLevel.Log);
+      expect(toLevel('2')).toEqual(LoggerLevel.Info);
+      expect(toLevel('3')).toEqual(LoggerLevel.Warn);
+      expect(toLevel('4')).toEqual(LoggerLevel.Error);
+      expect(toLevel('5')).toBeUndefined();
+    });
+
+    it('convert string to levels', () => {
+      expect(toLevel('debug')).toEqual(LoggerLevel.Debug);
+      expect(toLevel('Log')).toEqual(LoggerLevel.Log);
+      expect(toLevel('INFO')).toEqual(LoggerLevel.Info);
+      expect(toLevel('warN')).toEqual(LoggerLevel.Warn);
+      expect(toLevel('eRROR')).toEqual(LoggerLevel.Error);
+      expect(toLevel('other')).toBeUndefined();
     });
   });
 });

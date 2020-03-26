@@ -49,7 +49,7 @@ class Scanner {
   private createMethodSubscribe<T>(methods: string[], ...params: any[]): Observable<T> {
     const [updateType, subMethod, unsubMethod] = methods;
 
-    return new Observable<T>(observer => {
+    return new Observable<T>((observer) => {
       let subscriptionPromise: Promise<number | void> = Promise.resolve();
       const errorHandler = (error: Error): void => {
         observer.error(error);
@@ -66,7 +66,7 @@ class Scanner {
 
         subscriptionPromise = this.wsProvider
           .subscribe(updateType, subMethod, params, update)
-          .catch(error => errorHandler(error));
+          .catch((error) => errorHandler(error));
       } catch (error) {
         errorHandler(error);
       }
@@ -88,7 +88,7 @@ class Scanner {
     const requestes: any[] = [];
 
     requestes.push(
-      this.getEvents(blockAt, chainInfo).then(eventRecords => {
+      this.getEvents(blockAt, chainInfo).then((eventRecords) => {
         return eventRecords.map((event, index) => {
           return {
             index,
@@ -106,7 +106,7 @@ class Scanner {
     const blockRaw: BlockRaw = await this.rpcProvider.send('chain_getBlock', [blockAt.blockHash]);
 
     requestes.push(
-      this.getHeader(blockRaw.block.header, blockAt, chainInfo).then(header => {
+      this.getHeader(blockRaw.block.header, blockAt, chainInfo).then((header) => {
         return header.author?.toString();
       })
     );
@@ -272,19 +272,19 @@ class Scanner {
         'chain_finalizedHead',
         'chain_subscribeFinalizedHeads',
         'chain_unsubscribeFinalizedHeads'
-      ]).pipe(map(header => Number(header.number)));
+      ]).pipe(map((header) => Number(header.number)));
     } else if (typeof confirmation === 'number') {
       newBlockNumber$ = this.createMethodSubscribe<Header>([
         'chain_newHead',
         'chain_subscribeNewHead',
         'chain_unsubscribeNewHead'
-      ]).pipe(map(header => (Number(header.number) - confirmation >= 0 ? Number(header.number) - confirmation : 0)));
+      ]).pipe(map((header) => (Number(header.number) - confirmation >= 0 ? Number(header.number) - confirmation : 0)));
     } else {
       newBlockNumber$ = this.createMethodSubscribe<Header>([
         'chain_newHead',
         'chain_subscribeNewHead',
         'chain_unsubscribeNewHead'
-      ]).pipe(map(header => Number(header.number)));
+      ]).pipe(map((header) => Number(header.number)));
     }
     return newBlockNumber$.pipe(
       shareReplay({
@@ -294,7 +294,7 @@ class Scanner {
       pairwise(),
       mergeMap(([pre, current]) => {
         if (pre >= current) return of(current);
-        return of(...[...Array(current - pre).keys()].map(i => i + 1 + pre));
+        return of(...[...Array(current - pre).keys()].map((i) => i + 1 + pre));
       })
     );
   }
@@ -311,7 +311,7 @@ class Scanner {
 
       blockNumber$ = from(newBlockNumber$).pipe(
         take(1),
-        switchMap(lastestNumber => {
+        switchMap((lastestNumber) => {
           return concat(range(start, lastestNumber - start + 1), newBlockNumber$);
         })
       );
@@ -320,9 +320,9 @@ class Scanner {
     }
 
     const getBlockDetail = (blockNumber: number) => {
-      return new Observable<SubscribeBlock>(subscriber => {
+      return new Observable<SubscribeBlock>((subscriber) => {
         this.getBlockDetail({ blockNumber })
-          .then(data => {
+          .then((data) => {
             subscriber.next({
               blockNumber,
               result: data,
@@ -330,14 +330,14 @@ class Scanner {
             });
             subscriber.complete();
           })
-          .catch(error => {
+          .catch((error) => {
             subscriber.error(error);
           });
       }).pipe(
         timeout(options.timeout || 60000),
-        retryWhen(errors =>
+        retryWhen((errors) =>
           errors.pipe(
-            mergeMap(error => {
+            mergeMap((error) => {
               if (error.name !== 'TimeoutError') {
                 return throwError(error);
               }
@@ -355,7 +355,7 @@ class Scanner {
       );
     };
 
-    return blockNumber$.pipe(mergeMap(value => getBlockDetail(value), concurrent));
+    return blockNumber$.pipe(mergeMap((value) => getBlockDetail(value), concurrent));
   }
 }
 
