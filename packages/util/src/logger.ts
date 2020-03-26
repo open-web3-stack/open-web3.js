@@ -89,7 +89,7 @@ export class Logger {
     this.output = output;
   }
 
-  public outOutput(output: LoggerOutput) {
+  public setOutput(output: LoggerOutput) {
     this.output = output;
   }
 
@@ -100,7 +100,9 @@ export class Logger {
   public static defaultInstance = new Logger('');
 }
 
-export const consoleOutput = (payload: LoggerPayload, next: LoggerOutput) => {
+const noop = () => {};
+
+export const consoleOutput = (payload: LoggerPayload, next: LoggerOutput = noop) => {
   const labels: any[] = [payload.timestamp, payload.level.toUpperCase().padStart(5)];
   if (payload.namespaces.length) {
     labels.push('[' + payload.namespaces.join(':') + ']:');
@@ -113,7 +115,7 @@ export const consoleOutput = (payload: LoggerPayload, next: LoggerOutput) => {
 
 export const createFilterOutput = (level: LoggerLevel) => {
   const num = levelToNumber(level);
-  return (payload: LoggerPayload, next: LoggerOutput) => {
+  return (payload: LoggerPayload, next: LoggerOutput = noop) => {
     if (levelToNumber(payload.level) >= num) {
       next(payload);
     }
@@ -123,7 +125,7 @@ export const createFilterOutput = (level: LoggerLevel) => {
 export const createBufferedOutput = (level = LoggerLevel.Warn, size = 50) => {
   const buffer: LoggerPayload[] = [];
   const num = levelToNumber(level);
-  return (payload: LoggerPayload, next: LoggerOutput) => {
+  return (payload: LoggerPayload, next: LoggerOutput = noop) => {
     if (levelToNumber(payload.level) >= num) {
       for (const log of buffer) {
         next(log);
@@ -140,13 +142,12 @@ export const createBufferedOutput = (level = LoggerLevel.Warn, size = 50) => {
 };
 
 export const connectSubjectOutput = (subject: Subject<LoggerPayload>) => {
-  return (payload: LoggerPayload, next: LoggerOutput) => {
+  return (payload: LoggerPayload, next: LoggerOutput = noop) => {
     subject.next(payload);
     next(payload);
   };
 };
 
 Logger.defaultInstance.addMiddleware(consoleOutput);
-Logger.defaultInstance.addMiddleware(createFilterOutput(LoggerLevel.Log));
 
 export default Logger.defaultInstance;

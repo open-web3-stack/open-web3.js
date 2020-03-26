@@ -87,7 +87,8 @@ export default class ApiManager {
 
     const address = isKeyringPair(account) ? account.address : account.toString();
 
-    let ret = this._signAndSend(tx, id, account, options);
+    const result = this._signAndSend(tx, id, account, options);
+    let ret = result;
     if (retry > 0) {
       const finalized = deferred<TransactionResult>();
       const inBlock = deferred<TransactionResult>();
@@ -95,12 +96,12 @@ export default class ApiManager {
 
       this.txDeps[id] = send.promise;
 
-      ret.send
+      result.send
         .then(() => {
           // send success
 
-          finalized.resolve(ret.finalized);
-          inBlock.resolve(ret.inBlock);
+          finalized.resolve(result.finalized);
+          inBlock.resolve(result.inBlock);
           send.resolve();
         })
         .catch(async (error) => {
@@ -129,10 +130,10 @@ export default class ApiManager {
               // reset nonce
               data.nonce = Promise.resolve(undefined);
             }
-            const res = this.signAndSend(tx, options);
-            finalized.resolve(res.finalized);
-            inBlock.resolve(res.inBlock);
-            send.resolve(res.send);
+            const result2 = this.signAndSend(tx, options);
+            finalized.resolve(result2.finalized);
+            inBlock.resolve(result2.inBlock);
+            send.resolve(result2.send);
           } else {
             // not something we can handle, rethrow
             throw error;
