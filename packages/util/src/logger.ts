@@ -21,6 +21,30 @@ export const levelToNumber = (level: LoggerLevel) => {
   }
 };
 
+export const numberToLevel = (num: number) => {
+  switch (num) {
+    case 0:
+      return LoggerLevel.Debug;
+    case 1:
+      return LoggerLevel.Log;
+    case 2:
+      return LoggerLevel.Info;
+    case 3:
+      return LoggerLevel.Warn;
+    case 4:
+      return LoggerLevel.Error;
+  }
+  return undefined;
+};
+
+export const toLevel = (val?: string) => {
+  if (!val) {
+    return undefined;
+  }
+  const lower = val.toLowerCase();
+  return Object.values(LoggerLevel).find((x) => x === lower) || numberToLevel(+val);
+};
+
 export interface LoggerPayload {
   level: LoggerLevel;
   args: any[];
