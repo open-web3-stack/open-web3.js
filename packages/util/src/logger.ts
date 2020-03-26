@@ -1,5 +1,3 @@
-import { Subject } from 'rxjs';
-
 export enum LoggerLevel {
   Debug = 'debug',
   Log = 'log',
@@ -138,13 +136,6 @@ export const createBufferedOutput = (level = LoggerLevel.Warn, size = 50) => {
         buffer.shift();
       }
     }
-  };
-};
-
-export const connectSubjectOutput = (subject: Subject<LoggerPayload>) => {
-  return (payload: LoggerPayload, next: LoggerOutput = noop) => {
-    subject.next(payload);
-    next(payload);
   };
 };
 

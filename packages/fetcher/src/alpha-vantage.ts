@@ -1,4 +1,7 @@
 import axios from 'axios';
+import moduleLogger from './logger';
+
+const logger = moduleLogger.createLogger('AlphaVantage');
 
 type BodyParser = (body: any) => string | undefined | null;
 
@@ -19,17 +22,20 @@ export default class AlphaVantage {
     const resBody = res.data;
     const price = bodyToPrice(resBody);
     if (res.status >= 400 || !price) {
+      logger.debug('_getPrice', { query, status: res.status, body: resBody });
       throw new Error(`Price fetch failed (${res.status} ${res.statusText}): ${JSON.stringify(resBody)}.`);
     }
     return price;
   }
 
   public async getForexPrice(from: string, to: string): Promise<string> {
+    logger.debug('getForexPrice', { from, to });
     const query = `function=CURRENCY_EXCHANGE_RATE&from_currency=${from}&to_currency=${to}`;
     return this._getPrice(query, forexBodyParser);
   }
 
   public async getStockPrice(symbol: string): Promise<string> {
+    logger.debug('getStockPrice', { symbol });
     const query = `function=GLOBAL_QUOTE&symbol=${symbol}`;
     return this._getPrice(query, stockBodyParser);
   }
