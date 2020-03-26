@@ -28,7 +28,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           yarn install --frozen-lockfile
-          yarn polkadot-ci-ghact-build
+          yarn polkadot-dev-ghact-build
 
   dummy:
     name: Dummy
