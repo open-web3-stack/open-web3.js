@@ -424,13 +424,6 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.8.0"
 
-"@babel/plugin-syntax-import-meta@^7.8.3":
-  version "7.8.3"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-import-meta/-/plugin-syntax-import-meta-7.8.3.tgz#230afff79d3ccc215b5944b438e4e266daf3d84d"
-  integrity sha512-vYiGd4wQ9gx0Lngb7+bPCwQXGK/PR6FeTIJ+TIOlq+OfOKG/kCAOO2+IBac3oMM9qV7/fU76hfcqxUaLKZf1hQ==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.8.3"
-
 "@babel/plugin-syntax-json-strings@^7.8.0":
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-json-strings/-/plugin-syntax-json-strings-7.8.3.tgz#01ca21b668cd8218c9e640cb6dd88c5412b2c96a"
@@ -2205,16 +2198,15 @@
     eventemitter3 "^4.0.0"
     rxjs "^6.5.4"
 
-"@polkadot/dev@^0.41.6":
-  version "0.41.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.41.6.tgz#5cf31d867e00bf2618fef77560e981f807849cce"
-  integrity sha512-WYwW6RBO8rzBiw/H54DJ371P9tqSLT7WriaUPgC8KXDmA65qWyoPaPiC7vI4jfWL1iYxH1fBfiKXGLDtb5EuVQ==
+"@polkadot/dev@^0.40.22":
+  version "0.40.22"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.40.22.tgz#6306f3d0400180f57bdfa63ce63ee2e9da96d3f8"
+  integrity sha512-c1m1rk4FFXq/Jy67CzJkZLNtB7agjrB4Tbbwum7WItcdb6GrjnWB32ZmHEBPd982CTyiBRi5Y2OoUZMp6uR13A==
   dependencies:
     "@babel/cli" "^7.8.4"
     "@babel/core" "^7.8.4"
     "@babel/plugin-proposal-class-properties" "^7.8.3"
     "@babel/plugin-proposal-decorators" "^7.8.3"
-    "@babel/plugin-proposal-nullish-coalescing-operator" "^7.8.3"
     "@babel/plugin-proposal-numeric-separator" "^7.8.3"
     "@babel/plugin-proposal-object-rest-spread" "^7.8.3"
     "@babel/plugin-proposal-optional-chaining" "^7.8.3"
@@ -2222,8 +2214,6 @@
     "@babel/plugin-proposal-private-methods" "^7.8.3"
     "@babel/plugin-syntax-bigint" "^7.8.3"
     "@babel/plugin-syntax-dynamic-import" "^7.8.3"
-    "@babel/plugin-syntax-import-meta" "^7.8.3"
-    "@babel/plugin-syntax-top-level-await" "^7.8.3"
     "@babel/plugin-transform-runtime" "^7.8.3"
     "@babel/preset-env" "^7.8.4"
     "@babel/preset-react" "^7.8.3"
@@ -2243,6 +2233,7 @@
     coveralls "^3.0.9"
     cpx "^1.5.0"
     eslint "^6.8.0"
+    eslint-config-semistandard "^15.0.0"
     eslint-config-standard "^14.1.0"
     eslint-plugin-import "^2.20.1"
     eslint-plugin-node "^11.0.0"
@@ -6020,6 +6011,11 @@ escodegen@^1.11.1, escodegen@^1.8.0:
     optionator "^0.8.1"
   optionalDependencies:
     source-map "~0.6.1"
+
+eslint-config-semistandard@^15.0.0:
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-semistandard/-/eslint-config-semistandard-15.0.0.tgz#d8eefccfac4ca9cbc508d38de6cb8fd5e7a72fa9"
+  integrity sha512-volIMnosUvzyxGkYUA5QvwkahZZLeUx7wcS0+7QumPn+MMEBbV6P7BY1yukamMst0w3Et3QZlCjQEwQ8tQ6nug==
 
 eslint-config-standard@^14.1.0:
   version "14.1.1"
