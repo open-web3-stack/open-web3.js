@@ -1,3 +1,5 @@
+import BigNumber from 'big.js';
+
 import defaultLogger from '@orml/util/logger';
 
 export { defaultLogger };
@@ -16,3 +18,6 @@ export function deferred<T>() {
   });
   return deferred;
 }
+
+export const ACCURACY = new BigNumber('1e+18');
+export const withAccuracy = (rawPrice: string | number) => new BigNumber(rawPrice).mul(ACCURACY).toFixed();
