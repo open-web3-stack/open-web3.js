@@ -17,7 +17,7 @@ export function balance(
 
       if (currencyId.eq(nativeCurrencyId)) {
         return api.query.system.account<AccountInfo>(address).pipe(
-          map(result => {
+          map((result) => {
             return result.data.free;
           })
         );
