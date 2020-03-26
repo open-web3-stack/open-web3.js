@@ -93,10 +93,13 @@ export class Dispatcher {
 }
 
 export class DispatcherBuilder {
-  private readonly handlers: DispatchEventHandler[] = [];
+  private readonly handlers: DispatchEventHandler<any>[] = [];
 
-  public addHandler(handler: DispatchEventHandler | DispatchEventHandler[], ...handlers: DispatchEventHandler[]) {
-    const toArr = ([] as DispatchEventHandler[]).concat(handler);
+  public addHandler<T extends DispatchEvent>(
+    handler: DispatchEventHandler<T> | DispatchEventHandler<T>[],
+    ...handlers: DispatchEventHandler<T>[]
+  ) {
+    const toArr = ([] as DispatchEventHandler<T>[]).concat(handler);
     this.handlers.push(...toArr, ...handlers);
     return this;
   }
