@@ -1,6 +1,6 @@
 {
   "name": "@orml/api-derive",
-  "version": "0.2.0-beta.57",
+  "version": "0.2.0-beta.58",
   "description": "ORML JS API DERIVE",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
