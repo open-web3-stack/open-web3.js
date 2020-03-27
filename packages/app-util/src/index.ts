@@ -47,6 +47,8 @@ export const configureLogger = (options: {
   filter?: string;
   level?: string;
 }) => {
+  injectInspect();
+
   const logger = options.logger || defaultLogger;
 
   const defaultLevel = levelToNumber(toLevel(options.level) || LoggerLevel.Log);
