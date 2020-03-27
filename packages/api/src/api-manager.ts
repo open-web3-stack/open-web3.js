@@ -108,7 +108,8 @@ export default class ApiManager {
           logger.debug('signAndSend send error', {
             error,
             from: address,
-            method: `${tx.method.sectionName}.${tx.method.methodName}`
+            method: `${tx.method.sectionName}.${tx.method.methodName}`,
+            tip: options.tip
           });
 
           const message = error && (error.message as string);

@@ -65,6 +65,7 @@ export const configureLogger = (options: {
   const bufferSize = options.production ? 100 : 30;
   const panicModeLevel = levelToNumber(LoggerLevel.Warn);
   const panicModeDuration = 1000 * 60; // 1min
+  const filters = options.filter?.split(',');
 
   let panicModeEndTime = 0;
 
@@ -79,11 +80,6 @@ export const configureLogger = (options: {
           return of(payload);
         }
 
-        buffer.push(payload);
-        if (buffer.length >= bufferSize) {
-          buffer.shift();
-        }
-
         const level = levelToNumber(payload.level);
         if (level >= panicModeLevel) {
           // enter panic mode
@@ -91,6 +87,7 @@ export const configureLogger = (options: {
 
           // release buffer
           const logs = buffer;
+          logs.push(payload);
           buffer = [];
           return from(logs);
         }
@@ -99,11 +96,16 @@ export const configureLogger = (options: {
           return of(payload);
         }
 
-        if (options.filter) {
+        if (filters) {
           const namespace = payload.namespaces.join(':');
-          if (namespace.startsWith(options.filter)) {
+          if (filters.some((f) => namespace.startsWith(f))) {
             return of(payload);
           }
+        }
+
+        buffer.push(payload);
+        if (buffer.length >= bufferSize) {
+          buffer.shift();
         }
 
         return empty();
