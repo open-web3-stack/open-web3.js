@@ -1,6 +1,6 @@
 {
   "name": "@orml/fetcher",
-  "version": "0.2.0-beta.54",
+  "version": "0.2.0-beta.55",
   "description": "ORML JS API",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -16,7 +16,7 @@
   "homepage": "https://github.com/laminar-protocol/orml.js",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@orml/util": "^0.2.0-beta.54",
+    "@orml/util": "^0.2.0-beta.55",
     "axios": "^0.19.2"
   }
 }
