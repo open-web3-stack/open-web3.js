@@ -4,6 +4,7 @@ import { mergeMap, tap, bufferTime, filter } from 'rxjs/operators';
 import BigNumber from 'big.js';
 import BN from 'bn.js';
 import { IncomingWebhook } from '@slack/webhook';
+import axios from 'axios';
 import { Raw } from '@polkadot/types';
 
 import {
@@ -38,6 +39,28 @@ export const injectInspect = () => {
   Raw.prototype[inspect.custom] = function () {
     return this.toHuman();
   };
+
+  axios.interceptors.request.use((r) => {
+    r[inspect.custom] = function (depth, options) {
+      return `Request: ${this.method} ${this.url} <- ${inspect(this.data, {
+        ...options,
+        depth: depth - 1,
+        compact: true
+      })}`;
+    };
+    return r;
+  });
+
+  axios.interceptors.response.use((r) => {
+    r[inspect.custom] = function (depth, options) {
+      return `Response: ${this.config.method} ${this.config.url} -> ${inspect(this.data, {
+        ...options,
+        depth: depth - 1,
+        compact: true
+      })}`;
+    };
+    return r;
+  });
 };
 
 export const configureLogger = (options: {
