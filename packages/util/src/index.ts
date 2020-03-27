@@ -19,5 +19,7 @@ export function deferred<T>() {
   return deferred;
 }
 
-export const ACCURACY = new BigNumber('1e+18');
-export const withAccuracy = (rawPrice: string | number) => new BigNumber(rawPrice).mul(ACCURACY).toFixed();
+export const PRECISION = new BigNumber('1e+18');
+
+export const toBaseUnit = (rawPrice: string | number | BigNumber) => new BigNumber(rawPrice).mul(PRECISION);
+export const fromBaseUnit = (amount: string | number | BigNumber) => new BigNumber(amount).div(PRECISION);
