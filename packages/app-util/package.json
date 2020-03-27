@@ -18,7 +18,6 @@
     "@babel/runtime": "^7.8.4",
     "@orml/util": "^0.2.0-beta.55",
     "@slack/webhook": "^5.0.3",
-    "axios": "^0.19.2",
     "rxjs": "^6.5.4"
   }
 }
