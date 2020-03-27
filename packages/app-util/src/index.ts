@@ -1,6 +1,11 @@
 import { inspect } from 'util';
 import { Subject, of, empty, from } from 'rxjs';
+import { mergeMap, tap, bufferTime, filter } from 'rxjs/operators';
+import BigNumber from 'big.js';
+import BN from 'bn.js';
 import { IncomingWebhook } from '@slack/webhook';
+import { Raw } from '@polkadot/types';
+
 import {
   Logger,
   LoggerPayload,
@@ -11,7 +16,6 @@ import {
   toLevel
 } from '@orml/util/logger';
 import { defaultLogger } from '@orml/util';
-import { mergeMap, tap, bufferTime, filter } from 'rxjs/operators';
 
 const noop = () => {};
 
@@ -19,6 +23,20 @@ export const connectSubjectOutput = (subject: Subject<LoggerPayload>) => {
   return (payload: LoggerPayload, next: LoggerOutput = noop) => {
     subject.next(payload);
     next(payload);
+  };
+};
+
+export const injectInspect = () => {
+  BigNumber.prototype[inspect.custom] = function () {
+    return +this.toFixed(4);
+  };
+
+  BN.prototype[inspect.custom] = function () {
+    return +this.toString();
+  };
+
+  Raw.prototype[inspect.custom] = function () {
+    return this.toHuman();
   };
 };
 
