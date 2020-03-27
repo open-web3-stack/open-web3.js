@@ -1,14 +1,26 @@
 import { DispatchEvent, DispatchEventSource, DispatchEventHandler } from './dispatcher';
 
 export class SetIntervalEventSource implements DispatchEventSource {
-  // eslint-disable-next-line no-useless-constructor
-  public constructor(public readonly interval: number) {}
+  public readonly interval: number;
+  public readonly immediately: boolean;
+  public constructor(options: number | { interval: number; immediately?: boolean }) {
+    if (typeof options === 'number') {
+      this.interval = options;
+      this.immediately = false;
+    } else {
+      this.interval = options.interval;
+      this.immediately = Boolean(options.immediately);
+    }
+  }
 
   public readonly kind = Symbol('SetIntervalEven');
 
   public register(callback: (event: DispatchEvent) => void) {
     const event = { kind: this.kind };
     const id = setInterval(() => callback(event), this.interval);
+    if (this.immediately) {
+      setImmediate(() => callback(event));
+    }
     return () => clearInterval(id);
   }
 
@@ -82,8 +94,8 @@ export class MultiEventSource<E> implements DispatchEventSource {
   }
 }
 
-export function onInterval(interval: number, ...handlers: (() => any)[]) {
-  return new SetIntervalEventSource(interval).handler(...handlers);
+export function onInterval(option: number | { interval: number; immediately?: boolean }, ...handlers: (() => any)[]) {
+  return new SetIntervalEventSource(option).handler(...handlers);
 }
 
 export function createEvent<E>(name?: string) {
