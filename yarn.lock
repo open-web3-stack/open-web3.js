@@ -2241,7 +2241,7 @@
     websocket "^1.0.31"
     yargs "^15.3.1"
 
-"@polkadot/types@1.8.1":
+"@polkadot/types@1.8.1", "@polkadot/types@^1.8.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@polkadot/types/-/types-1.8.1.tgz#1ff499653aefbcc6ff852c830b74e9a31ac12806"
   integrity sha512-UVyrNhW8khUw7nDNOdEdZNJvG4Nlq1wBOTmmOFnpihBY95jVtk63jUjcb8CjR5/kJgpAIYumZ3XupZ8BgN1KPw==
