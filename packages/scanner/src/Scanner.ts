@@ -96,7 +96,7 @@ class Scanner {
             section: event.event.section,
             method: event.event.method,
             phaseType: event.phase.type,
-            phaseIndex: event.phase.index,
+            phaseIndex: (event.phase.value as any).toNumber(),
             args: event.event.data.toJSON() as any[]
           } as Event;
         });
