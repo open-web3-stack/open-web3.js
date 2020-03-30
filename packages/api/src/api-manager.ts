@@ -74,10 +74,20 @@ export default class ApiManager {
     return data;
   }
 
-  public signAndSend(tx: SubmittableExtrinsic<'promise'>, options: Partial<SigningOptions & SendingOptions> = {}) {
+  public signAndSend(
+    txs: SubmittableExtrinsic<'promise'> | Array<SubmittableExtrinsic<'promise'>>,
+    options: Partial<SigningOptions & SendingOptions> = {}
+  ) {
     const account = options.account || this.defaultAccount;
     if (!account) {
       throw new Error('Invalid argument, missing pair or defaultAccount');
+    }
+
+    let tx: SubmittableExtrinsic<'promise'>;
+    if (Array.isArray(txs)) {
+      tx = this.api.tx.utility.batch(txs);
+    } else {
+      tx = txs;
     }
 
     const id = this.txId++;
@@ -92,17 +102,17 @@ export default class ApiManager {
     if (retry > 0) {
       const finalized = deferred<TransactionResult>();
       const inBlock = deferred<TransactionResult>();
-      const send = deferred<void>();
+      const send = deferred<string>();
 
       this.txDeps[id] = send.promise;
 
       result.send
-        .then(() => {
+        .then((txHash) => {
           // send success
 
           finalized.resolve(result.finalized);
           inBlock.resolve(result.inBlock);
-          send.resolve();
+          send.resolve(txHash);
         })
         .catch(async (error) => {
           logger.debug('signAndSend send error', {
@@ -221,7 +231,7 @@ export default class ApiManager {
           }
         });
 
-        send.resolve(sendPromise);
+        send.resolve(sendPromise.then(() => signed.hash.toHex()));
 
         sendPromise.then(() => {
           delete this.txDeps[id];

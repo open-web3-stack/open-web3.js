@@ -54,6 +54,7 @@ export const configureLogger = (options: {
   production?: boolean;
   filter?: string;
   level?: string;
+  color?: boolean;
 }) => {
   injectInspect();
 
@@ -66,6 +67,7 @@ export const configureLogger = (options: {
   const panicModeLevel = levelToNumber(LoggerLevel.Warn);
   const panicModeDuration = 1000 * 60; // 1min
   const filters = options.filter?.split(',');
+  const color = options.color === undefined ? !options.production : options.color;
 
   let panicModeEndTime = 0;
 
@@ -111,7 +113,7 @@ export const configureLogger = (options: {
         return empty();
       })
     )
-    .pipe(tap((payload) => consoleOutput({ ...payload, args: payload.args.map((a) => inspect(a, false, 5, true)) }))); // log everything
+    .pipe(tap((payload) => consoleOutput({ ...payload, args: payload.args.map((a) => inspect(a, false, 5, color)) }))); // log everything
 
   if (slackWebhook) {
     const webhook = new IncomingWebhook(slackWebhook);
@@ -130,7 +132,9 @@ export const configureLogger = (options: {
             payloads
               .map(
                 (p) =>
-                  `<!date^${p.timestamp.valueOf()}^{date_num} {time_secs}^${p.timestamp.toISOString()}> ${p.level
+                  `<!date^${(p.timestamp.valueOf() / 1000).toFixed(
+                    0
+                  )}^{date_num} {time_secs}|${p.timestamp.toISOString()}> ${p.level
                     .toUpperCase()
                     .padStart(5)} [${p.namespaces.join(':')}]: ${p.args
                     .map((a) => inspect(a, false, 5, false))
