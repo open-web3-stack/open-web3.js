@@ -183,7 +183,7 @@ export default function init(db: Sequelize): void {
       },
       phaseIndex: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
       }
     },
     {
