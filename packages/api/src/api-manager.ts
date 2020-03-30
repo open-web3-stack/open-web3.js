@@ -92,17 +92,17 @@ export default class ApiManager {
     if (retry > 0) {
       const finalized = deferred<TransactionResult>();
       const inBlock = deferred<TransactionResult>();
-      const send = deferred<void>();
+      const send = deferred<string>();
 
       this.txDeps[id] = send.promise;
 
       result.send
-        .then(() => {
+        .then((txHash) => {
           // send success
 
           finalized.resolve(result.finalized);
           inBlock.resolve(result.inBlock);
-          send.resolve();
+          send.resolve(txHash);
         })
         .catch(async (error) => {
           logger.debug('signAndSend send error', {
@@ -221,7 +221,7 @@ export default class ApiManager {
           }
         });
 
-        send.resolve(sendPromise);
+        send.resolve(sendPromise.then(() => signed.hash.toHex()));
 
         sendPromise.then(() => {
           delete this.txDeps[id];
