@@ -74,10 +74,20 @@ export default class ApiManager {
     return data;
   }
 
-  public signAndSend(tx: SubmittableExtrinsic<'promise'>, options: Partial<SigningOptions & SendingOptions> = {}) {
+  public signAndSend(
+    txs: SubmittableExtrinsic<'promise'> | Array<SubmittableExtrinsic<'promise'>>,
+    options: Partial<SigningOptions & SendingOptions> = {}
+  ) {
     const account = options.account || this.defaultAccount;
     if (!account) {
       throw new Error('Invalid argument, missing pair or defaultAccount');
+    }
+
+    let tx: SubmittableExtrinsic<'promise'>;
+    if (Array.isArray(txs)) {
+      tx = this.api.tx.utility.batch(txs);
+    } else {
+      tx = txs;
     }
 
     const id = this.txId++;
