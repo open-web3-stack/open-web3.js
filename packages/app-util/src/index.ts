@@ -128,20 +128,24 @@ export const configureLogger = (options: {
       .pipe(bufferTime(2000))
       .pipe(
         tap((payloads) => {
-          webhook.send(
-            payloads
-              .map(
-                (p) =>
-                  `<!date^${(p.timestamp.valueOf() / 1000).toFixed(
-                    0
-                  )}^{date_num} {time_secs}|${p.timestamp.toISOString()}> ${p.level
-                    .toUpperCase()
-                    .padStart(5)} [${p.namespaces.join(':')}]: ${p.args
-                    .map((a) => inspect(a, false, 5, false))
-                    .join(' ')}`
-              )
-              .join('\n')
-          );
+          if (payloads.length === 0) {
+            return;
+          }
+          const message = payloads
+            .map(
+              (p) =>
+                `<!date^${(p.timestamp.valueOf() / 1000).toFixed(
+                  0
+                )}^{date_num} {time_secs}|${p.timestamp.toISOString()}> ${p.level
+                  .toUpperCase()
+                  .padStart(5)} [${p.namespaces.join(':')}]: ${p.args
+                  .map((a) => inspect(a, false, 5, false))
+                  .join(' ')}`
+            )
+            .join('\n');
+          webhook.send(message).catch((error) => {
+            console.warn('Failed to send slack message:', message, '\nError:', error);
+          });
         })
       )
       .subscribe();
