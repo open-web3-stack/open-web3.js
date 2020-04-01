@@ -132,16 +132,23 @@ export const configureLogger = (options: {
             return;
           }
           const message = payloads
-            .map(
-              (p) =>
-                `<!date^${(p.timestamp.valueOf() / 1000).toFixed(
-                  0
-                )}^{date_num} {time_secs}|${p.timestamp.toISOString()}> ${p.level
-                  .toUpperCase()
-                  .padStart(5)} [${p.namespaces.join(':')}]: ${p.args
-                  .map((a) => inspect(a, false, 5, false))
-                  .join(' ')}`
-            )
+            .map((p) => {
+              const emoji = {
+                [LoggerLevel.Debug]: ':sparkles:',
+                [LoggerLevel.Log]: ':eyes:',
+                [LoggerLevel.Info]: ':information_source:',
+                [LoggerLevel.Warn]: ':warning:',
+                [LoggerLevel.Log]: ':exclamation:'
+              };
+              const date = `<!date^${(p.timestamp.valueOf() / 1000).toFixed(
+                0
+              )}^{date_num} {time_secs}|${p.timestamp.toISOString()}>`;
+              const level = ('`' + p.level.toUpperCase() + '`').padStart(7);
+              const mention = p.level === LoggerLevel.Warn || p.level === LoggerLevel.Error ? '<!channel>' : '';
+              return `_${date}_ ${emoji[p.level]}${level} [${p.namespaces.join(':')}]: ${p.args
+                .map((a) => inspect(a, false, 5, false))
+                .join(' ')} ${mention}`;
+            })
             .join('\n');
           webhook.send(message).catch((error) => {
             console.warn('Failed to send slack message:', message, '\nError:', error);

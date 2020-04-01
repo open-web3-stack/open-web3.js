@@ -12,10 +12,12 @@ export interface DispatchEventSource {
 
 export interface DispatchEventHandlerOptions {
   maxConcurrentCount: number;
+  timeout: number;
 }
 
 const defaultDispatchEventHandlerOptions: DispatchEventHandlerOptions = {
-  maxConcurrentCount: 1000
+  maxConcurrentCount: 100,
+  timeout: 1000 * 60 * 5 // 5 mins
 };
 
 export class DispatchEventHandler<T extends DispatchEvent = DispatchEvent> {
@@ -77,7 +79,10 @@ export class Dispatcher {
     }
     ++handlerProps.running;
     try {
-      await handler.callback(event);
+      await new Promise((resolve, reject) => {
+        resolve(handler.callback(event));
+        setTimeout(() => reject(new Error('Handler timeouted')), handler.options.timeout);
+      });
     } catch (error) {
       logger.warn('callHandler', 'failed', { kind: handler.kind, error, handlerProps });
     }
