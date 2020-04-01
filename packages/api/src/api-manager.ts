@@ -85,7 +85,11 @@ export default class ApiManager {
 
     let tx: SubmittableExtrinsic<'promise'>;
     if (Array.isArray(txs)) {
-      tx = this.api.tx.utility.batch(txs);
+      if (txs.length === 1) {
+        tx = txs[0];
+      } else {
+        tx = this.api.tx.utility.batch(txs);
+      }
     } else {
       tx = txs;
     }
