@@ -145,7 +145,7 @@ export default class ApiManager {
               // reset nonce
               data.nonce = Promise.resolve(undefined);
             }
-            const result2 = this.signAndSend(tx, options);
+            const result2 = this.signAndSend(tx, newOption);
             finalized.resolve(result2.finalized);
             inBlock.resolve(result2.inBlock);
             send.resolve(result2.send);
@@ -168,6 +168,7 @@ export default class ApiManager {
         error
       });
     });
+    ret.inBlock.catch(() => {}); // suppress warning of unhandled rejection
 
     this.txDeps[id] = ret.send;
 
