@@ -1,10 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import { inspect } from 'util';
 import { Subject, of, empty, from } from 'rxjs';
 import { mergeMap, tap, bufferTime, filter } from 'rxjs/operators';
-import BigNumber from 'big.js';
-import BN from 'bn.js';
-import { IncomingWebhook } from '@slack/webhook';
-import { Raw } from '@polkadot/types';
 
 import {
   Logger,
@@ -15,7 +13,7 @@ import {
   levelToNumber,
   toLevel
 } from '@orml/util/logger';
-import { defaultLogger } from '@orml/util';
+import { defaultLogger, HeartbeatGroup } from '@orml/util';
 
 const noop = () => {};
 
@@ -27,23 +25,38 @@ export const connectSubjectOutput = (subject: Subject<LoggerPayload>) => {
 };
 
 export const injectInspect = () => {
-  BigNumber.prototype[inspect.custom] = function () {
-    return +this.toFixed(4);
-  };
+  try {
+    const BigNumber = require('big.js');
+    BigNumber.prototype[inspect.custom] = function () {
+      return +this.toFixed(4);
+    };
+  } catch (err) {
+    // ignore
+  }
 
-  BN.prototype[inspect.custom] = function () {
-    return +this.toString();
-  };
+  try {
+    const BN = require('bn.js');
+    BN.prototype[inspect.custom] = function () {
+      return +this.toString();
+    };
+  } catch (err) {
+    // ignore
+  }
 
-  Raw.prototype[inspect.custom] = function () {
-    return this.toHuman();
-  };
+  try {
+    const { Raw } = require('@polkadot/types');
+    Raw.prototype[inspect.custom] = function () {
+      return this.toHuman();
+    };
+  } catch (err) {
+    // ignore
+  }
 
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-extend-native
   Error.prototype[inspect.custom] = function (depth, options) {
     return `${this.name}: ${this.message}\n ${this.stack} ${inspect(Object.assign({}, this), {
       ...options,
-      depth: 0
+      depth: Math.min(depth, 1)
     })}`;
   };
 };
@@ -55,6 +68,7 @@ export const configureLogger = (options: {
   filter?: string;
   level?: string;
   color?: boolean;
+  heartbeatGroup?: HeartbeatGroup;
 }) => {
   injectInspect();
 
@@ -116,49 +130,65 @@ export const configureLogger = (options: {
     .pipe(tap((payload) => consoleOutput({ ...payload, args: payload.args.map((a) => inspect(a, false, 5, color)) }))); // log everything
 
   if (slackWebhook) {
-    const webhook = new IncomingWebhook(slackWebhook);
-    observable
-      // send to slack in panic mode or above slackLevel
-      .pipe(
-        filter(
-          (payload) => payload.timestamp.valueOf() < panicModeEndTime || levelToNumber(payload.level) >= slackLevel
+    try {
+      const { IncomingWebhook } = require('@slack/webhook');
+      const webhook = new IncomingWebhook(slackWebhook);
+      observable
+        // send to slack in panic mode or above slackLevel
+        .pipe(
+          filter(
+            (payload) => payload.timestamp.valueOf() < panicModeEndTime || levelToNumber(payload.level) >= slackLevel
+          )
         )
-      )
-      // avoid too many requests
-      .pipe(bufferTime(2000))
-      .pipe(
-        tap((payloads) => {
-          if (payloads.length === 0) {
-            return;
-          }
-          const message = payloads
-            .map((p) => {
-              const emoji = {
-                [LoggerLevel.Debug]: ':sparkles:',
-                [LoggerLevel.Log]: ':eyes:',
-                [LoggerLevel.Info]: ':information_source:',
-                [LoggerLevel.Warn]: ':warning:',
-                [LoggerLevel.Log]: ':exclamation:'
-              };
-              const date = `<!date^${(p.timestamp.valueOf() / 1000).toFixed(
-                0
-              )}^{date_num} {time_secs}|${p.timestamp.toISOString()}>`;
-              const level = ('`' + p.level.toUpperCase() + '`').padStart(7);
-              const mention = p.level === LoggerLevel.Warn || p.level === LoggerLevel.Error ? '<!channel>' : '';
-              return `_${date}_ ${emoji[p.level]}${level} [${p.namespaces.join(':')}]: ${p.args
-                .map((a) => inspect(a, false, 5, false))
-                .join(' ')} ${mention}`;
-            })
-            .join('\n');
-          webhook.send(message).catch((error) => {
-            console.warn('Failed to send slack message:', message, '\nError:', error);
-          });
-        })
-      )
-      .subscribe();
+        // avoid too many requests
+        .pipe(bufferTime(2000))
+        .pipe(
+          tap((payloads) => {
+            if (payloads.length === 0) {
+              return;
+            }
+            const message = payloads
+              .map((p) => {
+                const emoji = {
+                  [LoggerLevel.Debug]: ':sparkles:',
+                  [LoggerLevel.Log]: ':eyes:',
+                  [LoggerLevel.Info]: ':information_source:',
+                  [LoggerLevel.Warn]: ':warning:',
+                  [LoggerLevel.Log]: ':exclamation:'
+                };
+                const date = `<!date^${(p.timestamp.valueOf() / 1000).toFixed(
+                  0
+                )}^{date_num} {time_secs}|${p.timestamp.toISOString()}>`;
+                const level = ('`' + p.level.toUpperCase() + '`').padStart(7);
+                const mention = p.level === LoggerLevel.Warn || p.level === LoggerLevel.Error ? '<!channel>' : '';
+                return `_${date}_ ${emoji[p.level]}${level} [${p.namespaces.join(':')}]: ${p.args
+                  .map((a) => inspect(a, false, 5, false))
+                  .join(' ')} ${mention}`;
+              })
+              .join('\n');
+            webhook.send(message).catch((error) => {
+              console.warn('Failed to send slack message:', message, '\nError:', error);
+            });
+          })
+        )
+        .subscribe();
+    } catch (err) {
+      // ignore
+    }
   } else {
     observable.subscribe();
   }
 
   logger.setOutput(connectSubjectOutput(subject));
+
+  const heartbeatGroup = options.heartbeatGroup;
+  if (heartbeatGroup) {
+    logger.addMiddleware((payload, next) => {
+      const level = levelToNumber(payload.level);
+      if (level >= panicModeLevel) {
+        heartbeatGroup.markDead(payload.namespaces.join(':'));
+      }
+      next(payload);
+    });
+  }
 };

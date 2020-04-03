@@ -6,6 +6,8 @@ export { defaultLogger };
 
 export const moduleLogger = defaultLogger.createLogger('@orml/util');
 
+export * from './heartbeats';
+
 export function deferred<T>() {
   const deferred: {
     promise: Promise<T>;
