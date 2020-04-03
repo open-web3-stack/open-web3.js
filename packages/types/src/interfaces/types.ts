@@ -4,5 +4,6 @@
 export * from './runtime/types';
 export * from './oracle/types';
 export * from './prices/types';
+export * from './tokens/types';
 export * from './traits/types';
 export * from './utilities/types';
