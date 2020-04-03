@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import { inspect } from 'util';
 import { Subject, of, empty, from } from 'rxjs';
 import { mergeMap, tap, bufferTime, filter } from 'rxjs/operators';
@@ -50,7 +52,7 @@ export const injectInspect = () => {
     // ignore
   }
 
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-extend-native
   Error.prototype[inspect.custom] = function (depth, options) {
     return `${this.name}: ${this.message}\n ${this.stack} ${inspect(Object.assign({}, this), {
       ...options,
