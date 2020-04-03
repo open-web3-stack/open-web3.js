@@ -3,7 +3,7 @@ export class Heartbeat {
   private _resetableLastDead = 0;
   private _lastDead = 0;
 
-  public constructor(public readonly name, private readonly _livePeriod: number, private readonly _deadPeriod) {}
+  public constructor(private readonly _livePeriod: number, private readonly _deadPeriod) {}
 
   public markAlive(resetError = false) {
     this._lastAlive = Date.now();
@@ -35,7 +35,6 @@ export class Heartbeat {
 
   public summary() {
     return {
-      name: this.name,
       isAlive: this.isAlive(),
       lastAlive: this.lastDead,
       lastDead: this.lastDead
@@ -44,16 +43,36 @@ export class Heartbeat {
 }
 
 export class HeartbeatGroup {
-  public constructor(public readonly heartbeats: Heartbeat[]) {}
+  public constructor(
+    public readonly options: { livePeriod: number; deadPeriod: number },
+    public readonly heartbeats: Record<string, Heartbeat> = {}
+  ) {}
 
   public isAlive() {
-    return this.heartbeats.every((h) => h.isAlive());
+    return Object.values(this.heartbeats).every((h) => h.isAlive());
+  }
+
+  public getHeartbeat(name: string) {
+    let heartbeat = this.heartbeats[name];
+    if (!heartbeat) {
+      heartbeat = new Heartbeat(this.options.livePeriod, this.options.deadPeriod);
+      this.heartbeats[name] = heartbeat;
+    }
+    return heartbeat;
+  }
+
+  public markAlive(name: string, resetError = false) {
+    this.getHeartbeat(name).markAlive(resetError);
+  }
+
+  public markDead(name: string) {
+    this.getHeartbeat(name).markDead();
   }
 
   public summary() {
     return {
       isAlive: this.isAlive(),
-      details: this.heartbeats.map((h) => h.summary())
+      details: Object.entries(this.heartbeats).map(([name, h]) => ({ name, ...h.summary() }))
     };
   }
 }

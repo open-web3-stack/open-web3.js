@@ -11,7 +11,7 @@ import {
   levelToNumber,
   toLevel
 } from '@orml/util/logger';
-import { defaultLogger } from '@orml/util';
+import { defaultLogger, HeartbeatGroup } from '@orml/util';
 
 const noop = () => {};
 
@@ -66,6 +66,7 @@ export const configureLogger = (options: {
   filter?: string;
   level?: string;
   color?: boolean;
+  heartbeatGroup?: HeartbeatGroup;
 }) => {
   injectInspect();
 
@@ -177,4 +178,15 @@ export const configureLogger = (options: {
   }
 
   logger.setOutput(connectSubjectOutput(subject));
+
+  const heartbeatGroup = options.heartbeatGroup;
+  if (heartbeatGroup) {
+    logger.addMiddleware((payload, next) => {
+      const level = levelToNumber(payload.level);
+      if (level >= panicModeLevel) {
+        heartbeatGroup.markDead(payload.namespaces.join(':'));
+      }
+      next(payload);
+    });
+  }
 };
