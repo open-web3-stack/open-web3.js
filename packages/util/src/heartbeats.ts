@@ -5,7 +5,7 @@ export class Heartbeat {
   private _resetableLastDead = 0;
   private _lastDead = 0;
 
-  public constructor(private readonly _livePeriod: number, private readonly _deadPeriod: number) {}
+  public constructor(private readonly _livePeriod: number = Infinity, private readonly _deadPeriod: number = 0) {}
 
   public markAlive(resetError = false) {
     this._lastAlive = Date.now();
@@ -38,7 +38,7 @@ export class Heartbeat {
   public summary() {
     return {
       isAlive: this.isAlive(),
-      lastAlive: this.lastDead,
+      lastAlive: this.lastAlive,
       lastDead: this.lastDead
     };
   }
