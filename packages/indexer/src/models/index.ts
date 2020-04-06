@@ -81,7 +81,12 @@ export default function init(db: Sequelize): void {
       }
     },
     {
-      sequelize: db
+      sequelize: db,
+      indexes: [
+        {
+          fields: ['blockNumber']
+        }
+      ]
     }
   );
 
@@ -138,7 +143,18 @@ export default function init(db: Sequelize): void {
       }
     },
     {
-      sequelize: db
+      sequelize: db,
+      indexes: [
+        {
+          fields: ['blockNumber']
+        },
+        {
+          fields: ['blockHash', 'index']
+        },
+        {
+          fields: ['signer']
+        }
+      ]
     }
   );
 
@@ -187,7 +203,12 @@ export default function init(db: Sequelize): void {
       }
     },
     {
-      sequelize: db
+      sequelize: db,
+      indexes: [
+        {
+          fields: ['blockHash', 'phaseIndex']
+        }
+      ]
     }
   );
 
