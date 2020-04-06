@@ -2,7 +2,7 @@
   "extends": "./node_modules/@polkadot/dev/config/tsconfig",
   "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*"],
   "compilerOptions": {
-    "target": "es2018",
+    "target": "es2019",
     "module": "CommonJS",
     "baseUrl": ".",
     "noImplicitAny": false,

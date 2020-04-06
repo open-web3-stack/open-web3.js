@@ -1,9 +1,11 @@
+export type CheckHeartbeat = () => Promise<{ isAlive: boolean }>;
+
 export class Heartbeat {
   private _lastAlive = 0;
   private _resetableLastDead = 0;
   private _lastDead = 0;
 
-  public constructor(private readonly _livePeriod: number, private readonly _deadPeriod) {}
+  public constructor(private readonly _livePeriod: number, private readonly _deadPeriod: number) {}
 
   public markAlive(resetError = false) {
     this._lastAlive = Date.now();
@@ -43,13 +45,54 @@ export class Heartbeat {
 }
 
 export class HeartbeatGroup {
-  public constructor(
-    public readonly options: { livePeriod: number; deadPeriod: number },
-    public readonly heartbeats: Record<string, Heartbeat> = {}
-  ) {}
+  public readonly options: { livePeriod: number; deadPeriod: number };
+  public readonly checks: Record<string, CheckHeartbeat>;
+  public readonly heartbeats: Record<string, Heartbeat>;
 
-  public isAlive() {
-    return Object.values(this.heartbeats).every((h) => h.isAlive());
+  public constructor(
+    { livePeriod = Infinity, deadPeriod = 0 }: { livePeriod?: number; deadPeriod?: number } = {},
+    checks: Record<string, CheckHeartbeat> = {},
+    heartbeats: Record<string, Heartbeat> = {}
+  ) {
+    this.options = { livePeriod, deadPeriod };
+    this.checks = checks;
+    this.heartbeats = heartbeats;
+  }
+
+  public async isAlive() {
+    const alive = Object.values(this.heartbeats).every((h) => h.isAlive());
+    if (!alive) {
+      return false;
+    }
+    const checks = Object.values(this.checks);
+    if (checks.length === 0) {
+      return true;
+    }
+    return new Promise<boolean>((resolve) => {
+      let count = checks.length;
+      for (const check of checks) {
+        check()
+          .then(({ isAlive }) => {
+            if (isAlive) {
+              --count;
+              if (count === 0) {
+                resolve(true);
+              }
+            } else {
+              resolve(false);
+            }
+          })
+          .catch(() => resolve(false));
+      }
+    });
+  }
+
+  public addHeartbeat(name: string, heartbeat: Heartbeat | CheckHeartbeat) {
+    if (heartbeat instanceof Heartbeat) {
+      this.heartbeats[name] = heartbeat;
+    } else {
+      this.checks[name] = heartbeat;
+    }
   }
 
   public getHeartbeat(name: string) {
@@ -69,10 +112,26 @@ export class HeartbeatGroup {
     this.getHeartbeat(name).markDead();
   }
 
-  public summary() {
+  public async summary() {
+    const details = Object.entries(this.heartbeats).map(([name, h]) => ({ name, ...h.summary() }));
+    for (const [name, check] of Object.entries(this.checks)) {
+      let result;
+      try {
+        result = await check();
+      } catch (error) {
+        result = {
+          isAlive: false,
+          error
+        };
+      }
+      details.push({
+        name,
+        ...result
+      });
+    }
     return {
-      isAlive: this.isAlive(),
-      details: Object.entries(this.heartbeats).map(([name, h]) => ({ name, ...h.summary() }))
+      isAlive: details.every((d) => d.isAlive),
+      details
     };
   }
 }
