@@ -174,6 +174,7 @@ export const configureLogger = (options: {
         .subscribe();
     } catch (err) {
       // ignore
+      observable.subscribe();
     }
   } else {
     observable.subscribe();
