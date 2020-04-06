@@ -1,6 +1,6 @@
 {
   "name": "@orml/scanner",
-  "version": "0.2.0-beta.69",
+  "version": "0.2.0-beta.70",
   "description": "ORML Scanner",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
