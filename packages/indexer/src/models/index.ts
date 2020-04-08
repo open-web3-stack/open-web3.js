@@ -153,6 +153,9 @@ export default function init(db: Sequelize): void {
           fields: ['blockNumber']
         },
         {
+          fields: ['blockHash']
+        },
+        {
           fields: ['blockHash', 'index']
         },
         {
@@ -209,6 +212,12 @@ export default function init(db: Sequelize): void {
     {
       sequelize: db,
       indexes: [
+        {
+          fields: ['blockNumber']
+        },
+        {
+          fields: ['blockHash']
+        },
         {
           fields: ['blockHash', 'phaseIndex']
         }
