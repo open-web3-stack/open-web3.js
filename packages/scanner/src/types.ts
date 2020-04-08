@@ -66,6 +66,7 @@ export interface Extrinsic {
   method: string;
   section: string;
   signer: string | null;
+  result: string;
 }
 
 export interface RuntimeVersion {

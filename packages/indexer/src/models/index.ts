@@ -137,6 +137,10 @@ export default function init(db: Sequelize): void {
         type: DataTypes.STRING,
         allowNull: true
       },
+      result: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       bytes: {
         type: DataTypes.BLOB,
         allowNull: false
