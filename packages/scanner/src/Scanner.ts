@@ -114,7 +114,7 @@ class Scanner {
     const [events, author] = await Promise.all(requestes as [Promise<Event[]>, Promise<string>]);
 
     const extrinsics = blockRaw.block.extrinsics.map((extrinsic, index) => {
-      const event = events.reverse().find(({ phaseIndex }) => phaseIndex === index);
+      const event = [...events].reverse().find(({ phaseIndex }) => phaseIndex === index);
       const result =
         event && (event.method === 'ExtrinsicFailed' || event.method === 'ExtrinsicSuccess') ? event.method : '';
 
