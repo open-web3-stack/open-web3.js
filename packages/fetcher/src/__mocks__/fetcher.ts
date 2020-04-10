@@ -16,11 +16,11 @@ const prices: { [key in Exchange]?: { [key in Pair]?: string } } = {
 
 export default class Fetcher {
   getPrice(exchange: Exchange, pair: Pair): Promise<string> {
-    let x = prices[exchange];
-    if (!x) return Promise.reject();
+    const x = prices[exchange];
+    if (!x) return Promise.reject(Error('failed'));
 
-    let price = x[pair];
-    if (!price) return Promise.reject();
+    const price = x[pair];
+    if (!price) return Promise.reject(Error('failed'));
 
     return Promise.resolve(price);
   }

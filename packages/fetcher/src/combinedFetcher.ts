@@ -3,10 +3,10 @@ import { CombinedFetcherInterface, FetcherInterface, Exchange, Pair } from '../i
 import CCXT from './ccxt';
 import CryptoCompare from './crypto-compare';
 
-const median = (prices_unsorted: string[]): string => {
-  const prices = prices_unsorted.sort();
+const median = (pricesUnsorted: string[]): string => {
+  const prices = pricesUnsorted.sort();
   const mid = Math.ceil(prices.length / 2);
-  return prices.length % 2 == 0
+  return prices.length % 2 === 0
     ? bn(prices[mid])
         .add(bn(prices[mid - 1]))
         .div(2)
@@ -19,7 +19,7 @@ export default class CombinedFetcher implements CombinedFetcherInterface {
   private readonly minCount: number;
   private readonly fetchers: FetcherInterface[];
 
-  constructor(exchanges: Exchange[], minCount: number = 3) {
+  constructor(exchanges: Exchange[], minCount = 3) {
     this.minCount = minCount;
     this.exchanges = exchanges;
     this.fetchers = [new CCXT(), new CryptoCompare('')];
@@ -33,7 +33,7 @@ export default class CombinedFetcher implements CombinedFetcherInterface {
     );
     const prices = results.filter((i) => typeof i === 'string') as string[];
     if (prices.length < this.minCount) {
-      throw 'not enough prices';
+      throw Error('not enough prices');
     }
     return median(prices);
   }
