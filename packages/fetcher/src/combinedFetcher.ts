@@ -1,7 +1,5 @@
 import bn from 'big.js';
 import { CombinedFetcherInterface, FetcherInterface, Exchange, Pair } from '../interfaces';
-import CCXT from './ccxt';
-import CryptoCompare from './crypto-compare';
 
 const median = (pricesUnsorted: string[]): string => {
   const prices = pricesUnsorted.sort();
@@ -19,10 +17,10 @@ export default class CombinedFetcher implements CombinedFetcherInterface {
   private readonly minCount: number;
   private readonly fetchers: FetcherInterface[];
 
-  constructor(exchanges: Exchange[], minCount = 3) {
+  constructor(exchanges: Exchange[], fetchers: FetcherInterface[], minCount = 3) {
     this.minCount = minCount;
     this.exchanges = exchanges;
-    this.fetchers = [new CCXT(), new CryptoCompare('')];
+    this.fetchers = fetchers;
   }
 
   async getPrice(pair: Pair): Promise<string> {
