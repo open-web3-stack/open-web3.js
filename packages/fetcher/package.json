@@ -17,6 +17,7 @@
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "@orml/util": "^0.2.0-beta.70",
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "ccxt": "^1.26.3"
   }
 }
