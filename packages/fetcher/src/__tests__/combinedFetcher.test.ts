@@ -6,7 +6,7 @@ import CCXT from '../ccxt';
 import CryptoCompare from '../crypto-compare';
 import { Exchange } from '../../interfaces';
 
-describe('Scanner', () => {
+describe('CombinedFetcher', () => {
   let exchanges: Exchange[] = ['bittrex', 'coinbase', 'kraken'];
   let fetchers = [new CCXT(), new CryptoCompare('123')];
   const fetcher = new CombinedFetcher(exchanges, fetchers);
@@ -18,6 +18,6 @@ describe('Scanner', () => {
     const btc_price = await fetcher.getPrice('BTC/USD');
     expect(btc_price).toEqual('7310.82');
 
-    expect(fetcher.getPrice('BTC/ETH')).rejects.toMatch('not enough prices');
+    await expect(fetcher.getPrice('BTC/ETH')).rejects.toThrowError('not enough prices');
   });
 });
