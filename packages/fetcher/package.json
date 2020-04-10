@@ -19,5 +19,9 @@
     "@orml/util": "^0.2.0-beta.70",
     "axios": "^0.19.2",
     "ccxt": "^1.26.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "jest": "^25.3.0"
   }
 }
