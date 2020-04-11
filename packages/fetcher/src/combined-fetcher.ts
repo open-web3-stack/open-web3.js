@@ -1,5 +1,5 @@
 import bn from 'big.js';
-import { FetcherInterface, Pair } from './types';
+import { FetcherInterface } from './types';
 import moduleLogger from './logger';
 
 const logger = moduleLogger.createLogger('CombinedFetcher');
@@ -49,11 +49,11 @@ export default class CombinedFetcher implements FetcherInterface {
   /**
    * Get a median from prices provided by fetchers
    *
-   * @param {Pair} pair
+   * @param {string} pair
    * @returns {Promise<string>}
    * @memberof CombinedFetcher
    */
-  async getPrice(pair: Pair): Promise<string> {
+  async getPrice(pair: string): Promise<string> {
     // fetch from all sources
     const results = await Promise.all(
       this.fetchers.map((fetcher) =>

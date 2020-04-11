@@ -1,6 +1,6 @@
-import { Pair, FetcherInterface } from '../types';
+import { FetcherInterface } from '../types';
 
-const prices: { [key: string]: { [key in Pair]?: string } } = {
+const prices: { [key: string]: { [key: string]: string } } = {
   bittrex: {
     'ETH/USD': '149.85',
     'BTC/USD': '7303.36'
@@ -21,7 +21,7 @@ export default class Fetcher implements FetcherInterface {
     this.exchange = prices[source];
   }
 
-  getPrice(pair: Pair): Promise<string> {
+  getPrice(pair: string): Promise<string> {
     const price = this.exchange[pair];
     if (!price) return Promise.reject(Error('failed'));
 

@@ -1,30 +1,30 @@
 import bn from 'big.js';
 import ccxt, { Ticker, Exchange } from 'ccxt';
-import { FetcherInterface, Pair } from './types';
+import { FetcherInterface } from './types';
 
 /**
- * CCXT fetcher.
+ * CCXTFetcher.
  *
  * @export
- * @class CCXT
+ * @class CCXTFetcher
  * @implements {FetcherInterface}
  */
-export default class CCXT implements FetcherInterface {
+export default class CCXTFetcher implements FetcherInterface {
   private readonly source: string;
   private readonly exchange: Exchange;
 
   /**
-   * Creates an instance of CCXT.
+   * Creates an instance of CCXTFetcher.
    * @param {string} source
    * @param {{ [key in keyof Exchange]?: Exchange[key] }} [config]
-   * @memberof CCXT
+   * @memberof CCXTFetcher
    */
   constructor(source: string, config?: { [key in keyof Exchange]?: Exchange[key] }) {
     this.source = source;
-    this.exchange = new ccxt[source](config);
+    this.exchange = new ccxt[source]({ timeout: 2000, ...config });
   }
 
-  getSymbol(pair: Pair): string | null {
+  getSymbol(pair: string): string | null {
     // TODO: return symbol supported by exchange
     return pair;
   }
@@ -32,11 +32,11 @@ export default class CCXT implements FetcherInterface {
   /**
    * Fetch price for a given pair.
    *
-   * @param {Pair} pair
+   * @param {string} pair
    * @returns {Promise<string>} (bid + ask) / 2
-   * @memberof CCXT
+   * @memberof CCXTFetcher
    */
-  getPrice(pair: Pair): Promise<string> {
+  getPrice(pair: string): Promise<string> {
     const symbol = this.getSymbol(pair);
     if (symbol === null) {
       throw Error('pair not supported');

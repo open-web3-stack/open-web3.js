@@ -1,38 +1,41 @@
 import axios from 'axios';
-import { FetcherInterface, Pair } from './types';
+import { FetcherInterface } from './types';
 
 const baseURL = 'https://min-api.cryptocompare.com';
 
 /**
- * CryptoCompare fetcher
+ * CryptoCompareFetcher
  *
  * @export
- * @class CryptoCompare
+ * @class CryptoCompareFetcher
  * @implements {FetcherInterface}
  */
-export default class CryptoCompare implements FetcherInterface {
+export default class CryptoCompareFetcher implements FetcherInterface {
   private readonly source: string;
   private readonly apiKey: string;
+  private readonly timeout: number;
 
   /**
-   * Creates an instance of CryptoCompare.
+   * Creates an instance of CryptoCompareFetcher.
    * @param {string} source
    * @param {string} apiKey
-   * @memberof CryptoCompare
+   * @param {number} timeout milliseconds
+   * @memberof CryptoCompareFetcher
    */
-  constructor(source: string, apiKey: string) {
+  constructor(source: string, apiKey: string, timeout = 2000) {
     this.source = source;
     this.apiKey = apiKey;
+    this.timeout = timeout;
   }
 
   /**
    * Fetch price for a give pair.
    *
-   * @param {Pair} pair
+   * @param {string} pair base/quote
    * @returns {Promise<string>}
-   * @memberof CryptoCompare
+   * @memberof CryptoCompareFetcher
    */
-  getPrice(pair: Pair): Promise<string> {
+  getPrice(pair: string): Promise<string> {
     const [base, quote] = pair.split('/');
     const params = {
       e: this.source,
@@ -40,7 +43,7 @@ export default class CryptoCompare implements FetcherInterface {
       tsyms: quote,
       api_key: this.apiKey // eslint-disable-line @typescript-eslint/camelcase
     };
-    return axios.get('/data/price', { params, baseURL }).then((res) => {
+    return axios.get('/data/price', { params, baseURL, timeout: this.timeout }).then((res) => {
       const price = res.data[quote];
       if (res.status >= 400 || !price) {
         throw Error(`Price fetch failed (${res.status} ${res.statusText}): ${JSON.stringify(res.data)}.`);

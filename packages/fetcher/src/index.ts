@@ -1,6 +1,6 @@
 export { default as AlphaVantage } from './alpha-vantage';
 
-export { FetcherInterface, Pair } from './types';
-export { default as CCXT } from './ccxt';
-export { default as CryptoCompare } from './crypto-compare';
-export { default as CombinedFetcher } from './combinedFetcher';
+export { FetcherInterface } from './types';
+export { default as CCXTFetcher } from './ccxt-fetcher';
+export { default as CryptoCompareFetcher } from './crypto-compare-fetcher';
+export { default as CombinedFetcher } from './combined-fetcher';

@@ -1,16 +1,16 @@
-jest.mock('../ccxt');
-jest.mock('../crypto-compare');
+jest.mock('../ccxt-fetcher');
+jest.mock('../crypto-compare-fetcher');
 
-import CombinedFetcher from '../combinedFetcher';
-import CCXT from '../ccxt';
-import CryptoCompare from '../crypto-compare';
+import CombinedFetcher from '../combined-fetcher';
+import CCXTFetcher from '../ccxt-fetcher';
+import CryptoCompareFetcher from '../crypto-compare-fetcher';
 
 describe('CombinedFetcher', () => {
   let fetchers = [];
 
   ['bittrex', 'coinbase', 'kraken'].forEach((source) => {
-    fetchers.push(new CCXT(source));
-    fetchers.push(new CryptoCompare(source, '123'));
+    fetchers.push(new CCXTFetcher(source));
+    fetchers.push(new CryptoCompareFetcher(source, '123'));
   });
 
   const fetcher = new CombinedFetcher(fetchers);
