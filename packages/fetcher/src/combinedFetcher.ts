@@ -1,5 +1,5 @@
 import bn from 'big.js';
-import { FetcherInterface, Pair } from '../interfaces';
+import { FetcherInterface, Pair } from './types';
 import moduleLogger from './logger';
 
 const logger = moduleLogger.createLogger('CombinedFetcher');

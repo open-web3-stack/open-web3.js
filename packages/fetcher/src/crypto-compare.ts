@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FetcherInterface, Pair } from '../interfaces';
+import { FetcherInterface, Pair } from './types';
 
 const baseURL = 'https://min-api.cryptocompare.com';
 

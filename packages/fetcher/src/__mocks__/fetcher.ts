@@ -1,4 +1,4 @@
-import { Pair, FetcherInterface } from '../../interfaces';
+import { Pair, FetcherInterface } from '../types';
 
 const prices: { [key: string]: { [key in Pair]?: string } } = {
   bittrex: {
