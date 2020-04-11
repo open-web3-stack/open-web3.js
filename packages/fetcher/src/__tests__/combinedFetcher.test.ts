@@ -4,12 +4,17 @@ jest.mock('../crypto-compare');
 import CombinedFetcher from '../combinedFetcher';
 import CCXT from '../ccxt';
 import CryptoCompare from '../crypto-compare';
-import { Exchange } from '../../interfaces';
+import { Source } from '../../interfaces';
 
 describe('CombinedFetcher', () => {
-  let exchanges: Exchange[] = ['bittrex', 'coinbase', 'kraken'];
-  let fetchers = [new CCXT(), new CryptoCompare('123')];
-  const fetcher = new CombinedFetcher(exchanges, fetchers);
+  let fetchers = [];
+
+  ['bittrex', 'coinbase', 'kraken'].forEach((source: Source) => {
+    fetchers.push(new CCXT(source));
+    fetchers.push(new CryptoCompare(source, '123'));
+  });
+
+  const fetcher = new CombinedFetcher(fetchers);
 
   it('getPrice', async () => {
     const eth_price = await fetcher.getPrice('ETH/USD');

@@ -1,18 +1,21 @@
 import axios from 'axios';
-import { FetcherInterface, Exchange, Pair } from '../interfaces';
+import { FetcherInterface, Source, Pair } from '../interfaces';
 
 const baseURL = 'https://min-api.cryptocompare.com';
 
 export default class CryptoCompare implements FetcherInterface {
+  private readonly source: Source;
   private readonly apiKey: string;
-  constructor(apiKey: string) {
+
+  constructor(source: Source, apiKey: string) {
+    this.source = source;
     this.apiKey = apiKey;
   }
 
-  getPrice(exchange: Exchange, pair: Pair): Promise<string> {
+  getPrice(pair: Pair): Promise<string> {
     const [quote, base] = pair.split('/');
     const params = {
-      e: exchange,
+      e: this.source,
       fsym: quote,
       tsyms: base,
       api_key: this.apiKey // eslint-disable-line @typescript-eslint/camelcase
