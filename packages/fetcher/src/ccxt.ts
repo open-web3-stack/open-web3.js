@@ -10,6 +10,7 @@ import { FetcherInterface, Pair } from './types';
  * @implements {FetcherInterface}
  */
 export default class CCXT implements FetcherInterface {
+  private readonly source: string;
   private readonly exchange: Exchange;
 
   /**
@@ -19,7 +20,13 @@ export default class CCXT implements FetcherInterface {
    * @memberof CCXT
    */
   constructor(source: string, config?: { [key in keyof Exchange]?: Exchange[key] }) {
+    this.source = source;
     this.exchange = new ccxt[source](config);
+  }
+
+  getSymbol(pair: Pair): string | null {
+    // TODO: return symbol supported by exchange
+    return pair;
   }
 
   /**
@@ -30,7 +37,12 @@ export default class CCXT implements FetcherInterface {
    * @memberof CCXT
    */
   getPrice(pair: Pair): Promise<string> {
-    return this.exchange.fetchTicker(pair).then((ticker: Ticker) => {
+    const symbol = this.getSymbol(pair);
+    if (symbol === null) {
+      throw Error('pair not supported');
+    }
+
+    return this.exchange.fetchTicker(symbol).then((ticker: Ticker) => {
       // bid & ask avg
       const price = bn(ticker.bid).add(bn(ticker.ask)).div(2);
       return price.toString();

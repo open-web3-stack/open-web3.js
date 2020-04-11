@@ -33,15 +33,15 @@ export default class CryptoCompare implements FetcherInterface {
    * @memberof CryptoCompare
    */
   getPrice(pair: Pair): Promise<string> {
-    const [quote, base] = pair.split('/');
+    const [base, quote] = pair.split('/');
     const params = {
       e: this.source,
-      fsym: quote,
-      tsyms: base,
+      fsym: base,
+      tsyms: quote,
       api_key: this.apiKey // eslint-disable-line @typescript-eslint/camelcase
     };
     return axios.get('/data/price', { params, baseURL }).then((res) => {
-      const price = res.data[base];
+      const price = res.data[quote];
       if (res.status >= 400 || !price) {
         throw Error(`Price fetch failed (${res.status} ${res.statusText}): ${JSON.stringify(res.data)}.`);
       }

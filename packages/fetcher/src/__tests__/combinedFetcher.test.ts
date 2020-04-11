@@ -22,6 +22,6 @@ describe('CombinedFetcher', () => {
     const btc_price = await fetcher.getPrice('BTC/USD');
     expect(btc_price).toEqual('7310.82');
 
-    await expect(fetcher.getPrice('BTC/ETH')).rejects.toThrowError('not enough prices');
+    await expect(fetcher.getPrice('EUR/USD')).rejects.toThrowError('not enough prices');
   });
 });
