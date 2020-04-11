@@ -1,6 +1,6 @@
-import { Source, Pair, FetcherInterface } from '../../interfaces';
+import { Pair, FetcherInterface } from '../../interfaces';
 
-const prices: { [key in Source]?: { [key in Pair]?: string } } = {
+const prices: { [key: string]: { [key in Pair]?: string } } = {
   bittrex: {
     'ETH/USD': '149.85',
     'BTC/USD': '7303.36'
@@ -17,7 +17,7 @@ const prices: { [key in Source]?: { [key in Pair]?: string } } = {
 export default class Fetcher implements FetcherInterface {
   private readonly exchange: any;
 
-  constructor(source: Source) {
+  constructor(source: string) {
     this.exchange = prices[source];
   }
 

@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { FetcherInterface, Source, Pair } from '../interfaces';
+import { FetcherInterface, Pair } from '../interfaces';
 
 const baseURL = 'https://min-api.cryptocompare.com';
 
 export default class CryptoCompare implements FetcherInterface {
-  private readonly source: Source;
+  private readonly source: string;
   private readonly apiKey: string;
 
-  constructor(source: Source, apiKey: string) {
+  constructor(source: string, apiKey: string) {
     this.source = source;
     this.apiKey = apiKey;
   }
