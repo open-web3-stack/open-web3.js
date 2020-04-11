@@ -137,6 +137,10 @@ export default function init(db: Sequelize): void {
         type: DataTypes.STRING,
         allowNull: true
       },
+      result: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       bytes: {
         type: DataTypes.BLOB,
         allowNull: false
@@ -147,6 +151,9 @@ export default function init(db: Sequelize): void {
       indexes: [
         {
           fields: ['blockNumber']
+        },
+        {
+          fields: ['blockHash']
         },
         {
           fields: ['blockHash', 'index']
@@ -205,6 +212,12 @@ export default function init(db: Sequelize): void {
     {
       sequelize: db,
       indexes: [
+        {
+          fields: ['blockNumber']
+        },
+        {
+          fields: ['blockHash']
+        },
         {
           fields: ['blockHash', 'phaseIndex']
         }

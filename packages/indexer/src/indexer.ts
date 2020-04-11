@@ -265,6 +265,7 @@ export default class Indexer {
             nonce: extrinsic.nonce,
             tip: extrinsic.tip,
             signer: extrinsic.signer,
+            result: extrinsic.result,
             bytes: extrinsic.bytes
           },
           options
