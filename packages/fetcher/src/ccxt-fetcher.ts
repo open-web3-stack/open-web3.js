@@ -24,11 +24,6 @@ export default class CCXTFetcher implements FetcherInterface {
     this.exchange = new ccxt[source]({ timeout: 2000, ...config });
   }
 
-  getSymbol(pair: string): string | null {
-    // TODO: return symbol supported by exchange
-    return pair;
-  }
-
   /**
    * Fetch price for a given pair.
    *
@@ -37,12 +32,7 @@ export default class CCXTFetcher implements FetcherInterface {
    * @memberof CCXTFetcher
    */
   getPrice(pair: string): Promise<string> {
-    const symbol = this.getSymbol(pair);
-    if (symbol === null) {
-      throw Error('pair not supported');
-    }
-
-    return this.exchange.fetchTicker(symbol).then((ticker: Ticker) => {
+    return this.exchange.fetchTicker(pair).then((ticker: Ticker) => {
       // bid & ask avg
       const price = bn(ticker.bid).add(bn(ticker.ask)).div(2);
       return price.toString();
