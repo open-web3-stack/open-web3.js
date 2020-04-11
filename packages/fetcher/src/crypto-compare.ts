@@ -3,15 +3,35 @@ import { FetcherInterface, Pair } from '../interfaces';
 
 const baseURL = 'https://min-api.cryptocompare.com';
 
+/**
+ * CryptoCompare fetcher
+ *
+ * @export
+ * @class CryptoCompare
+ * @implements {FetcherInterface}
+ */
 export default class CryptoCompare implements FetcherInterface {
   private readonly source: string;
   private readonly apiKey: string;
 
+  /**
+   * Creates an instance of CryptoCompare.
+   * @param {string} source
+   * @param {string} apiKey
+   * @memberof CryptoCompare
+   */
   constructor(source: string, apiKey: string) {
     this.source = source;
     this.apiKey = apiKey;
   }
 
+  /**
+   * Fetch price for a give pair.
+   *
+   * @param {Pair} pair
+   * @returns {Promise<string>}
+   * @memberof CryptoCompare
+   */
   getPrice(pair: Pair): Promise<string> {
     const [quote, base] = pair.split('/');
     const params = {

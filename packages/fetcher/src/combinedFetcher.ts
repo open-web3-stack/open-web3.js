@@ -24,15 +24,35 @@ export class CombinedFetcherError extends Error {
   }
 }
 
+/**
+ * CombinedFetcher will fetch prices from provided fetchers and find a median.
+ *
+ * @export
+ * @class CombinedFetcher
+ * @implements {FetcherInterface}
+ */
 export default class CombinedFetcher implements FetcherInterface {
-  private readonly minCount: number;
+  private readonly minValidPrices: number;
   private readonly fetchers: FetcherInterface[];
 
-  constructor(fetchers: FetcherInterface[], minCount = 3) {
-    this.minCount = minCount;
+  /**
+   * Creates an instance of CombinedFetcher.
+   * @param {FetcherInterface[]} fetchers
+   * @param {number} [minValidPrices=3] number of min valid prices to provide a median
+   * @memberof CombinedFetcher
+   */
+  constructor(fetchers: FetcherInterface[], minValidPrices = 3) {
+    this.minValidPrices = minValidPrices;
     this.fetchers = fetchers;
   }
 
+  /**
+   * Get a median from prices provided by fetchers
+   *
+   * @param {Pair} pair
+   * @returns {Promise<string>}
+   * @memberof CombinedFetcher
+   */
   async getPrice(pair: Pair): Promise<string> {
     // fetch from all sources
     const results = await Promise.all(
@@ -48,7 +68,7 @@ export default class CombinedFetcher implements FetcherInterface {
     const prices = results.filter((i) => typeof i === 'string') as string[];
 
     // ensure enough prices
-    if (prices.length < this.minCount) {
+    if (prices.length < this.minValidPrices) {
       const errors = results.filter((i) => i instanceof Error);
       throw new CombinedFetcherError('not enough prices', errors);
     }
