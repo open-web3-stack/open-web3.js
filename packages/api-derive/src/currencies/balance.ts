@@ -1,6 +1,6 @@
 import { ApiInterfaceRx } from '@polkadot/api/types';
 import { AccountInfo } from '@polkadot/types/interfaces';
-import { AccountId, Balance } from '@orml/types/interfaces';
+import { AccountId, Balance, OrmlAccountData } from '@orml/types/interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -22,7 +22,11 @@ export function balance(
           })
         );
       } else {
-        return api.query.tokens.balance<Balance>(token, address);
+        return api.query.tokens.accounts<OrmlAccountData>(token, address).pipe(
+          map((result) => {
+            return result.free;
+          })
+        );
       }
     }
   );
