@@ -254,7 +254,7 @@ export default class Indexer {
       request.push(
         Extrinsic.upsert(
           {
-            id: `${block.number}-${extrinsic.index}`,
+            id: `${block.hash}-${extrinsic.index}`,
             hash: extrinsic.hash,
             blockHash: block.hash,
             blockNumber: block.number,
