@@ -1,13 +1,20 @@
 import { Sequelize, Op, SyncOptions } from 'sequelize';
+import { MetadataLatest } from '@polkadot/types/interfaces/metadata';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap } from 'rxjs/operators';
 import Scanner from '@orml/scanner';
-import { TypeProvider, ChainInfo, SubscribeBlock, SubscribeBlockError } from '@orml/scanner/types';
+import {
+  TypeProvider,
+  ChainInfo,
+  SubscribeBlock,
+  SubscribeBlockError,
+  DispatchableCall as DispatchableCallType
+} from '@orml/scanner/types';
 
-import init, { Status, Block, Metadata, Extrinsic, Events } from './models';
+import init, { Status, Block, Metadata, Extrinsic, Events, DispatchableCall } from './models';
 import log from './log';
 
-type IndexerOptions = {
+export type IndexerOptions = {
   dbUrl: string;
   wsUrl: string;
   types?: TypeProvider;
@@ -143,6 +150,7 @@ export default class Indexer {
           this.syncBlock(block, { transaction: t }),
           this.syncEvents(block, { transaction: t }),
           this.syncExtrinsics(block, { transaction: t }),
+          this.syncDispatchableCalls(block, { transaction: t }),
           this.syncStatus(block.number, block.hash, 0, { transaction: t })
         ])
           .then(() => {
@@ -273,6 +281,92 @@ export default class Indexer {
       );
     }
     await Promise.all(request);
+  }
+
+  async syncDispatchableCalls(block: SubscribeBlock['result'], options: any) {
+    type ChildCall = {
+      args: any;
+      callIndex: 'string';
+    };
+
+    const promises: Promise<any>[] = [];
+    let metadata: MetadataLatest;
+
+    const decodeCallIndex = (callIndex: string) => {
+      if (!metadata) {
+        metadata = block.chainInfo.metadata.metadata.asLatest;
+      }
+      const callIndexNum = parseInt(callIndex, 16);
+      const sectionIndex = callIndexNum >> 8;
+      const methodIndex = callIndexNum & 0xff;
+      const section = metadata.modules[sectionIndex];
+      const method = section.calls.unwrap()[methodIndex];
+      return {
+        section: section.name.toString(),
+        method: method.name.toString()
+      };
+    };
+
+    const handle = (
+      call: DispatchableCallType,
+      parentId: string | null,
+      childIndex: number | null,
+      extrinsic: SubscribeBlock['result']['extrinsics'][0]
+    ) => {
+      const extrinsicId = `${block.hash}-${extrinsic.index}`;
+      const id = parentId ? `${parentId}-${childIndex}` : extrinsicId;
+
+      promises.push(
+        DispatchableCall.upsert(
+          {
+            id,
+            section: call.section,
+            method: call.method,
+            args: call.args,
+            extrinsic: extrinsicId,
+            parent: parentId,
+            origin: extrinsic.signer
+          },
+          options
+        )
+      );
+
+      if (call.section === 'utility' && call.method === 'batch') {
+        const calls = call.args.calls as ChildCall[];
+        calls.forEach((childCall, idx) => {
+          const { section, method } = decodeCallIndex(childCall.callIndex);
+          handle(
+            {
+              callIndex: childCall.callIndex,
+              section,
+              method,
+              args: childCall.args
+            },
+            id,
+            idx,
+            extrinsic
+          );
+        });
+      } else if (call.section === 'sudo' && call.method === 'sudo') {
+        const childCall = call.args.call as ChildCall;
+        const { section, method } = decodeCallIndex(childCall.callIndex);
+        handle(
+          {
+            callIndex: childCall.callIndex,
+            section,
+            method,
+            args: childCall.args
+          },
+          id,
+          0,
+          extrinsic
+        );
+      }
+    };
+    for (const extrinsic of block.extrinsics) {
+      handle(extrinsic, null, null, extrinsic);
+    }
+    return Promise.all(promises);
   }
 
   async syncMetadata(chainInfo: ChainInfo) {
