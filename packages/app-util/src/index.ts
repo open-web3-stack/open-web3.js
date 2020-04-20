@@ -77,9 +77,9 @@ export const configureLogger = (options: {
   const defaultLevel = levelToNumber(toLevel(options.level) || LoggerLevel.Log);
   const slackWebhook = options.production && options.slackWebhook;
   const slackLevel = levelToNumber(LoggerLevel.Info);
-  const bufferSize = options.production ? 100 : 30;
+  const bufferSize = 50;
   const panicModeLevel = levelToNumber(LoggerLevel.Warn);
-  const panicModeDuration = 1000 * 60; // 1min
+  const panicModeDuration = 1000 * 20; // 20s
   const filters = options.filter?.split(',');
   const color = options.color === undefined ? !options.production : options.color;
 
@@ -140,8 +140,8 @@ export const configureLogger = (options: {
             (payload) => payload.timestamp.valueOf() < panicModeEndTime || levelToNumber(payload.level) >= slackLevel
           )
         )
-        // avoid too many requests
-        .pipe(bufferTime(2000))
+        // avoid too many requests, up to 10 messages
+        .pipe(bufferTime(2000, 2000, 10))
         .pipe(
           tap((payloads) => {
             if (payloads.length === 0) {
