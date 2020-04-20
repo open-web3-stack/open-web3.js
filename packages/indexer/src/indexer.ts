@@ -1,5 +1,5 @@
 import { Sequelize, Op, SyncOptions } from 'sequelize';
-import { MetadataLatest } from '@polkadot/types/interfaces/metadata';
+import { Registry } from '@polkadot/types/types';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap } from 'rxjs/operators';
 import Scanner from '@orml/scanner';
@@ -290,20 +290,19 @@ export default class Indexer {
     };
 
     const promises: Promise<any>[] = [];
-    let metadata: MetadataLatest;
+    let registry: Registry;
 
     const decodeCallIndex = (callIndex: string) => {
-      if (!metadata) {
-        metadata = block.chainInfo.metadata.metadata.asLatest;
+      if (!registry) {
+        registry = block.chainInfo.registry;
       }
       const callIndexNum = parseInt(callIndex, 16);
       const sectionIndex = callIndexNum >> 8;
       const methodIndex = callIndexNum & 0xff;
-      const section = metadata.modules[sectionIndex];
-      const method = section.calls.unwrap()[methodIndex];
+      const call = registry.findMetaCall(new Uint8Array([sectionIndex, methodIndex]));
       return {
-        section: section.name.toString(),
-        method: method.name.toString()
+        section: call.section.toString(),
+        method: call.meta.toString()
       };
     };
 
