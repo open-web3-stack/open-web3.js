@@ -56,17 +56,20 @@ export interface Event {
   args: any[];
 }
 
-export interface Extrinsic {
-  bytes: Bytes;
+export interface DispatchableCall {
   callIndex: Bytes;
-  hash: Bytes;
+  section: string;
+  method: string;
   args: Record<string, any>;
+}
+
+export interface Extrinsic extends DispatchableCall {
   tip: string;
   nonce: number;
-  method: string;
-  section: string;
   signer: string | null;
   result: string;
+  bytes: Bytes;
+  hash: Bytes;
 }
 
 export interface RuntimeVersion {

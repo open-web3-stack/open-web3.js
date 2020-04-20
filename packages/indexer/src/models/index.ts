@@ -1,55 +1,16 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
 
-export class Block extends Model {
-  // public blockHash!: string;
-  // public blockNumber!: number;
-  // public timestamp!: number | null;
-  // public parentHash!: string;
-  // public author!: string | null;
-  // public raw!: object;
-}
+export class Block extends Model {}
 
-export class Extrinsic extends Model {
-  // public id!: string;
-  // public hash!: string;
-  // public blockHash!: string;
-  // public blockNumber!: number;
-  // public index!: number;
-  // public section!: string;
-  // public method!: string;
-  // public args!: object;
-  // public nonce!: number;
-  // public tip!: string;
-  // public signer?: string;
-  // public bytes!: Buffer;
-}
+export class Extrinsic extends Model {}
 
-export class Events extends Model {
-  // public id!: string;
-  // public blockHash!: string;
-  // public blockNumber!: number;
-  // public index!: number;
-  // public section!: string;
-  // public method!: string;
-  // public args!: object;
-  // public bytes!: Buffer;
-  // public phaseType!: string;
-  // public phaseIndex!: number;
-}
+export class DispatchableCall extends Model {}
 
-export class Metadata extends Model {
-  // public minBlockNumber!: number;
-  // public maxBlockNumber!: number;
-  // public bytes!: Buffer;
-  // public json!: object;
-  // public runtimeVersion!: object;
-}
+export class Events extends Model {}
 
-export class Status extends Model {
-  // public blockNumber!: number;
-  // public blockHash?: string;
-  // public status!: number;
-}
+export class Metadata extends Model {}
+
+export class Status extends Model {}
 
 export default function init(db: Sequelize): void {
   Block.init(
@@ -93,6 +54,7 @@ export default function init(db: Sequelize): void {
   Extrinsic.init(
     {
       id: {
+        // ${blockHash}-${index}
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true
@@ -160,6 +122,61 @@ export default function init(db: Sequelize): void {
         },
         {
           fields: ['signer']
+        },
+        {
+          fields: ['section', 'method']
+        }
+      ]
+    }
+  );
+
+  DispatchableCall.init(
+    {
+      id: {
+        // ${parent.id}-${index}
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+      },
+      section: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      method: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      args: {
+        type: DataTypes.JSONB,
+        allowNull: false
+      },
+      extrinsic: {
+        // Extrinsic.id
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      parent: {
+        // DispatchableCall.id
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      origin: {
+        // Address | 'root' | 'none'
+        type: DataTypes.STRING,
+        allowNull: true
+      }
+    },
+    {
+      sequelize: db,
+      indexes: [
+        {
+          fields: ['extrinsic']
+        },
+        {
+          fields: ['origin']
+        },
+        {
+          fields: ['section', 'method']
         }
       ]
     }
@@ -168,6 +185,7 @@ export default function init(db: Sequelize): void {
   Events.init(
     {
       id: {
+        // ${blockNumber}-${index}
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true
@@ -220,6 +238,9 @@ export default function init(db: Sequelize): void {
         },
         {
           fields: ['blockHash', 'phaseIndex']
+        },
+        {
+          fields: ['section', 'method']
         }
       ]
     }
