@@ -302,7 +302,7 @@ export default class Indexer {
       const call = registry.findMetaCall(new Uint8Array([sectionIndex, methodIndex]));
       return {
         section: call.section.toString(),
-        method: call.meta.toString()
+        method: call.method.toString()
       };
     };
 
