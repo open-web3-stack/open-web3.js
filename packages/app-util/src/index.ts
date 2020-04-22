@@ -173,7 +173,7 @@ export const configureLogger = (options: {
         )
         .subscribe();
     } catch (err) {
-      // ignore
+      console.warn("Slack webhook is configured but require('@slack/webhook') failed", err);
       observable.subscribe();
     }
   } else {
