@@ -1,6 +1,6 @@
 import { ApiInterfaceRx } from '@polkadot/api/types';
 import { AccountInfo } from '@polkadot/types/interfaces';
-import { AccountId, Balance, OrmlAccountData } from '@orml/types/interfaces';
+import { AccountId, Balance, OrmlAccountData } from '@open-web3/orml-types/interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

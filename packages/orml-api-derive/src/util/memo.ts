@@ -6,7 +6,7 @@ import createMemo from 'memoizee';
 import { Observable, Observer } from 'rxjs';
 import { drr } from '@polkadot/rpc-core/rxjs';
 
-type ObsFn <T> = (...params: any[]) => Observable<T>;
+type ObsFn<T> = (...params: any[]) => Observable<T>;
 
 // Normalize via JSON.stringify, allow e.g. AccountId -> ss58
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -16,17 +16,19 @@ const normalizer = JSON.stringify;
 //   1. creates a memo of the inner fn -> Observable, removing when unsubscribed
 //   2. wraps the observable in a drr() (which includes an unsub delay)
 /** @internal */
-export function memo <T> (inner: ObsFn<T>): ObsFn<T> {
+export function memo<T>(inner: ObsFn<T>): ObsFn<T> {
   const cached = createMemo(
     (...params: any[]): Observable<T> =>
-      Observable.create((observer: Observer<T>): VoidCallback => {
-        const sub = inner(...params).subscribe(observer);
+      Observable.create(
+        (observer: Observer<T>): VoidCallback => {
+          const sub = inner(...params).subscribe(observer);
 
-        return (): void => {
-          cached.delete(...params);
-          sub.unsubscribe();
-        };
-      }).pipe(drr()),
+          return (): void => {
+            cached.delete(...params);
+            sub.unsubscribe();
+          };
+        }
+      ).pipe(drr()),
     { normalizer }
   );
 

@@ -4,7 +4,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { SubmittableExtrinsic, ApiOptions, AddressOrPair } from '@polkadot/api/types';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { EventRecord, Hash } from '@polkadot/types/interfaces';
-import { deferred } from '@orml/util';
+import { deferred } from '@open-web3/util';
 
 import logger from './logger';
 

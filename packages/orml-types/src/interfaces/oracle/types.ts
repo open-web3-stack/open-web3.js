@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { Struct } from '@polkadot/types/codec';
-import { Moment, OracleValue } from '@orml/types/interfaces/runtime';
+import { Moment, OracleValue } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name TimestampedValue */
 export interface TimestampedValue extends Struct {

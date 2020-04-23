@@ -1,10 +1,10 @@
 import BigNumber from 'big.js';
 
-import defaultLogger from '@orml/util/logger';
+import defaultLogger from '@open-web3/util/logger';
 
 export { defaultLogger };
 
-export const moduleLogger = defaultLogger.createLogger('@orml/util');
+export const moduleLogger = defaultLogger.createLogger('@open-web3/util');
 
 export * from './heartbeats';
 

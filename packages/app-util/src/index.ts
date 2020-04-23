@@ -12,8 +12,8 @@ import {
   consoleOutput,
   levelToNumber,
   toLevel
-} from '@orml/util/logger';
-import { defaultLogger, HeartbeatGroup } from '@orml/util';
+} from '@open-web3/util/logger';
+import { defaultLogger, HeartbeatGroup } from '@open-web3/util';
 
 const noop = () => {};
 

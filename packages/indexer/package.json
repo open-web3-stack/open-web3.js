@@ -1,6 +1,6 @@
 {
-  "name": "@orml/indexer",
-  "version": "0.2.0-beta.79",
+  "name": "@open-web3/indexer",
+  "version": "0.3.0-beta.0",
   "description": "ORML JS API",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -9,14 +9,14 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "repository": "https://github.com/laminar-protocol/orml.js.git",
+  "repository": "https://github.com/open-web3-stack/open-web3.js.git",
   "bugs": {
-    "url": "https://github.com/laminar-protocol/orml.js/issues"
+    "url": "https://github.com/open-web3-stack/open-web3.js/issues"
   },
-  "homepage": "https://github.com/laminar-protocol/orml.js",
+  "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@orml/scanner": "^0.2.0-beta.79",
+    "@open-web3/scanner": "^0.3.0-beta.0",
     "@polkadot/api": "^1.9.0-beta.22",
     "@types/sequelize": "^4.28.8",
     "pg": "^7.18.2",
