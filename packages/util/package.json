@@ -1,7 +1,7 @@
 {
   "name": "@open-web3/util",
   "version": "0.3.0-beta.1",
-  "description": "ORML JS API",
+  "description": "JS utilities",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
