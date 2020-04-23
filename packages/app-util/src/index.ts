@@ -77,9 +77,9 @@ export const configureLogger = (options: {
   const defaultLevel = levelToNumber(toLevel(options.level) || LoggerLevel.Log);
   const slackWebhook = options.production && options.slackWebhook;
   const slackLevel = levelToNumber(LoggerLevel.Info);
-  const bufferSize = 50;
+  const bufferSize = 20;
   const panicModeLevel = levelToNumber(LoggerLevel.Warn);
-  const panicModeDuration = 1000 * 20; // 20s
+  const panicModeDuration = 1000 * 5; // 5s
   const filters = options.filter?.split(',');
   const color = options.color === undefined ? !options.production : options.color;
 
@@ -162,7 +162,9 @@ export const configureLogger = (options: {
                 const level = ('`' + p.level.toUpperCase() + '`').padStart(7);
                 const mention = p.level === LoggerLevel.Warn || p.level === LoggerLevel.Error ? '<!channel>' : '';
                 return `_${date}_ ${emoji[p.level]}${level} [${p.namespaces.join(':')}]: ${p.args
-                  .map((a) => inspect(a, false, 5, false))
+                  .map((a) =>
+                    inspect(a, { showHidden: false, depth: 5, colors: false, compact: true, breakLength: Infinity })
+                  )
                   .join(' ')} ${mention}`;
               })
               .join('\n');
