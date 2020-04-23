@@ -27,8 +27,8 @@ import {
   u8,
   usize
 } from '@polkadot/types/primitive';
-import { TimestampedValue, TimestampedValueOf } from '@open-web3/types/interfaces/oracle';
-import { Price } from '@open-web3/types/interfaces/prices';
+import { TimestampedValue, TimestampedValueOf } from '@open-web3/orml-types/interfaces/oracle';
+import { Price } from '@open-web3/orml-types/interfaces/prices';
 import {
   AccountId,
   AccountIdOf,
@@ -78,10 +78,10 @@ import {
   ValidatorId,
   Weight,
   WeightMultiplier
-} from '@open-web3/types/interfaces/runtime';
-import { OrmlAccountData, OrmlBalanceLock } from '@open-web3/types/interfaces/tokens';
-import { AuctionInfo } from '@open-web3/types/interfaces/traits';
-import { FixedU128 } from '@open-web3/types/interfaces/utilities';
+} from '@open-web3/orml-types/interfaces/runtime';
+import { OrmlAccountData, OrmlBalanceLock } from '@open-web3/orml-types/interfaces/tokens';
+import { AuctionInfo } from '@open-web3/orml-types/interfaces/traits';
+import { FixedU128 } from '@open-web3/orml-types/interfaces/utilities';
 import { BlockAttestations, IncludedBlocks, MoreAttestations } from '@polkadot/types/interfaces/attestations';
 import { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
 import { ExtrinsicOrHash, ExtrinsicStatus } from '@polkadot/types/interfaces/author';

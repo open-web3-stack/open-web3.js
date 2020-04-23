@@ -3,7 +3,7 @@
 
 import { ITuple } from '@polkadot/types/types';
 import { Option, Struct } from '@polkadot/types/codec';
-import { AccountId, Balance, BlockNumber } from '@open-web3/types/interfaces/runtime';
+import { AccountId, Balance, BlockNumber } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name AuctionInfo */
 export interface AuctionInfo extends Struct {

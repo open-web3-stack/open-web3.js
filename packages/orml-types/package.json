@@ -1,6 +1,6 @@
 {
-  "name": "@open-web3/types",
-  "version": "0.2.0-beta.79",
+  "name": "@open-web3/orml-types",
+  "version": "0.3.0-beta.0",
   "description": "ORML JS types",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",

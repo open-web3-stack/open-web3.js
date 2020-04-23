@@ -16,7 +16,7 @@ const file = fs.readFileSync(lockfilePath, 'utf8');
 
 const json = lockfile.parse(file).object;
 
-const deps = Object.keys(json).filter(x => packages.some(p => x.startsWith(p)));
+const deps = Object.keys(json).filter((x) => packages.some((p) => x.startsWith(p)));
 
 const resolved = Object.create(null);
 
@@ -29,14 +29,16 @@ for (const dep of deps) {
 
 const result = Object.entries(resolved).filter(([, v]) => v.size > 1);
 if (result.length > 0) {
-  console.warn('Multiple instances of dependencies detected, ensure that there is only one version of each package in your dependency tree.');
+  console.warn(
+    'Multiple instances of dependencies detected, ensure that there is only one version of each package in your dependency tree.'
+  );
   console.log();
   for (const [name, versions] of result) {
     console.log(`${name}:`);
-     for (const ver of versions) {
-       console.log(`\t${ver}`);
-     }
-     console.log();
+    for (const ver of versions) {
+      console.log(`\t${ver}`);
+    }
+    console.log();
   }
   process.exit(1);
 }

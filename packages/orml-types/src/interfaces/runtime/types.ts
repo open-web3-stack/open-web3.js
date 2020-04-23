@@ -14,7 +14,7 @@ import {
   GenericOrigin
 } from '@polkadot/types/generic';
 import { Bytes, Null, StorageKey, bool, u128, u32, u64, u8 } from '@polkadot/types/primitive';
-import { FixedU128 } from '@open-web3/types/interfaces/utilities';
+import { FixedU128 } from '@open-web3/orml-types/interfaces/utilities';
 import { AuthorityId } from '@polkadot/types/interfaces/consensus';
 import { Signature } from '@polkadot/types/interfaces/extrinsics';
 
