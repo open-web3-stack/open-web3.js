@@ -55,14 +55,7 @@ export default class CombinedFetcher implements FetcherInterface {
    */
   async getPrice(pair: string): Promise<string> {
     // fetch from all sources
-    const results = await Promise.all(
-      this.fetchers.map((fetcher) =>
-        fetcher.getPrice(pair).catch((error) => {
-          logger.warn('getPrice', { pair, error });
-          return error;
-        })
-      )
-    );
+    const results = await Promise.all(this.fetchers.map((fetcher) => fetcher.getPrice(pair).catch((error) => error)));
 
     // get prices
     const prices = results.filter((i) => typeof i === 'string') as string[];
