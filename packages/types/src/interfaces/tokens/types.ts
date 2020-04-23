@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { Struct } from '@polkadot/types/codec';
-import { Balance, LockIdentifier } from '@orml/types/interfaces/runtime';
+import { Balance, LockIdentifier } from '@open-web3/types/interfaces/runtime';
 
 /** @name OrmlAccountData */
 export interface OrmlAccountData extends Struct {

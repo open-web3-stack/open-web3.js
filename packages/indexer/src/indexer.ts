@@ -2,14 +2,14 @@ import { Sequelize, Op, SyncOptions } from 'sequelize';
 import { Registry } from '@polkadot/types/types';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap } from 'rxjs/operators';
-import Scanner from '@orml/scanner';
+import Scanner from '@open-web3/scanner';
 import {
   TypeProvider,
   ChainInfo,
   SubscribeBlock,
   SubscribeBlockError,
   DispatchableCall as DispatchableCallType
-} from '@orml/scanner/types';
+} from '@open-web3/scanner/types';
 
 import init, { Status, Block, Metadata, Extrinsic, Events, DispatchableCall } from './models';
 import log from './log';

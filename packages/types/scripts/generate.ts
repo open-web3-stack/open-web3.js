@@ -9,8 +9,8 @@ const { runtime, ...substrateDefinations } = defaultDefinations;
 
 const definations = {
   '@polkadot/types/interfaces': substrateDefinations,
-  '@orml/types/interfaces': ormlDefinations
+  '@open-web3/types/interfaces': ormlDefinations
 };
 
-generateTsDef(definations, 'packages/types/src/interfaces', '@orml/types/interfaces');
+generateTsDef(definations, 'packages/types/src/interfaces', '@open-web3/types/interfaces');
 generateInterfaceTypes(definations, 'packages/types/src/interfaceRegistry.ts');
