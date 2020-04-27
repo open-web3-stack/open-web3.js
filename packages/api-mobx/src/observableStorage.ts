@@ -16,8 +16,9 @@ export class ObservableStorageEntry {
     private readonly _entry: string,
     private readonly _keys: any[] = []
   ) {
+    const name = [_module, _entry, ..._keys].join('.');
     this._atom = createAtom(
-      `${_module}.${_entry}`,
+      name,
       () => this._start(),
       () => this._stop()
     );
@@ -65,13 +66,14 @@ export class ObservableStorageMapEntries {
     private readonly _module: string,
     private readonly _entry: string
   ) {
+    const name = `${_module}.${_entry}.entries()`;
     this._atom = createAtom(
-      `${_module}.${_entry}`,
+      name,
       () => this._start(),
       () => this._stop()
     );
 
-    this._value = observable.map({}, { deep: false, name: `${_module}.${_entry}.entries` });
+    this._value = observable.map({}, { deep: false, name });
   }
 
   private _start() {
@@ -95,6 +97,63 @@ export class ObservableStorageMapEntries {
       } else {
         const type = StorageKey.getType(storageEntry.creator);
         this._value.set(key, [decodedKey.args[0], this._api.createType(type as any, value)]);
+      }
+    });
+  }
+
+  private _stop() {
+    this._unsub();
+  }
+
+  public get value() {
+    this._atom.reportObserved();
+    return this._value;
+  }
+}
+
+export class ObservableStorageDoubleMapEntries {
+  private readonly _atom: Atom;
+  private _value: ObservableMap;
+  private _unsub: () => any = () => {};
+
+  public constructor(
+    private readonly _api: ApiPromise,
+    private readonly _tracker: StateTracker,
+    private readonly _module: string,
+    private readonly _entry: string,
+    private readonly _key: any
+  ) {
+    const name = `${_module}.${_entry}.entries(${_key})`;
+    this._atom = createAtom(
+      name,
+      () => this._start(),
+      () => this._stop()
+    );
+
+    this._value = observable.map({}, { deep: false, name });
+  }
+
+  private _start() {
+    const storageEntry = this._api.query[this._module][this._entry];
+
+    // fetch initial value
+    storageEntry.entries(this._key).then((val) => {
+      transaction(() => {
+        for (const [key, value] of val) {
+          this._value.set(key.toHex(), [key.args, value]);
+        }
+      });
+    });
+
+    const prefix = storageEntry.key(this._key); // TODO: blocked by https://github.com/polkadot-js/api/issues/2213
+    this._unsub = this._tracker.trackPrefix(prefix, (key, value) => {
+      const decodedKey = new StorageKey(this._api.registry, key);
+      decodedKey.setMeta(storageEntry.creator.meta);
+      if (value == null) {
+        this._value.delete(key);
+      } else {
+        const type = StorageKey.getType(storageEntry.creator);
+        this._value.set(key, [decodedKey.args, this._api.createType(type as any, value)]);
       }
     });
   }

@@ -4,7 +4,11 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { AugmentedQueries } from '@polkadot/api/types/storage';
 import { stringCamelCase } from '@polkadot/util';
 import StateTracker from './stateTracker';
-import { ObservableStorageEntry, ObservableStorageMapEntries } from './observableStorage';
+import {
+  ObservableStorageEntry,
+  ObservableStorageMapEntries,
+  ObservableStorageDoubleMapEntries
+} from './observableStorage';
 
 type RootType = AugmentedQueries<'promise'>;
 
@@ -48,7 +52,12 @@ export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
         const accessorImpl = computedFn((key1: any, key2: any) => {
           return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key1, key2]);
         });
-        const accessor = (key1: any, key2: any) => accessorImpl(key1, key2).value;
+        const accessor: any = (key1: any, key2: any) => accessorImpl(key1, key2).value;
+        const entries = new ObservableStorageMapEntries(api, tracker, moduleName, entryName);
+        const entriesImpl = computedFn((key: any) => {
+          return new ObservableStorageDoubleMapEntries(api, tracker, moduleName, entryName, key);
+        });
+        accessor.entries = (key?: any) => (key === undefined ? entries.value : entriesImpl(key).value);
         storage[entryName] = accessor;
       }
     }
@@ -66,9 +75,9 @@ async function main() {
   const storage = createStorage(api, ws);
   autorun((r) => {
     r.trace();
-    const accounts = storage.system.account.entries();
+    const accounts = storage.staking.erasStakers.entries(5);
     // const events = storage.system.events;
-    // const stakers = storage.staking.erasStakers(713, 'FSETB7JeTuTsJBYzUcKBtHXBYtBft3pZ87FUxP2GaY4acFh');
+    // const stakers = storage.staking.erasStakers(1, '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY');
     console.dir(
       {
         account: [...accounts.values()].map(([key, value]) => [key.toString(), value.toHuman()])
@@ -79,4 +88,6 @@ async function main() {
   });
 }
 
-main();
+if (require.main === module) {
+  main();
+}
