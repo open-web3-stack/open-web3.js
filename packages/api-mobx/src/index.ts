@@ -1,9 +1,11 @@
 import { IObservableObject, createAtom, autorun } from 'mobx';
-import { createTransformer } from 'mobx-utils';
+import { computedFn } from 'mobx-utils';
 import { Atom } from 'mobx/lib/core/atom';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { AugmentedQueries } from '@polkadot/api/types/storage';
 import { stringCamelCase } from '@polkadot/util';
+import StateTracker from './stateTracker';
+import { StorageKey } from '@polkadot/types';
 
 type RootType = AugmentedQueries<'promise'>;
 
@@ -21,6 +23,7 @@ class ObservableStorageEntry {
 
   public constructor(
     private readonly _api: ApiPromise,
+    private readonly _tracker: StateTracker,
     private readonly _module: string,
     private readonly _entry: string,
     private readonly _keys: any[] = []
@@ -33,12 +36,24 @@ class ObservableStorageEntry {
   }
 
   private _start() {
-    const accessor: (...args: any[]) => Promise<() => any> = this._api.query[this._module][this._entry] as any;
-    accessor(...this._keys, (val) => {
+    const storageEntry = this._api.query[this._module][this._entry];
+
+    // fetch initial value
+    storageEntry(...this._keys).then((val) => {
       this._value = val;
       this._atom.reportChanged();
-    }).then((unsub) => {
-      this._unsub = unsub;
+    });
+
+    const key = storageEntry.key(...this._keys);
+    this._unsub = this._tracker.trackKey(key, (key, value) => {
+      console.log(value);
+      if (value == null) {
+        this._value = null;
+      } else {
+        const type = StorageKey.getType(storageEntry.creator);
+        this._value = this._api.createType(type as any, value);
+      }
+      this._atom.reportChanged();
     });
   }
 
@@ -52,10 +67,12 @@ class ObservableStorageEntry {
   }
 }
 
-export const createStorage = (api: ApiPromise): StorageType => {
+export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
   const obj: any = {};
 
   const metadata = api.runtimeMetadata.asLatest;
+
+  const tracker = new StateTracker(ws);
 
   for (const moduleMetadata of metadata.modules) {
     const moduleName = stringCamelCase(moduleMetadata.name.toString());
@@ -65,22 +82,23 @@ export const createStorage = (api: ApiPromise): StorageType => {
       const type = entry.type;
       const entryName = stringCamelCase(entry.name.toString());
       if (type.isPlain) {
-        const val = new ObservableStorageEntry(api, moduleName, entryName);
+        const val = new ObservableStorageEntry(api, tracker, moduleName, entryName);
         Object.defineProperty(storage, entryName, {
           configurable: false,
           enumerable: true,
           get: () => val.value
         });
       } else if (type.isMap) {
-        const accessor = createTransformer((key: any) => {
-          return new ObservableStorageEntry(api, moduleName, entryName, [key]).value;
+        const accessorImpl = computedFn((key: any) => {
+          return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key]);
         });
+        const accessor = (key: any) => accessorImpl(key).value;
         storage[entryName] = accessor;
       } else if (type.isDoubleMap) {
-        const accessorImpl = createTransformer((keys: any) => {
-          return new ObservableStorageEntry(api, moduleName, entryName, keys).value;
+        const accessorImpl = computedFn((key1: any, key2: any) => {
+          return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key1, key2]);
         });
-        const accessor = (key1: any, key2: any) => accessorImpl([key1, key2]);
+        const accessor = (key1: any, key2: any) => accessorImpl(key1, key2).value;
         storage[entryName] = accessor;
       }
     }
@@ -93,15 +111,18 @@ export const createStorage = (api: ApiPromise): StorageType => {
 
 async function main() {
   const ws = new WsProvider('wss://kusama-rpc.polkadot.io/');
-  const api = await ApiPromise.create({ provider: ws, types: { BountyIndex: 'u32' } });
-  const storage = createStorage(api);
-  autorun(() => {
-    const val = storage.system.account('E346pvnjqJrMhP34GGskn4HU9w6WQmrtvtpJA66xDj3Tq68');
-    const val2 = storage.staking.erasStakers(713, 'FSETB7JeTuTsJBYzUcKBtHXBYtBft3pZ87FUxP2GaY4acFh');
-    const val3 = storage.balances.totalIssuance;
-    if (val && val2 && val3) {
-      console.log(val.toHuman(), val2.toHuman(), val3.toHuman());
-    }
+  const api = await ApiPromise.create({ provider: ws });
+  const storage = createStorage(api, ws);
+  autorun((r) => {
+    r.trace();
+    const account = storage.system.account('E346pvnjqJrMhP34GGskn4HU9w6WQmrtvtpJA66xDj3Tq68');
+    const events = storage.system.events;
+    const stakers = storage.staking.erasStakers(713, 'FSETB7JeTuTsJBYzUcKBtHXBYtBft3pZ87FUxP2GaY4acFh');
+    console.log({
+      account: account?.toHuman(),
+      events: events?.toHuman(),
+      stakers: stakers?.toHuman()
+    });
   });
 }
 

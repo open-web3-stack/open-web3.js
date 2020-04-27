@@ -12,16 +12,24 @@
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
+      "protocol": "inspector"
     },
     {
       "type": "node",
       "request": "launch",
       "name": "jest task",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
-      "args": [
-        "e2e/Scanner"
-      ]
+      "args": ["e2e/Scanner"]
+    },
+    {
+      "name": "Current TS File",
+      "type": "node",
+      "request": "launch",
+      "args": ["${relativeFile}"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector"
     }
   ]
 }
