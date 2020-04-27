@@ -1,4 +1,5 @@
-import { transaction } from 'mobx';
+import { transaction, createAtom } from 'mobx';
+import { Atom } from 'mobx/lib/core/atom';
 import { WsProvider } from '@polkadot/api';
 import subscribeStorage from './rpc';
 
@@ -10,7 +11,16 @@ export default class StateTracker {
   private _callabcksCount = 0;
   private _unsub = () => {};
 
-  public constructor(private readonly _ws: WsProvider) {}
+  private readonly _blockHashAtom: Atom;
+  private _blockHash: string | null = null;
+
+  public constructor(private readonly _ws: WsProvider) {
+    this._blockHashAtom = createAtom(
+      'block.hash',
+      () => this._incCallabcksCount(),
+      () => this._descCallbacksCount()
+    );
+  }
 
   private _incCallabcksCount() {
     if (this._callabcksCount === 0) {
@@ -19,7 +29,11 @@ export default class StateTracker {
           // ignore
         }
         if (result) {
-          this._handleUpdate(result.changes);
+          transaction(() => {
+            this._blockHash = result.block;
+            this._handleUpdate(result.changes);
+            this._blockHashAtom.reportChanged();
+          });
         }
       });
     }
@@ -34,24 +48,22 @@ export default class StateTracker {
   }
 
   private _handleUpdate(changeset: [string, string][]) {
-    transaction(() => {
-      for (const [key, value] of changeset) {
-        const callbacks = this._trackKeys[key];
-        if (callbacks) {
-          for (const callback of callbacks) {
+    for (const [key, value] of changeset) {
+      const callbacks = this._trackKeys[key];
+      if (callbacks) {
+        for (const callback of callbacks) {
+          callback(key, value);
+        }
+      }
+      // TODO: improve this to make it better than O(mn)
+      for (const [prefix, prefixCallbacks] of Object.entries(this._trackPrefixes)) {
+        if (key.startsWith(prefix)) {
+          for (const callback of prefixCallbacks) {
             callback(key, value);
           }
         }
-        // TODO: improve this to make it better than O(mn)
-        for (const [prefix, prefixCallbacks] of Object.entries(this._trackPrefixes)) {
-          if (key.startsWith(prefix)) {
-            for (const callback of prefixCallbacks) {
-              callback(key, value);
-            }
-          }
-        }
       }
-    });
+    }
   }
 
   public trackKey(key: string, callback: Callback): () => void {
@@ -86,5 +98,10 @@ export default class StateTracker {
         this._descCallbacksCount();
       }
     };
+  }
+
+  public get blockHash() {
+    this._blockHashAtom.reportObserved();
+    return this._blockHash;
   }
 }

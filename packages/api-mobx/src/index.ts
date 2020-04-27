@@ -1,4 +1,4 @@
-import { IObservableObject, autorun } from 'mobx';
+import { autorun } from 'mobx';
 import { computedFn } from 'mobx-utils';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { AugmentedQueries } from '@polkadot/api/types/storage';
@@ -15,8 +15,11 @@ type RootType = AugmentedQueries<'promise'>;
 type StorageType = {
   [ModuleKey in keyof RootType]: {
     [ItemKey in keyof RootType[ModuleKey]]: any;
-  } &
-    IObservableObject;
+  };
+} & {
+  block: {
+    hash: string | null;
+  };
 };
 
 export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
@@ -65,6 +68,12 @@ export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
     obj[moduleName] = storage;
   }
 
+  obj.block = {
+    get hash() {
+      return tracker.blockHash;
+    }
+  };
+
   return obj;
 };
 
@@ -75,11 +84,13 @@ async function main() {
   const storage = createStorage(api, ws);
   autorun((r) => {
     r.trace();
-    const accounts = storage.staking.erasStakers.entries(5);
+    const hash = storage.block.hash;
+    const accounts = storage.system.account.entries();
     // const events = storage.system.events;
     // const stakers = storage.staking.erasStakers(1, '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY');
     console.dir(
       {
+        hash,
         account: [...accounts.values()].map(([key, value]) => [key.toString(), value.toHuman()])
         // stakers: stakers?.toHuman()
       },
