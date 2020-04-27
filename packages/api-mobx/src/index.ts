@@ -1,11 +1,10 @@
-import { IObservableObject, createAtom, autorun } from 'mobx';
+import { IObservableObject, autorun } from 'mobx';
 import { computedFn } from 'mobx-utils';
-import { Atom } from 'mobx/lib/core/atom';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { AugmentedQueries } from '@polkadot/api/types/storage';
 import { stringCamelCase } from '@polkadot/util';
 import StateTracker from './stateTracker';
-import { StorageKey } from '@polkadot/types';
+import { ObservableStorageEntry, ObservableStorageMapEntries } from './observableStorage';
 
 type RootType = AugmentedQueries<'promise'>;
 
@@ -15,57 +14,6 @@ type StorageType = {
   } &
     IObservableObject;
 };
-
-class ObservableStorageEntry {
-  private readonly _atom: Atom;
-  private _value: any = null;
-  private _unsub: () => any = () => {};
-
-  public constructor(
-    private readonly _api: ApiPromise,
-    private readonly _tracker: StateTracker,
-    private readonly _module: string,
-    private readonly _entry: string,
-    private readonly _keys: any[] = []
-  ) {
-    this._atom = createAtom(
-      `${_module}.${_entry}`,
-      () => this._start(),
-      () => this._stop()
-    );
-  }
-
-  private _start() {
-    const storageEntry = this._api.query[this._module][this._entry];
-
-    // fetch initial value
-    storageEntry(...this._keys).then((val) => {
-      this._value = val;
-      this._atom.reportChanged();
-    });
-
-    const key = storageEntry.key(...this._keys);
-    this._unsub = this._tracker.trackKey(key, (key, value) => {
-      console.log(value);
-      if (value == null) {
-        this._value = null;
-      } else {
-        const type = StorageKey.getType(storageEntry.creator);
-        this._value = this._api.createType(type as any, value);
-      }
-      this._atom.reportChanged();
-    });
-  }
-
-  private _stop() {
-    this._unsub();
-  }
-
-  public get value() {
-    this._atom.reportObserved();
-    return this._value;
-  }
-}
 
 export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
   const obj: any = {};
@@ -92,7 +40,9 @@ export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
         const accessorImpl = computedFn((key: any) => {
           return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key]);
         });
-        const accessor = (key: any) => accessorImpl(key).value;
+        const accessor: any = (key: any) => accessorImpl(key).value;
+        const entries = new ObservableStorageMapEntries(api, tracker, moduleName, entryName);
+        accessor.entries = () => entries.value;
         storage[entryName] = accessor;
       } else if (type.isDoubleMap) {
         const accessorImpl = computedFn((key1: any, key2: any) => {
@@ -110,19 +60,22 @@ export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
 };
 
 async function main() {
-  const ws = new WsProvider('wss://kusama-rpc.polkadot.io/');
+  // const ws = new WsProvider('wss://kusama-rpc.polkadot.io/');
+  const ws = new WsProvider('ws://localhost:9944/');
   const api = await ApiPromise.create({ provider: ws });
   const storage = createStorage(api, ws);
   autorun((r) => {
     r.trace();
-    const account = storage.system.account('E346pvnjqJrMhP34GGskn4HU9w6WQmrtvtpJA66xDj3Tq68');
-    const events = storage.system.events;
-    const stakers = storage.staking.erasStakers(713, 'FSETB7JeTuTsJBYzUcKBtHXBYtBft3pZ87FUxP2GaY4acFh');
-    console.log({
-      account: account?.toHuman(),
-      events: events?.toHuman(),
-      stakers: stakers?.toHuman()
-    });
+    const accounts = storage.system.account.entries();
+    // const events = storage.system.events;
+    // const stakers = storage.staking.erasStakers(713, 'FSETB7JeTuTsJBYzUcKBtHXBYtBft3pZ87FUxP2GaY4acFh');
+    console.dir(
+      {
+        account: [...accounts.values()].map(([key, value]) => [key.toString(), value.toHuman()])
+        // stakers: stakers?.toHuman()
+      },
+      { depth: 5 }
+    );
   });
 }
 

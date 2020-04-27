@@ -1,3 +1,4 @@
+import { transaction } from 'mobx';
 import { WsProvider } from '@polkadot/api';
 import subscribeStorage from './rpc';
 
@@ -33,22 +34,24 @@ export default class StateTracker {
   }
 
   private _handleUpdate(changeset: [string, string][]) {
-    for (const [key, value] of changeset) {
-      const callbacks = this._trackKeys[key];
-      if (callbacks) {
-        for (const callback of callbacks) {
-          callback(key, value);
-        }
-      }
-      // TODO: improve this to make it better than O(mn)
-      for (const [prefix, prefixCallbacks] of Object.entries(this._trackPrefixes)) {
-        if (key.startsWith(prefix)) {
-          for (const callback of prefixCallbacks) {
+    transaction(() => {
+      for (const [key, value] of changeset) {
+        const callbacks = this._trackKeys[key];
+        if (callbacks) {
+          for (const callback of callbacks) {
             callback(key, value);
           }
         }
+        // TODO: improve this to make it better than O(mn)
+        for (const [prefix, prefixCallbacks] of Object.entries(this._trackPrefixes)) {
+          if (key.startsWith(prefix)) {
+            for (const callback of prefixCallbacks) {
+              callback(key, value);
+            }
+          }
+        }
       }
-    }
+    });
   }
 
   public trackKey(key: string, callback: Callback): () => void {
