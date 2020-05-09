@@ -21,6 +21,18 @@ export function deferred<T>() {
   return deferred;
 }
 
+export function withTimeout<T = any>(timeout: number, promise: Promise<T>) {
+  return new Promise((resolve, reject) => {
+    const id = setTimeout(() => {
+      reject(new Error('timeout'));
+    }, timeout);
+    promise.finally(() => {
+      clearTimeout(id);
+    });
+    resolve(promise);
+  });
+}
+
 export const PRECISION = new BigNumber('1e+18');
 
 export const toBaseUnit = (rawPrice: string | number | BigNumber) => new BigNumber(rawPrice).mul(PRECISION);
