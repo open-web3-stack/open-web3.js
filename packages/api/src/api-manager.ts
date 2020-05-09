@@ -245,7 +245,11 @@ export default class ApiManager {
         nonceDeferred.resolve(undefined); // release lock on error
         throw error;
       }
-    })();
+    })().catch((error) => {
+      send.reject(error);
+      inBlock.reject(error);
+      finalized.reject(error);
+    });
 
     send.promise.catch(inBlock.reject);
     send.promise.catch(finalized.reject);
