@@ -15,8 +15,10 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@polkadot/api": "^1.12.1",
     "memoizee": "^0.4.14"
+  },
+  "peerDependencies": {
+    "@polkadot/api": "^1.12.1"
   },
   "devDependencies": {
     "@types/memoizee": "^0.4.3"
