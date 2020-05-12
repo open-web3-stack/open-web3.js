@@ -18,9 +18,10 @@
     "orml-check-deps": "./src/scripts/check-deps.js"
   },
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
-    "@types/big.js": "^4.0.5",
     "@yarnpkg/lockfile": "^1.1.0",
     "big.js": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/big.js": "^4.0.5"
   }
 }

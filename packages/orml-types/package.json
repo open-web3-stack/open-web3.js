@@ -14,10 +14,6 @@
     "url": "https://github.com/open-web3-stack/open-web3.js/issues"
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
-  "dependencies": {
-    "@babel/runtime": "^7.8.4",
-    "@polkadot/typegen": "^1.12.1"
-  },
   "peerDependencies": {
     "@polkadot/api": "^1.12.1",
     "@polkadot/typegen": "^1.12.1"
