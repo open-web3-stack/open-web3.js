@@ -13,7 +13,7 @@ export default {
     getAllValues: {
       description: 'Retrieves all oracle values.',
       params: [],
-      type: 'Option<Vec<TimestampedValue>>'
+      type: 'Vec<(OracleKey, Option<TimestampedValue>)>'
     }
   },
   types: {
