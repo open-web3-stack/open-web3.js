@@ -10,7 +10,7 @@ export default {
       ],
       type: 'Option<TimestampedValue>'
     },
-    getValues: {
+    getAllValues: {
       description: 'Retrieves all oracle values.',
       params: [],
       type: 'Option<Vec<TimestampedValue>>'
