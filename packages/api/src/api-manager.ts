@@ -119,6 +119,10 @@ export default class ApiManager {
           send.resolve(txHash);
         })
         .catch(async (error) => {
+          // ignore error
+          result.inBlock.catch(() => {});
+          result.finalized.catch(() => {});
+
           logger.debug('signAndSend send error', {
             error,
             from: address,
