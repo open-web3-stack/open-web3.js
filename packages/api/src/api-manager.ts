@@ -110,6 +110,10 @@ export default class ApiManager {
 
       this.txDeps[id] = send.promise;
 
+      // ignore error
+      result.inBlock.catch(() => {});
+      result.finalized.catch(() => {});
+
       result.send
         .then((txHash) => {
           // send success
@@ -119,10 +123,6 @@ export default class ApiManager {
           send.resolve(txHash);
         })
         .catch(async (error) => {
-          // ignore error
-          result.inBlock.catch(() => {});
-          result.finalized.catch(() => {});
-
           logger.debug('signAndSend send error', {
             error,
             from: address,
@@ -130,14 +130,14 @@ export default class ApiManager {
             tip: options.tip
           });
 
-          const message = error && (error.message as string);
+          const message = error?.message;
 
-          if (message && message.includes('ExtrinsicStatus:: ')) {
+          if (typeof message === 'string') {
             const newOption = { ...options, retry: (options.retry || 1) - 1 };
-            if (message.includes('ExtrinsicStatus:: 1014: Priority is too low')) {
+            if (message.includes('1014: Priority is too low')) {
               // add some tip to bump priority
               newOption.tip = (options.tip || 0) + 1;
-            } else if (message.includes('ExtrinsicStatus:: 1010: Invalid Transaction: Stale')) {
+            } else if (message.includes('1010: Invalid Transaction: Stale')) {
               // wait until previous one are sent to avoid race conditions
               try {
                 await this.txDeps[id - 1];
@@ -154,8 +154,10 @@ export default class ApiManager {
             inBlock.resolve(result2.inBlock);
             send.resolve(result2.send);
           } else {
-            // not something we can handle, rethrow
-            throw error;
+            // not something we can handle
+            finalized.reject(error);
+            inBlock.reject(error);
+            send.reject(error);
           }
         });
 
