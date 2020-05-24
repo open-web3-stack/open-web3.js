@@ -69,7 +69,7 @@ export class Dispatcher {
 
   private async callHandler(handler: DispatchEventHandler, event: DispatchEvent) {
     const handlerProps = this.getHandlerProps(handler);
-    if (handlerProps.running >= handler.options.maxConcurrentCount) {
+    if (handler.options.maxConcurrentCount !== 0 && handlerProps.running >= handler.options.maxConcurrentCount) {
       logger.debug('callHandler', 'preventing start new handler due to maxConcurrentCount limit', {
         kind: handler.kind,
         ...handlerProps,

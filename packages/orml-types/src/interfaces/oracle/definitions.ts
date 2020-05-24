@@ -9,6 +9,11 @@ export default {
         }
       ],
       type: 'Option<TimestampedValue>'
+    },
+    getAllValues: {
+      description: 'Retrieves all oracle values.',
+      params: [],
+      type: 'Vec<(OracleKey, Option<TimestampedValue>)>'
     }
   },
   types: {
