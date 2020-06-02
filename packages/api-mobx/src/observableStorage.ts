@@ -2,6 +2,8 @@ import { createAtom, ObservableMap, observable, transaction } from 'mobx';
 import { Atom } from 'mobx/lib/core/atom';
 import { ApiPromise } from '@polkadot/api';
 import { StorageKey } from '@polkadot/types';
+import { u8aToHex } from '@polkadot/util';
+
 import StateTracker from './stateTracker';
 
 export class ObservableStorageEntry {
@@ -145,7 +147,7 @@ export class ObservableStorageDoubleMapEntries {
       });
     });
 
-    const prefix = storageEntry.key(this._key); // TODO: blocked by https://github.com/polkadot-js/api/issues/2213
+    const prefix = u8aToHex(storageEntry.creator.keyPrefix(this._key));
     this._unsub = this._tracker.trackPrefix(prefix, (key, value) => {
       const decodedKey = new StorageKey(this._api.registry, key);
       decodedKey.setMeta(storageEntry.creator.meta);
