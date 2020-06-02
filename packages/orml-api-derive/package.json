@@ -15,6 +15,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
+    "@babel/runtime": "^7.8.4",
     "memoizee": "^0.4.14"
   },
   "peerDependencies": {
