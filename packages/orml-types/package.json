@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/orml-types",
-  "version": "0.3.0-beta.16",
+  "version": "0.3.0-beta.17",
   "description": "Polkadot.js types for Open Runtime Module Library (ORML)",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
