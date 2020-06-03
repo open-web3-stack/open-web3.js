@@ -11,8 +11,7 @@ export function balance(
 ): (address: AccountId | string | Uint8Array, token: any) => Observable<Balance> {
   return memo(
     (address: AccountId | string | Uint8Array, token: any): Observable<Balance> => {
-      const CurrencyId = api.registry.get('CurrencyId');
-      const currencyId = new (CurrencyId as any)(api.registry, token);
+      const currencyId = api.registry.createType('CurrencyId' as any, token);
       const nativeCurrencyId = api.consts.currencies.nativeCurrencyId;
 
       if (currencyId.eq(nativeCurrencyId)) {
@@ -22,7 +21,7 @@ export function balance(
           })
         );
       } else {
-        return api.query.tokens.accounts<OrmlAccountData>(token, address).pipe(
+        return api.query.tokens.accounts<OrmlAccountData>(address, token).pipe(
           map((result) => {
             return result.free;
           })
