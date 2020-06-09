@@ -21,7 +21,9 @@ export function balance(
           })
         );
       } else {
-        return api.query.tokens.accounts<OrmlAccountData>(address, token).pipe(
+        const key1 = api.query.tokens.accounts.creator.meta.type.asDoubleMap.key1.toString();
+        const arg = key1 === 'CurrencyId' ? [token, address] : [address, token];
+        return api.query.tokens.accounts<OrmlAccountData>(...arg).pipe(
           map((result) => {
             return result.free;
           })
