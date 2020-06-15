@@ -14,9 +14,6 @@
     "url": "https://github.com/open-web3-stack/open-web3.js/issues"
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
-  "bin": {
-    "orml-check-deps": "./src/scripts/check-deps.js"
-  },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "@yarnpkg/lockfile": "^1.1.0",
