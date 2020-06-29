@@ -21,6 +21,7 @@ export default {
       value: 'OracleValue',
       timestamp: 'Moment'
     },
-    TimestampedValueOf: 'TimestampedValue'
+    TimestampedValueOf: 'TimestampedValue',
+    OrderedSet: 'Vec<AccountId>'
   }
 };

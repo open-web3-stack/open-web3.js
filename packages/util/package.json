@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/util",
-  "version": "0.3.0-beta.11",
+  "version": "0.3.0-beta.20",
   "description": "JS utilities",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -14,9 +14,6 @@
     "url": "https://github.com/open-web3-stack/open-web3.js/issues"
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
-  "bin": {
-    "orml-check-deps": "./src/scripts/check-deps.js"
-  },
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
     "big.js": "^5.2.2"

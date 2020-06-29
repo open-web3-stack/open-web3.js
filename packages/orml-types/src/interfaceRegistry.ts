@@ -27,7 +27,8 @@ import {
   u8,
   usize
 } from '@polkadot/types/primitive';
-import { TimestampedValue, TimestampedValueOf } from '@open-web3/orml-types/interfaces/oracle';
+import { CallOf } from '@open-web3/orml-types/interfaces/authority';
+import { OrderedSet, TimestampedValue, TimestampedValueOf } from '@open-web3/orml-types/interfaces/oracle';
 import { Price } from '@open-web3/orml-types/interfaces/prices';
 import {
   AccountId,
@@ -48,6 +49,8 @@ import {
   DispatchClass,
   DispatchInfo,
   DispatchInfoTo190,
+  DispatchInfoTo244,
+  ExtrinsicsWeight,
   Fixed128,
   Fixed64,
   H160,
@@ -66,6 +69,7 @@ import {
   Moment,
   OracleValue,
   Origin,
+  Pays,
   Perbill,
   Percent,
   Permill,
@@ -83,19 +87,23 @@ import {
   WeightMultiplier
 } from '@open-web3/orml-types/interfaces/runtime';
 import { OrmlAccountData, OrmlBalanceLock } from '@open-web3/orml-types/interfaces/tokens';
-import { AuctionInfo } from '@open-web3/orml-types/interfaces/traits';
+import { AuctionInfo, DelayedDispatchTime, DispatchId } from '@open-web3/orml-types/interfaces/traits';
 import { FixedU128 } from '@open-web3/orml-types/interfaces/utilities';
+import { VestingScheduleOf } from '@open-web3/orml-types/interfaces/vesting';
 import { BlockAttestations, IncludedBlocks, MoreAttestations } from '@polkadot/types/interfaces/attestations';
 import { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
 import { ExtrinsicOrHash, ExtrinsicStatus } from '@polkadot/types/interfaces/author';
 import { UncleEntryItem } from '@polkadot/types/interfaces/authorship';
 import {
+  AllowedSlots,
   BabeAuthorityWeight,
   BabeBlockWeight,
   BabeWeight,
   EpochAuthorship,
   MaybeRandomness,
   MaybeVrf,
+  NextConfigDescriptor,
+  NextConfigDescriptorV1,
   Randomness,
   RawBabePreDigest,
   RawBabePreDigestCompat,
@@ -119,7 +127,7 @@ import {
 } from '@polkadot/types/interfaces/balances';
 import { BlockHash } from '@polkadot/types/interfaces/chain';
 import { PrefixedStorageKey } from '@polkadot/types/interfaces/childstate';
-import { EthereumAddress } from '@polkadot/types/interfaces/claims';
+import { EthereumAddress, StatementKind } from '@polkadot/types/interfaces/claims';
 import { MemberCount, ProposalIndex, Votes, VotesTo230 } from '@polkadot/types/interfaces/collective';
 import { AuthorityId, RawVRFOutput } from '@polkadot/types/interfaces/consensus';
 import {
@@ -156,6 +164,7 @@ import {
   ReferendumInfoFinished,
   ReferendumInfoTo239,
   ReferendumStatus,
+  ReleasesDemocracy,
   Tally,
   Voting,
   VotingDelegating,
@@ -164,6 +173,8 @@ import {
 } from '@polkadot/types/interfaces/democracy';
 import {
   ApprovalFlag,
+  DefunctVoter,
+  Renouncing,
   SetIndex,
   Vote,
   VoteIndex,
@@ -171,7 +182,7 @@ import {
   VoterInfo
 } from '@polkadot/types/interfaces/elections';
 import { CreatedBlock, ImportedAux } from '@polkadot/types/interfaces/engine';
-import { Account, Log } from '@polkadot/types/interfaces/evm';
+import { Account, Log, Vicinity } from '@polkadot/types/interfaces/evm';
 import {
   EcdsaSignature,
   Ed25519Signature,
@@ -240,6 +251,7 @@ import {
   AuthIndex,
   AuthoritySignature,
   Heartbeat,
+  HeartbeatTo244,
   OpaqueMultiaddr,
   OpaqueNetworkState,
   OpaquePeerId
@@ -470,7 +482,14 @@ import {
 import { RuntimeDispatchInfo } from '@polkadot/types/interfaces/payment';
 import { ActiveRecovery, RecoveryConfig } from '@polkadot/types/interfaces/recovery';
 import { RpcMethods } from '@polkadot/types/interfaces/rpc';
-import { SchedulePeriod, SchedulePriority, Scheduled, TaskAddress } from '@polkadot/types/interfaces/scheduler';
+import {
+  Period,
+  Priority,
+  SchedulePeriod,
+  SchedulePriority,
+  Scheduled,
+  TaskAddress
+} from '@polkadot/types/interfaces/scheduler';
 import {
   FullIdentification,
   IdentificationTuple,
@@ -542,6 +561,7 @@ import {
   RuntimeVersionApi,
   StorageChangeSet
 } from '@polkadot/types/interfaces/state';
+import { WeightToFeeCoefficient } from '@polkadot/types/interfaces/support';
 import {
   AccountInfo,
   ChainProperties,
@@ -667,6 +687,9 @@ declare module '@polkadot/types/types/registry' {
     RawAuraPreDigest: RawAuraPreDigest;
     'Option<RawAuraPreDigest>': Option<RawAuraPreDigest>;
     'Vec<RawAuraPreDigest>': Vec<RawAuraPreDigest>;
+    AllowedSlots: AllowedSlots;
+    'Option<AllowedSlots>': Option<AllowedSlots>;
+    'Vec<AllowedSlots>': Vec<AllowedSlots>;
     BabeAuthorityWeight: BabeAuthorityWeight;
     'Compact<BabeAuthorityWeight>': Compact<BabeAuthorityWeight>;
     'Option<BabeAuthorityWeight>': Option<BabeAuthorityWeight>;
@@ -688,6 +711,12 @@ declare module '@polkadot/types/types/registry' {
     EpochAuthorship: EpochAuthorship;
     'Option<EpochAuthorship>': Option<EpochAuthorship>;
     'Vec<EpochAuthorship>': Vec<EpochAuthorship>;
+    NextConfigDescriptor: NextConfigDescriptor;
+    'Option<NextConfigDescriptor>': Option<NextConfigDescriptor>;
+    'Vec<NextConfigDescriptor>': Vec<NextConfigDescriptor>;
+    NextConfigDescriptorV1: NextConfigDescriptorV1;
+    'Option<NextConfigDescriptorV1>': Option<NextConfigDescriptorV1>;
+    'Vec<NextConfigDescriptorV1>': Vec<NextConfigDescriptorV1>;
     Randomness: Randomness;
     'Option<Randomness>': Option<Randomness>;
     'Vec<Randomness>': Vec<Randomness>;
@@ -859,6 +888,9 @@ declare module '@polkadot/types/types/registry' {
     ReferendumStatus: ReferendumStatus;
     'Option<ReferendumStatus>': Option<ReferendumStatus>;
     'Vec<ReferendumStatus>': Vec<ReferendumStatus>;
+    ReleasesDemocracy: ReleasesDemocracy;
+    'Option<ReleasesDemocracy>': Option<ReleasesDemocracy>;
+    'Vec<ReleasesDemocracy>': Vec<ReleasesDemocracy>;
     Tally: Tally;
     'Option<Tally>': Option<Tally>;
     'Vec<Tally>': Vec<Tally>;
@@ -878,6 +910,12 @@ declare module '@polkadot/types/types/registry' {
     'Compact<ApprovalFlag>': Compact<ApprovalFlag>;
     'Option<ApprovalFlag>': Option<ApprovalFlag>;
     'Vec<ApprovalFlag>': Vec<ApprovalFlag>;
+    DefunctVoter: DefunctVoter;
+    'Option<DefunctVoter>': Option<DefunctVoter>;
+    'Vec<DefunctVoter>': Vec<DefunctVoter>;
+    Renouncing: Renouncing;
+    'Option<Renouncing>': Option<Renouncing>;
+    'Vec<Renouncing>': Vec<Renouncing>;
     SetIndex: SetIndex;
     'Compact<SetIndex>': Compact<SetIndex>;
     'Option<SetIndex>': Option<SetIndex>;
@@ -907,6 +945,9 @@ declare module '@polkadot/types/types/registry' {
     Log: Log;
     'Option<Log>': Option<Log>;
     'Vec<Log>': Vec<Log>;
+    Vicinity: Vicinity;
+    'Option<Vicinity>': Option<Vicinity>;
+    'Vec<Vicinity>': Vec<Vicinity>;
     Extrinsic: Extrinsic;
     'Option<Extrinsic>': Option<Extrinsic>;
     'Vec<Extrinsic>': Vec<Extrinsic>;
@@ -1089,6 +1130,9 @@ declare module '@polkadot/types/types/registry' {
     Heartbeat: Heartbeat;
     'Option<Heartbeat>': Option<Heartbeat>;
     'Vec<Heartbeat>': Vec<Heartbeat>;
+    HeartbeatTo244: HeartbeatTo244;
+    'Option<HeartbeatTo244>': Option<HeartbeatTo244>;
+    'Vec<HeartbeatTo244>': Vec<HeartbeatTo244>;
     OpaqueMultiaddr: OpaqueMultiaddr;
     'Option<OpaqueMultiaddr>': Option<OpaqueMultiaddr>;
     'Vec<OpaqueMultiaddr>': Vec<OpaqueMultiaddr>;
@@ -1125,11 +1169,17 @@ declare module '@polkadot/types/types/registry' {
     RecoveryConfig: RecoveryConfig;
     'Option<RecoveryConfig>': Option<RecoveryConfig>;
     'Vec<RecoveryConfig>': Vec<RecoveryConfig>;
+    Period: Period;
+    'Option<Period>': Option<Period>;
+    'Vec<Period>': Vec<Period>;
+    Priority: Priority;
+    'Compact<Priority>': Compact<Priority>;
+    'Option<Priority>': Option<Priority>;
+    'Vec<Priority>': Vec<Priority>;
     SchedulePeriod: SchedulePeriod;
     'Option<SchedulePeriod>': Option<SchedulePeriod>;
     'Vec<SchedulePeriod>': Vec<SchedulePeriod>;
     SchedulePriority: SchedulePriority;
-    'Compact<SchedulePriority>': Compact<SchedulePriority>;
     'Option<SchedulePriority>': Option<SchedulePriority>;
     'Vec<SchedulePriority>': Vec<SchedulePriority>;
     Scheduled: Scheduled;
@@ -1319,6 +1369,9 @@ declare module '@polkadot/types/types/registry' {
     ValidatorPrefsTo145: ValidatorPrefsTo145;
     'Option<ValidatorPrefsTo145>': Option<ValidatorPrefsTo145>;
     'Vec<ValidatorPrefsTo145>': Vec<ValidatorPrefsTo145>;
+    WeightToFeeCoefficient: WeightToFeeCoefficient;
+    'Option<WeightToFeeCoefficient>': Option<WeightToFeeCoefficient>;
+    'Vec<WeightToFeeCoefficient>': Vec<WeightToFeeCoefficient>;
     AccountInfo: AccountInfo;
     'Option<AccountInfo>': Option<AccountInfo>;
     'Vec<AccountInfo>': Vec<AccountInfo>;
@@ -1450,6 +1503,9 @@ declare module '@polkadot/types/types/registry' {
     EthereumAddress: EthereumAddress;
     'Option<EthereumAddress>': Option<EthereumAddress>;
     'Vec<EthereumAddress>': Vec<EthereumAddress>;
+    StatementKind: StatementKind;
+    'Option<StatementKind>': Option<StatementKind>;
+    'Vec<StatementKind>': Vec<StatementKind>;
     AttestedCandidate: AttestedCandidate;
     'Option<AttestedCandidate>': Option<AttestedCandidate>;
     'Vec<AttestedCandidate>': Vec<AttestedCandidate>;
@@ -2173,6 +2229,12 @@ declare module '@polkadot/types/types/registry' {
     DispatchInfoTo190: DispatchInfoTo190;
     'Option<DispatchInfoTo190>': Option<DispatchInfoTo190>;
     'Vec<DispatchInfoTo190>': Vec<DispatchInfoTo190>;
+    DispatchInfoTo244: DispatchInfoTo244;
+    'Option<DispatchInfoTo244>': Option<DispatchInfoTo244>;
+    'Vec<DispatchInfoTo244>': Vec<DispatchInfoTo244>;
+    ExtrinsicsWeight: ExtrinsicsWeight;
+    'Option<ExtrinsicsWeight>': Option<ExtrinsicsWeight>;
+    'Vec<ExtrinsicsWeight>': Vec<ExtrinsicsWeight>;
     Fixed64: Fixed64;
     'Option<Fixed64>': Option<Fixed64>;
     'Vec<Fixed64>': Vec<Fixed64>;
@@ -2227,6 +2289,9 @@ declare module '@polkadot/types/types/registry' {
     Origin: Origin;
     'Option<Origin>': Option<Origin>;
     'Vec<Origin>': Vec<Origin>;
+    Pays: Pays;
+    'Option<Pays>': Option<Pays>;
+    'Vec<Pays>': Vec<Pays>;
     Perbill: Perbill;
     'Compact<Perbill>': Compact<Perbill>;
     'Option<Perbill>': Option<Perbill>;
@@ -2283,12 +2348,18 @@ declare module '@polkadot/types/types/registry' {
     OracleValue: OracleValue;
     'Option<OracleValue>': Option<OracleValue>;
     'Vec<OracleValue>': Vec<OracleValue>;
+    CallOf: CallOf;
+    'Option<CallOf>': Option<CallOf>;
+    'Vec<CallOf>': Vec<CallOf>;
     TimestampedValue: TimestampedValue;
     'Option<TimestampedValue>': Option<TimestampedValue>;
     'Vec<TimestampedValue>': Vec<TimestampedValue>;
     TimestampedValueOf: TimestampedValueOf;
     'Option<TimestampedValueOf>': Option<TimestampedValueOf>;
     'Vec<TimestampedValueOf>': Vec<TimestampedValueOf>;
+    OrderedSet: OrderedSet;
+    'Option<OrderedSet>': Option<OrderedSet>;
+    'Vec<OrderedSet>': Vec<OrderedSet>;
     Price: Price;
     'Option<Price>': Option<Price>;
     'Vec<Price>': Vec<Price>;
@@ -2301,9 +2372,19 @@ declare module '@polkadot/types/types/registry' {
     AuctionInfo: AuctionInfo;
     'Option<AuctionInfo>': Option<AuctionInfo>;
     'Vec<AuctionInfo>': Vec<AuctionInfo>;
+    DelayedDispatchTime: DelayedDispatchTime;
+    'Option<DelayedDispatchTime>': Option<DelayedDispatchTime>;
+    'Vec<DelayedDispatchTime>': Vec<DelayedDispatchTime>;
+    DispatchId: DispatchId;
+    'Compact<DispatchId>': Compact<DispatchId>;
+    'Option<DispatchId>': Option<DispatchId>;
+    'Vec<DispatchId>': Vec<DispatchId>;
     FixedU128: FixedU128;
     'Compact<FixedU128>': Compact<FixedU128>;
     'Option<FixedU128>': Option<FixedU128>;
     'Vec<FixedU128>': Vec<FixedU128>;
+    VestingScheduleOf: VestingScheduleOf;
+    'Option<VestingScheduleOf>': Option<VestingScheduleOf>;
+    'Vec<VestingScheduleOf>': Vec<VestingScheduleOf>;
   }
 }
