@@ -15,7 +15,6 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
     "@polkadot/api": "^1.12.0-beta.8",
     "@polkadot/types": "^1.12.0-beta.8",
     "@polkadot/util": "^2.8.1",

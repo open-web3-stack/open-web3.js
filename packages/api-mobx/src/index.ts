@@ -1,4 +1,3 @@
-import { autorun } from 'mobx';
 import { computedFn } from 'mobx-utils';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { AugmentedQueries } from '@polkadot/api/types/storage';
@@ -12,7 +11,7 @@ import {
 
 type RootType = AugmentedQueries<'promise'>;
 
-type StorageType = {
+export type StorageType = {
   [ModuleKey in keyof RootType]: {
     [ItemKey in keyof RootType[ModuleKey]]: any;
   };
@@ -76,29 +75,3 @@ export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
 
   return obj;
 };
-
-async function main() {
-  // const ws = new WsProvider('wss://kusama-rpc.polkadot.io/');
-  const ws = new WsProvider('ws://localhost:9944/');
-  const api = await ApiPromise.create({ provider: ws });
-  const storage = createStorage(api, ws);
-  autorun((r) => {
-    r.trace();
-    const hash = storage.block.hash;
-    const accounts = storage.system.account.entries();
-    // const events = storage.system.events;
-    // const stakers = storage.staking.erasStakers(1, '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY');
-    console.dir(
-      {
-        hash,
-        account: [...accounts.values()].map(([key, value]) => [key.toString(), value.toHuman()])
-        // stakers: stakers?.toHuman()
-      },
-      { depth: 5 }
-    );
-  });
-}
-
-if (require.main === module) {
-  main();
-}
