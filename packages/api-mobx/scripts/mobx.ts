@@ -25,7 +25,7 @@ import {
 } from './util';
 import { ModuleTypes } from './util/imports';
 
-Handlebars.registerHelper('inc', function (value, options) {
+Handlebars.registerHelper('inc', function (value) {
   return parseInt(value) + 1;
 });
 

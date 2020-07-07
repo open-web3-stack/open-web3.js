@@ -1,6 +1,6 @@
 {
   "extends": "./node_modules/@polkadot/dev/config/tsconfig",
-  "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*"],
+  "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*", "**/__mock__/**/*"],
   "compilerOptions": {
     "target": "es2019",
     "module": "CommonJS",
