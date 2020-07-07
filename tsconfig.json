@@ -22,6 +22,7 @@
       "@open-web3/util/*": ["packages/util/src/*"],
       "@open-web3/dispatcher": ["packages/dispatcher/src"],
       "@open-web3/dispatcher/*": ["packages/dispatcher/src/*"],
+      "@open-web3/api-mobx": ["packages/api-mobx/src"],
       "@open-web3/api-mobx/*": ["packages/api-mobx/src/*"]
     },
     "skipLibCheck": true,

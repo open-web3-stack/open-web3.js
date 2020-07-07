@@ -50,7 +50,7 @@ class Scanner {
     const [updateType, subMethod, unsubMethod] = methods;
 
     return new Observable<T>((observer) => {
-      let subscriptionPromise: Promise<number | void> = Promise.resolve();
+      let subscriptionPromise: Promise<string | number | void> = Promise.resolve();
       const errorHandler = (error: Error): void => {
         observer.error(error);
       };

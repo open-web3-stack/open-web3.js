@@ -9,7 +9,7 @@ export function createMethodSubscribe<T>(
 ): () => void {
   const [updateType, subMethod, unsubMethod] = methods;
 
-  let subscriptionPromise: Promise<number | void> = Promise.resolve();
+  let subscriptionPromise: Promise<string | number | void> = Promise.resolve();
   const errorHandler = (error: Error): void => {
     callback(error);
   };

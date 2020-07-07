@@ -6,6 +6,10 @@ import { u8aToHex } from '@polkadot/util';
 
 import StateTracker from './stateTracker';
 
+const createMap = (name: string) => {
+  return observable.map({}, { deep: false, name });
+};
+
 export class ObservableStorageEntry {
   private readonly _atom: Atom;
   private _value: any = null;
@@ -75,7 +79,7 @@ export class ObservableStorageMapEntries {
       () => this._stop()
     );
 
-    this._value = observable.map({}, { deep: false, name });
+    this._value = createMap(name);
   }
 
   private _start() {
@@ -84,8 +88,16 @@ export class ObservableStorageMapEntries {
     // fetch initial value
     storageEntry.entries().then((val) => {
       transaction(() => {
-        for (const [key, value] of val) {
-          this._value.set(key.toHex(), [key.args[0], value]);
+        for (const [storageKey, value] of val) {
+          const [key1, key2] = storageKey.args.map((i) => i.toString());
+          if (key2) {
+            const name = `${this._module}.${this._entry}.entries().${key1}.${key2}`;
+            const values = this._value.get(key1) || createMap(name);
+            values.set(key2, value);
+            this._value.set(key1, values);
+          } else {
+            this._value.set(key1, value);
+          }
         }
       });
     });
@@ -94,11 +106,29 @@ export class ObservableStorageMapEntries {
     this._unsub = this._tracker.trackPrefix(prefix, (key, value) => {
       const decodedKey = new StorageKey(this._api.registry, key);
       decodedKey.setMeta(storageEntry.creator.meta);
-      if (value == null) {
-        this._value.delete(key);
+      const [key1, key2] = decodedKey.args.map((i) => i.toString());
+
+      if (key2) {
+        if (value == null) {
+          const values = this._value.get(key1);
+          if (values) {
+            values.delete(key2);
+            this._value.set(key1, values);
+          }
+        } else {
+          const name = `${this._module}.${this._entry}.entries().${key1}.${key2}`;
+          const values = this._value.get(key1) || createMap(name);
+          const type = StorageKey.getType(storageEntry.creator);
+          values.set(key2, this._api.createType(type as any, value));
+          this._value.set(key1, values);
+        }
       } else {
-        const type = StorageKey.getType(storageEntry.creator);
-        this._value.set(key, [decodedKey.args[0], this._api.createType(type as any, value)]);
+        if (value == null) {
+          this._value.delete(key1);
+        } else {
+          const type = StorageKey.getType(storageEntry.creator);
+          this._value.set(key1, this._api.createType(type as any, value));
+        }
       }
     });
   }
@@ -132,7 +162,7 @@ export class ObservableStorageDoubleMapEntries {
       () => this._stop()
     );
 
-    this._value = observable.map({}, { deep: false, name });
+    this._value = createMap(name);
   }
 
   private _start() {
@@ -141,8 +171,12 @@ export class ObservableStorageDoubleMapEntries {
     // fetch initial value
     storageEntry.entries(this._key).then((val) => {
       transaction(() => {
-        for (const [key, value] of val) {
-          this._value.set(key.toHex(), [key.args, value]);
+        for (const [storageKey, value] of val) {
+          const [key1, key2] = storageKey.args.map((i) => i.toString());
+          const name = `${this._module}.${this._entry}.entries(${this._key}).${key2}`;
+          const values = this._value.get(key1) || createMap(name);
+          values.set(key2, value);
+          this._value.set(key1, values);
         }
       });
     });
@@ -151,11 +185,15 @@ export class ObservableStorageDoubleMapEntries {
     this._unsub = this._tracker.trackPrefix(prefix, (key, value) => {
       const decodedKey = new StorageKey(this._api.registry, key);
       decodedKey.setMeta(storageEntry.creator.meta);
+      const [key1, key2] = decodedKey.args.map((i) => i.toString());
       if (value == null) {
-        this._value.delete(key);
+        this._value.delete(key1);
       } else {
+        const name = `${this._module}.${this._entry}.entries(${this._key}).${key2}`;
+        const values = this._value.get(key1) || createMap(name);
         const type = StorageKey.getType(storageEntry.creator);
-        this._value.set(key, [decodedKey.args, this._api.createType(type as any, value)]);
+        values.set(key2, this._api.createType(type as any, value));
+        this._value.set(key1, values);
       }
     });
   }

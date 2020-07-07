@@ -1,32 +1,49 @@
 import { autorun } from 'mobx';
 import { ApiPromise } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { createStorage, StorageType } from '../..';
+import { createStorage, BaseStorageType } from '../..';
 
-let storage: StorageType;
+import { StorageType } from '../../__mock__/api-mobx';
 
-beforeAll(async () => {
-  const ws = new WsProvider('wss://kusama-rpc.polkadot.io/');
-  const api = await ApiPromise.create({ provider: ws });
-  storage = createStorage(api, ws);
-}, 10_000);
+describe('api-mobx', () => {
+  let storage: BaseStorageType & StorageType;
 
-it('works', (done) => {
-  let i = 0;
-  autorun(() => {
-    const hash = storage.block.hash;
-    const accounts = storage.system.account.entries();
-    console.dir({
-      hash,
-      account: [...accounts.values()].map(([key, value]) => ({ [key.toString()]: value.toHuman() }))
+  beforeAll(async () => {
+    const ws = new WsProvider('wss://kusama-rpc.polkadot.io/');
+    const api = await ApiPromise.create({ provider: ws });
+    storage = createStorage<StorageType>(api, ws);
+  }, 10_000);
+
+  it('block hash works', (done) => {
+    autorun(() => {
+      const hash = storage.block.hash;
+      console.dir(hash);
+
+      if (hash != null) {
+        done();
+      }
     });
+  }, 30_000);
 
-    if (i === 0) {
-      expect(accounts.size).toBe(0);
-    } else {
-      expect(accounts.size).toBeGreaterThan(0);
-      done();
-    }
-    i++;
-  });
-}, 30_000);
+  it('account works', (done) => {
+    autorun(() => {
+      const account = storage.system.account('CtwdfrhECFs3FpvCGoiE4hwRC4UsSiM8WL899HjRdQbfYZY');
+      console.dir(account && account.toHuman());
+
+      if (account) {
+        done();
+      }
+    });
+  }, 30_000);
+
+  it('StorageMap works', (done) => {
+    autorun(() => {
+      const validators = storage.staking.validators.entries();
+      console.dir([...validators.values()].map((value) => value.toHuman()));
+
+      if (validators.size > 0) {
+        done();
+      }
+    });
+  }, 30_000);
+});

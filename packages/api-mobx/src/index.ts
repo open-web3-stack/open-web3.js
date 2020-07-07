@@ -1,6 +1,6 @@
+import { ObservableMap } from 'mobx';
 import { computedFn } from 'mobx-utils';
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { AugmentedQueries } from '@polkadot/api/types/storage';
 import { stringCamelCase } from '@polkadot/util';
 import StateTracker from './stateTracker';
 import {
@@ -9,19 +9,24 @@ import {
   ObservableStorageDoubleMapEntries
 } from './observableStorage';
 
-type RootType = AugmentedQueries<'promise'>;
-
-export type StorageType = {
-  [ModuleKey in keyof RootType]: {
-    [ItemKey in keyof RootType[ModuleKey]]: any;
-  };
-} & {
+export interface BaseStorageType {
   block: {
     hash: string | null;
   };
-};
+}
 
-export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
+export interface StorageMap<Key, T> {
+  (key: Key): T;
+  entries: () => ObservableMap<string, T>;
+}
+
+export interface StorageDoubleMap<Key1, Key2, T> {
+  (key1: Key1, key2: Key2): T;
+  entries: (key1: Key1) => ObservableMap<string, T>;
+  allEntries: () => ObservableMap<string, ObservableMap<string, T>>;
+}
+
+export const createStorage = <T>(api: ApiPromise, ws: WsProvider): T & BaseStorageType => {
   const obj: any = {};
 
   const metadata = api.runtimeMetadata.asLatest;
@@ -30,7 +35,7 @@ export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
 
   for (const moduleMetadata of metadata.modules) {
     const moduleName = stringCamelCase(moduleMetadata.name.toString());
-    const storage = {};
+    const storage: { [key: string]: any } = {};
 
     for (const entry of moduleMetadata.storage.unwrapOrDefault().items) {
       const type = entry.type;
@@ -46,7 +51,7 @@ export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
         const accessorImpl = computedFn((key: any) => {
           return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key]);
         });
-        const accessor: any = (key: any) => accessorImpl(key).value;
+        const accessor: any = (key: any) => accessorImpl(key.toString()).value;
         const entries = new ObservableStorageMapEntries(api, tracker, moduleName, entryName);
         accessor.entries = () => entries.value;
         storage[entryName] = accessor;
@@ -54,12 +59,13 @@ export const createStorage = (api: ApiPromise, ws: WsProvider): StorageType => {
         const accessorImpl = computedFn((key1: any, key2: any) => {
           return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key1, key2]);
         });
-        const accessor: any = (key1: any, key2: any) => accessorImpl(key1, key2).value;
+        const accessor: any = (key1: any, key2: any) => accessorImpl(key1.toString(), key2.toString()).value;
         const entries = new ObservableStorageMapEntries(api, tracker, moduleName, entryName);
         const entriesImpl = computedFn((key: any) => {
           return new ObservableStorageDoubleMapEntries(api, tracker, moduleName, entryName, key);
         });
-        accessor.entries = (key?: any) => (key === undefined ? entries.value : entriesImpl(key).value);
+        accessor.entries = (key1: any) => entriesImpl(key1.toString()).value.get(key1.toString());
+        accessor.allEntries = () => entries.value;
         storage[entryName] = accessor;
       }
     }

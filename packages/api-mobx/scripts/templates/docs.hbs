@@ -1,0 +1,14 @@
+/**
+{{#if docs.length}}
+{{#each docs}}
+ * {{#trim}}{{{this}}}{{/trim}}
+{{/each}}
+ *
+{{#if args}}
+{{~#each args}}
+ *
+ * @key{{inc @index}} {{{this}}}
+{{/each}}
+{{/if}}
+{{/if}}
+ **/
