@@ -15,13 +15,12 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
     "memoizee": "^0.4.14",
     "rxjs": "^6.5.5"
   },
   "peerDependencies": {
-    "@polkadot/api": "^1.12.1",
-    "@polkadot/rpc-core": "^1.12.1"
+    "@polkadot/api": "^1.23.1",
+    "@polkadot/rpc-core": "^1.23.1"
   },
   "devDependencies": {
     "@types/memoizee": "^0.4.3"

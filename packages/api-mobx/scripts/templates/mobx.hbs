@@ -1,0 +1,15 @@
+{{> header }}
+
+{{{ imports }}}
+
+export interface StorageType {
+{{#each modules}}
+  {{{name}}}: {
+  {{~#each items}}
+    {{> docs}}
+    {{{name}}}: {{{entryType}}};
+  {{/each}}
+  };
+{{/each}}
+}
+{{> footer }}

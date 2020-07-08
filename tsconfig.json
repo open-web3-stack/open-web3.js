@@ -1,6 +1,6 @@
 {
   "extends": "./node_modules/@polkadot/dev/config/tsconfig",
-  "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*"],
+  "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*", "**/__mock__/**/*"],
   "compilerOptions": {
     "target": "es2019",
     "module": "CommonJS",
@@ -21,7 +21,9 @@
       "@open-web3/util": ["packages/util/src"],
       "@open-web3/util/*": ["packages/util/src/*"],
       "@open-web3/dispatcher": ["packages/dispatcher/src"],
-      "@open-web3/dispatcher/*": ["packages/dispatcher/src/*"]
+      "@open-web3/dispatcher/*": ["packages/dispatcher/src/*"],
+      "@open-web3/api-mobx": ["packages/api-mobx/src"],
+      "@open-web3/api-mobx/*": ["packages/api-mobx/src/*"]
     },
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types"]

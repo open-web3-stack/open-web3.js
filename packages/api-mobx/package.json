@@ -1,7 +1,7 @@
 {
-  "name": "@open-web3/api",
-  "version": "0.3.0-beta.20",
-  "description": "Extended API library for polkadot.js",
+  "name": "@open-web3/api-mobx",
+  "version": "0.3.0-beta.3",
+  "description": "MobX integration for polkadot.js",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -15,10 +15,10 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@open-web3/util": "^0.3.0-beta.20"
-  },
-  "peerDependencies": {
     "@polkadot/api": "^1.23.1",
-    "@polkadot/util-crypto": "^1.12.1"
+    "@polkadot/types": "^1.23.1",
+    "@polkadot/util": "^2.8.1",
+    "mobx": "^5.15.4",
+    "mobx-utils": "^5.5.7"
   }
 }

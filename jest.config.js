@@ -4,7 +4,8 @@ module.exports = {
     '@open-web3/jsonrpc(.*)$': '<rootDir>/packages/jsonrpc/src/$1',
     '@open-web3/scanner(.*)$': '<rootDir>/packages/scanner/src/$1',
     '@open-web3/util(.*)$': '<rootDir>/packages/util/src/$1',
-    '@open-web3/orml-api-derive(.*)$': '<rootDir>/packages/orml-api-derive/src/$1'
+    '@open-web3/orml-api-derive(.*)$': '<rootDir>/packages/orml-api-derive/src/$1',
+    '@open-web3/api-mobx(.*)$': '<rootDir>/packages/api-mobx/src/$1'
   },
   modulePathIgnorePatterns: [
     '<rootDir>/build',
@@ -15,6 +16,7 @@ module.exports = {
     '<rootDir>/packages/indexer/build',
     '<rootDir>/packages/orml-api-derive/build',
     '<rootDir>/packages/orml-types/build',
-    '<rootDir>/packages/scanner/build'
+    '<rootDir>/packages/scanner/build',
+    '<rootDir>/packages/api-mobx/build'
   ]
 };
