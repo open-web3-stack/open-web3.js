@@ -15,6 +15,6 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "peerDependencies": {
-    "@polkadot/api": "^1.15.1"
+    "@polkadot/api": "^1.23.1"
   }
 }

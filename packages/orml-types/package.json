@@ -15,8 +15,8 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "peerDependencies": {
-    "@polkadot/api": "^1.15.1",
-    "@polkadot/typegen": "^1.15.1",
-    "@polkadot/types": "^1.12.1"
+    "@polkadot/api": "^1.23.1",
+    "@polkadot/typegen": "^1.23.1",
+    "@polkadot/types": "^1.23.1"
   }
 }

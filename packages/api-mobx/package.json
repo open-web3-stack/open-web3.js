@@ -15,8 +15,8 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@polkadot/api": "^1.22.1",
-    "@polkadot/types": "^1.22.1",
+    "@polkadot/api": "^1.23.1",
+    "@polkadot/types": "^1.23.1",
     "@polkadot/util": "^2.8.1",
     "mobx": "^5.15.4",
     "mobx-utils": "^5.5.7"
