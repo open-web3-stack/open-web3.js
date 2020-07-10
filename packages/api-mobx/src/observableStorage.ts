@@ -127,7 +127,7 @@ export class ObservableStorageMapEntries {
           this._value.delete(key1);
         } else {
           const type = StorageKey.getType(storageEntry.creator);
-          this._value.set(key1, this._api.createType(type as any, value));
+          this._value.set(key1, this._api.createType(type as any, hexToU8a(value)));
         }
       }
     });
