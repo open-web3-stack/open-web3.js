@@ -2,7 +2,7 @@ import { createAtom, ObservableMap, observable, transaction } from 'mobx';
 import { Atom } from 'mobx/lib/core/atom';
 import { ApiPromise } from '@polkadot/api';
 import { StorageKey } from '@polkadot/types';
-import { u8aToHex } from '@polkadot/util';
+import { u8aToHex, hexToU8a } from '@polkadot/util';
 
 import StateTracker from './stateTracker';
 
@@ -192,7 +192,7 @@ export class ObservableStorageDoubleMapEntries {
         const name = `${this._module}.${this._entry}.entries(${this._key}).${key2}`;
         const values = this._value.get(key1) || createMap(name);
         const type = StorageKey.getType(storageEntry.creator);
-        values.set(key2, this._api.createType(type as any, value));
+        values.set(key2, this._api.createType(type as any, hexToU8a(value)));
         this._value.set(key1, values);
       }
     });
