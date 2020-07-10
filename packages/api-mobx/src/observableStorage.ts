@@ -45,7 +45,7 @@ export class ObservableStorageEntry {
         this._value = null;
       } else {
         const type = StorageKey.getType(storageEntry.creator);
-        this._value = this._api.createType(type as any, value);
+        this._value = this._api.createType(type as any, hexToU8a(value));
       }
       this._atom.reportChanged();
     });
