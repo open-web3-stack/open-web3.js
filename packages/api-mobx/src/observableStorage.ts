@@ -118,7 +118,11 @@ export class ObservableStorageMapEntries {
         } else {
           const name = `${this._module}.${this._entry}.entries().${key1}.${key2}`;
           const values = this._value.get(key1) || createMap(name);
-          const type = StorageKey.getType(storageEntry.creator);
+          let type = StorageKey.getType(storageEntry.creator);
+          const isOptional = storageEntry.creator.meta.modifier.isOptional;
+          if (isOptional) {
+            type = `Option<${type}>`;
+          }
           values.set(key2, this._api.createType(type as any, value));
           this._value.set(key1, values);
         }
@@ -191,7 +195,11 @@ export class ObservableStorageDoubleMapEntries {
       } else {
         const name = `${this._module}.${this._entry}.entries(${this._key}).${key2}`;
         const values = this._value.get(key1) || createMap(name);
-        const type = StorageKey.getType(storageEntry.creator);
+        let type = StorageKey.getType(storageEntry.creator);
+        const isOptional = storageEntry.creator.meta.modifier.isOptional;
+        if (isOptional) {
+          type = `Option<${type}>`;
+        }
         values.set(key2, this._api.createType(type as any, hexToU8a(value)));
         this._value.set(key1, values);
       }
