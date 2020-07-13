@@ -21,5 +21,5 @@ export function writeFile(dest: string, generator: () => string, noLog?: boolean
 }
 
 export function readTemplate(path: string): string {
-  return fs.readFileSync(`${__dirname}/../templates/${path}.hbs`).toString();
+  return fs.readFileSync(`${__dirname}/../../templates/${path}.hbs`).toString();
 }
