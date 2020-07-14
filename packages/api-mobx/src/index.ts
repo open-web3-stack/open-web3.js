@@ -26,7 +26,7 @@ export interface StorageDoubleMap<Key1, Key2, T> {
   allEntries: () => ObservableMap<string, ObservableMap<string, T>>;
 }
 
-export const createStorage = <T>(api: ApiPromise, ws: WsProvider): T & BaseStorageType => {
+export const createStorage = <T>(api: ApiPromise, ws: WsProvider): T => {
   const obj: any = {};
 
   const metadata = api.runtimeMetadata.asLatest;

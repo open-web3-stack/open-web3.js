@@ -2,7 +2,7 @@
 
 {{{ imports }}}
 
-export interface StorageType {
+export interface StorageType extends BaseStorageType {
 {{#each modules}}
   {{{name}}}: {
   {{~#each items}}

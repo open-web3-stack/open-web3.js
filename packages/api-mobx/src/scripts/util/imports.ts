@@ -43,7 +43,7 @@ export function setImports(allDefs: Record<string, ModuleTypes>, imports: TypeIm
   types.forEach((type): void => {
     if (ignoredTypes.includes(type)) {
       // do nothing
-    } else if (['CallFunction', 'Codec', 'IExtrinsic', 'ITuple'].includes(type)) {
+    } else if (['AnyNumber', 'CallFunction', 'Codec', 'IExtrinsic', 'ITuple'].includes(type)) {
       typesTypes[type] = true;
     } else if ((codecClasses as Record<string, unknown>)[type]) {
       codecTypes[type] = true;

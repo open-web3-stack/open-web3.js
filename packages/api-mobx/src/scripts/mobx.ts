@@ -5,7 +5,7 @@
 import Handlebars from 'handlebars';
 
 import { StorageEntryMetadataLatest } from '@polkadot/types/interfaces/metadata';
-import { Registry, RegisteredTypes } from '@polkadot/types/types';
+import { Registry, RegisteredTypes, TypeDef } from '@polkadot/types/types';
 
 import Metadata from '@polkadot/metadata/Metadata';
 import * as defaultDefs from '@polkadot/types/interfaces/definitions';
@@ -20,6 +20,7 @@ import {
   formatType,
   readTemplate,
   registerDefinitions,
+  getSimilarTypes,
   setImports,
   writeFile
 } from './util';
@@ -37,6 +38,8 @@ function entrySignature(
   storageEntry: StorageEntryMetadataLatest,
   imports: TypeImports
 ): [string[], string] {
+  const format = (type: string | TypeDef) => formatType(allDefs, type, imports);
+
   const outputType = unwrapStorageType(storageEntry.type, storageEntry.modifier.isOptional);
 
   if (storageEntry.type.isPlain) {
@@ -45,21 +48,21 @@ function entrySignature(
     return [[], formatType(allDefs, outputType, imports)];
   } else if (storageEntry.type.isMap) {
     // Find similar types of the `key` type
-    const key = storageEntry.type.asMap.key.toString();
+    const key = getSimilarTypes(allDefs, registry, storageEntry.type.asMap.key.toString(), imports);
     const value = storageEntry.type.asMap.value.toString();
 
-    setImports(allDefs, imports, [value]);
+    setImports(allDefs, imports, [...key, value]);
 
-    return [[key], formatType(allDefs, outputType, imports)];
+    return [[key.map(format).join(' | ')], formatType(allDefs, outputType, imports)];
   } else if (storageEntry.type.isDoubleMap) {
     // Find similar types of `key1` and `key2` types
-    const key1 = storageEntry.type.asDoubleMap.key1.toString();
-    const key2 = storageEntry.type.asDoubleMap.key2.toString();
+    const key1 = getSimilarTypes(allDefs, registry, storageEntry.type.asDoubleMap.key1.toString(), imports);
+    const key2 = getSimilarTypes(allDefs, registry, storageEntry.type.asDoubleMap.key2.toString(), imports);
     const value = storageEntry.type.asDoubleMap.value.toString();
 
-    setImports(allDefs, imports, [value]);
+    setImports(allDefs, imports, [...key1, ...key2, value]);
 
-    return [[key1, key2], formatType(allDefs, outputType, imports)];
+    return [[key1.map(format).join(' | '), key2.map(format).join(' | ')], formatType(allDefs, outputType, imports)];
   }
 
   throw new Error(`entryArgs: Cannot parse args of entry ${storageEntry.name.toString()}`);
@@ -97,11 +100,11 @@ function generateForMeta(
             let entryType = returnType;
 
             if (storageEntry.type.isMap) {
-              entryType = `StorageMap<string, ${returnType}>`;
+              entryType = `StorageMap<${args.join(', ')}, ${returnType}>`;
             }
 
             if (storageEntry.type.isDoubleMap) {
-              entryType = `StorageDoubleMap<string, string, ${returnType}>`;
+              entryType = `StorageDoubleMap<${args.join(', ')}, ${returnType}>`;
             }
 
             return {
@@ -128,7 +131,7 @@ function generateForMeta(
         })),
       {
         file: '@open-web3/api-mobx',
-        types: ['StorageMap', 'StorageDoubleMap']
+        types: ['StorageMap', 'StorageDoubleMap', 'BaseStorageType']
       }
     ];
 
