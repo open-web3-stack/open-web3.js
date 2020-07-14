@@ -159,7 +159,7 @@ export class ObservableStorageDoubleMapEntries {
     private readonly _entry: string,
     private readonly _key: any
   ) {
-    const name = `${_module}.${_entry}.entries(${_key})`;
+    const name = `${_module}.${_entry}.entries(${_key.toString()})`;
     this._atom = createAtom(
       name,
       () => this._start(),
@@ -177,7 +177,7 @@ export class ObservableStorageDoubleMapEntries {
       transaction(() => {
         for (const [storageKey, value] of val) {
           const [key1, key2] = storageKey.args.map((i) => i.toString());
-          const name = `${this._module}.${this._entry}.entries(${this._key}).${key2}`;
+          const name = `${this._module}.${this._entry}.entries(${key1}).${key2}`;
           const values = this._value.get(key1) || createMap(name);
           values.set(key2, value);
           this._value.set(key1, values);
@@ -193,7 +193,7 @@ export class ObservableStorageDoubleMapEntries {
       if (value == null) {
         this._value.delete(key1);
       } else {
-        const name = `${this._module}.${this._entry}.entries(${this._key}).${key2}`;
+        const name = `${this._module}.${this._entry}.entries(${key1}).${key2}`;
         const values = this._value.get(key1) || createMap(name);
         let type = StorageKey.getType(storageEntry.creator);
         const isOptional = storageEntry.creator.meta.modifier.isOptional;

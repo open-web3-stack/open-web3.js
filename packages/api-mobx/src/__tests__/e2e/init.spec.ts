@@ -1,17 +1,18 @@
 import { autorun } from 'mobx';
 import { ApiPromise } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { createStorage, BaseStorageType } from '../..';
+import { createStorage } from '../..';
 
 import { StorageType } from '../../__mock__/api-mobx';
 
 describe('api-mobx', () => {
-  let storage: BaseStorageType & StorageType;
+  let api: ApiPromise;
+  let storage: StorageType;
 
   beforeAll(async () => {
     const ws = new WsProvider('wss://kusama-rpc.polkadot.io/');
-    const api = await ApiPromise.create({ provider: ws });
-    storage = createStorage<StorageType>(api, ws);
+    api = await ApiPromise.create({ provider: ws });
+    storage = createStorage(api, ws);
   }, 10_000);
 
   it('block hash works', (done) => {
@@ -27,7 +28,8 @@ describe('api-mobx', () => {
 
   it('account works', (done) => {
     autorun(() => {
-      const account = storage.system.account('CtwdfrhECFs3FpvCGoiE4hwRC4UsSiM8WL899HjRdQbfYZY');
+      const alice = api.createType('AccountId', 'CtwdfrhECFs3FpvCGoiE4hwRC4UsSiM8WL899HjRdQbfYZY');
+      const account = storage.system.account(alice);
       console.dir(account && account.toHuman());
 
       if (account) {
