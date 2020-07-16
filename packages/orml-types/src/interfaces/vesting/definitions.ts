@@ -1,11 +1,1 @@
-export default {
-  types: {
-    VestingSchedule: {
-      start: 'BlockNumber',
-      period: 'BlockNumber',
-      periodCount: 'u32',
-      perPeriod: 'Compact<Balance>'
-    },
-    VestingScheduleOf: 'VestingSchedule'
-  }
-};
+export { default } from '@open-web3/orml-type-definitions/vesting';

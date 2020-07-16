@@ -1,10 +1,1 @@
-export default {
-  types: {
-    StorageValue: 'Vec<u8>',
-    GraduallyUpdate: {
-      key: 'Vec<u8>',
-      targetValue: 'StorageValue',
-      perBlock: 'StorageValue'
-    }
-  }
-};
+export { default } from '@open-web3/orml-type-definitions/graduallyUpdates';

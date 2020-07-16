@@ -1,13 +1,1 @@
-export default {
-  types: {
-    OrmlAccountData: {
-      free: 'Balance',
-      frozen: 'Balance',
-      reserved: 'Balance'
-    },
-    OrmlBalanceLock: {
-      amount: 'Balance',
-      id: 'LockIdentifier'
-    }
-  }
-};
+export { default } from '@open-web3/orml-type-definitions/tokens';

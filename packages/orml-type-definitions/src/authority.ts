@@ -1,5 +1,5 @@
 export default {
   types: {
-    Price: 'FixedU128'
+    CallOf: 'Call'
   }
 };

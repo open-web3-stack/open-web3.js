@@ -1,5 +1,5 @@
 {
-  "name": "@open-web3/orml-types",
+  "name": "@open-web3/orml-type-definitions",
   "version": "0.3.0-beta.30",
   "description": "Polkadot.js types for Open Runtime Module Library (ORML)",
   "main": "index.js",
@@ -13,13 +13,5 @@
   "bugs": {
     "url": "https://github.com/open-web3-stack/open-web3.js/issues"
   },
-  "homepage": "https://github.com/open-web3-stack/open-web3.js",
-  "dependencies": {
-    "@open-web3/orml-type-definitions": "^0.3.0-beta.30"
-  },
-  "peerDependencies": {
-    "@polkadot/api": "^1.23.1",
-    "@polkadot/typegen": "^1.23.1",
-    "@polkadot/types": "^1.23.1"
-  }
+  "homepage": "https://github.com/open-web3-stack/open-web3.js"
 }

@@ -1,5 +1,1 @@
-export default {
-  types: {
-    CallOf: 'Call'
-  }
-};
+export { default } from '@open-web3/orml-type-definitions/authority';
