@@ -12,7 +12,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "build": "yarn check-deps && yarn build:interfaces && polkadot-dev-build-ts && (cd packages/api-mobx && cp -r src/templates build)",
+    "build": "yarn check-deps && polkadot-dev-build-ts && (cd packages/api-mobx && cp -r src/templates build)",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx . && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
