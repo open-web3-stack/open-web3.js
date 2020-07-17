@@ -14,8 +14,6 @@
       "@open-web3/scanner/*": ["packages/scanner/src/*"],
       "@open-web3/orml-types": ["packages/orml-types/src"],
       "@open-web3/orml-types/*": ["packages/orml-types/src/*"],
-      "@open-web3/orml-type-definitions": ["packages/orml-type-definitions/src"],
-      "@open-web3/orml-type-definitions/*": ["packages/orml-type-definitions/src/*"],
       "@open-web3/orml-api-derive": ["packages/orml-api-derive/src"],
       "@open-web3/orml-api-derive/*": ["packages/orml-api-derive/src/*"],
       "@open-web3/indexer": ["packages/indexer/src"],
