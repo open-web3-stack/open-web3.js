@@ -70,6 +70,7 @@ export function setImports(allDefs: Record<string, ModuleTypes>, imports: TypeIm
       }
     } else if (type.includes('[') && type.includes('|')) {
       // We split the types
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const splitTypes = /\[\s?(.+?)\s?\]/.exec(type)![1].split(/\s?\|\s?/);
 
       setImports(allDefs, imports, splitTypes);

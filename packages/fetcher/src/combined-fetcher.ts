@@ -1,8 +1,5 @@
 import bn from 'big.js';
 import { FetcherInterface } from './types';
-import moduleLogger from './logger';
-
-const logger = moduleLogger.createLogger('CombinedFetcher');
 
 const median = (pricesUnsorted: string[]): string => {
   const prices = pricesUnsorted.sort();
