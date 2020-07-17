@@ -1,6 +1,5 @@
 import { ApiInterfaceRx } from '@polkadot/api/types';
-import { AccountInfo } from '@polkadot/types/interfaces';
-import { AccountId, Balance, OrmlAccountData } from '@open-web3/orml-types/interfaces';
+import { AccountInfo, AccountId, Balance } from '@polkadot/types/interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -23,7 +22,7 @@ export function balance(
       } else {
         const key1 = api.query.tokens.accounts.creator.meta.type.asDoubleMap.key1.toString();
         const arg = key1 === 'CurrencyId' ? [token, address] : [address, token];
-        return api.query.tokens.accounts<OrmlAccountData>(...arg).pipe(
+        return api.query.tokens.accounts<any>(...arg).pipe(
           map((result) => {
             return result.free;
           })
