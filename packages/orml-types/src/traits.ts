@@ -11,6 +11,7 @@ export default {
         After: 'BlockNumber'
       }
     },
-    DispatchId: 'u32'
+    DispatchId: 'u32',
+    Price: 'FixedU128'
   }
 };
