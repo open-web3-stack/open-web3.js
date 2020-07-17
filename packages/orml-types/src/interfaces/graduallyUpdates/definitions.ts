@@ -2,7 +2,7 @@ export default {
   types: {
     StorageValue: 'Vec<u8>',
     GraduallyUpdate: {
-      key: 'StorageKey',
+      key: 'Vec<u8>',
       targetValue: 'StorageValue',
       perBlock: 'StorageValue'
     }

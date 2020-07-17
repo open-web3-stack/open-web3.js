@@ -9,11 +9,5 @@ export default {
       amount: 'Balance',
       id: 'LockIdentifier'
     }
-  },
-  typesAlias: {
-    tokens: {
-      AccountData: 'OrmlAccountData',
-      BalanceLock: 'OrmlBalanceLock'
-    }
   }
 };
