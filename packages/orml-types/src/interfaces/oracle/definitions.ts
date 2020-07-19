@@ -1,3 +1,5 @@
+import { Definitions } from '@polkadot/types/types';
+
 export default {
   rpc: {
     getValue: {
@@ -24,4 +26,4 @@ export default {
     TimestampedValueOf: 'TimestampedValue',
     OrderedSet: 'Vec<AccountId>'
   }
-};
+} as Definitions;
