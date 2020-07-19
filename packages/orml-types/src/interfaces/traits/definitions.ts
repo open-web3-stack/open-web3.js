@@ -1,4 +1,7 @@
+import { Definitions } from '@polkadot/types/types';
+
 export default {
+  rpc: {},
   types: {
     AuctionInfo: {
       bid: 'Option<(AccountId, Balance)>',
@@ -13,4 +16,4 @@ export default {
     },
     DispatchId: 'u32'
   }
-};
+} as Definitions;

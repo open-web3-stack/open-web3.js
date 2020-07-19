@@ -1,4 +1,7 @@
+import { Definitions } from '@polkadot/types/types';
+
 export default {
+  rpc: {},
   types: {
     StorageValue: 'Vec<u8>',
     GraduallyUpdate: {
@@ -7,4 +10,4 @@ export default {
       perBlock: 'StorageValue'
     }
   }
-};
+} as Definitions;

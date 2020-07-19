@@ -1,4 +1,7 @@
+import { Definitions } from '@polkadot/types/types';
+
 export default {
+  rpc: {},
   types: {
     OrmlAccountData: {
       free: 'Balance',
@@ -10,4 +13,4 @@ export default {
       id: 'LockIdentifier'
     }
   }
-};
+} as Definitions;

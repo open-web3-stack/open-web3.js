@@ -1,4 +1,7 @@
+import { Definitions } from '@polkadot/types/types';
+
 export default {
+  rpc: {},
   types: {
     VestingSchedule: {
       start: 'BlockNumber',
@@ -8,4 +11,4 @@ export default {
     },
     VestingScheduleOf: 'VestingSchedule'
   }
-};
+} as Definitions;
