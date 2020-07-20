@@ -3,14 +3,7 @@
 
 import { ITuple } from '@polkadot/types/types';
 import { Compact, Enum, Int, Struct, U8aFixed, Vec } from '@polkadot/types/codec';
-import {
-  GenericAccountId,
-  GenericAccountIndex,
-  GenericAddress,
-  GenericBlock,
-  GenericCall,
-  GenericConsensusEngineId
-} from '@polkadot/types/generic';
+import { GenericAccountId, GenericAccountIndex, GenericAddress, GenericBlock, GenericCall, GenericConsensusEngineId } from '@polkadot/types/generic';
 import { Bytes, DoNotConstruct, Null, StorageKey, u128, u32, u64, u8 } from '@polkadot/types/primitive';
 import { AuthorityId } from '@polkadot/types/interfaces/consensus';
 import { Signature } from '@polkadot/types/interfaces/extrinsics';
