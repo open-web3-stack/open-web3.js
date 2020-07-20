@@ -1,14 +1,4 @@
 import { Definitions } from '@polkadot/types/types';
+import vesting from '@open-web3/orml-type-definitions/vesting';
 
-export default {
-  rpc: {},
-  types: {
-    VestingSchedule: {
-      start: 'BlockNumber',
-      period: 'BlockNumber',
-      periodCount: 'u32',
-      perPeriod: 'Compact<Balance>'
-    },
-    VestingScheduleOf: 'VestingSchedule'
-  }
-} as Definitions;
+export default vesting as Definitions;

@@ -24,4 +24,7 @@ export interface DelayedDispatchTime extends Enum {
 /** @name DispatchId */
 export interface DispatchId extends u32 {}
 
+/** @name Price */
+export interface Price extends FixedU128 {}
+
 export type PHANTOM_TRAITS = 'traits';

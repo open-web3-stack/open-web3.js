@@ -1,16 +1,4 @@
 import { Definitions } from '@polkadot/types/types';
+import tokens from '@open-web3/orml-type-definitions/tokens';
 
-export default {
-  rpc: {},
-  types: {
-    OrmlAccountData: {
-      free: 'Balance',
-      frozen: 'Balance',
-      reserved: 'Balance'
-    },
-    OrmlBalanceLock: {
-      amount: 'Balance',
-      id: 'LockIdentifier'
-    }
-  }
-} as Definitions;
+export default tokens as Definitions;

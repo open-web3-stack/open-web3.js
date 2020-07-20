@@ -1,13 +1,4 @@
 import { Definitions } from '@polkadot/types/types';
+import graduallyUpdates from '@open-web3/orml-type-definitions/graduallyUpdates';
 
-export default {
-  rpc: {},
-  types: {
-    StorageValue: 'Vec<u8>',
-    GraduallyUpdate: {
-      key: 'Vec<u8>',
-      targetValue: 'StorageValue',
-      perBlock: 'StorageValue'
-    }
-  }
-} as Definitions;
+export default graduallyUpdates as Definitions;

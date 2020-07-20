@@ -2,11 +2,11 @@
 /* eslint-disable */
 
 import { Struct } from '@polkadot/types/codec';
-import { Bytes } from '@polkadot/types/primitive';
+import { Bytes, StorageKey } from '@polkadot/types/primitive';
 
 /** @name GraduallyUpdate */
 export interface GraduallyUpdate extends Struct {
-  readonly key: Bytes;
+  readonly key: StorageKey;
   readonly targetValue: StorageValue;
   readonly perBlock: StorageValue;
 }
