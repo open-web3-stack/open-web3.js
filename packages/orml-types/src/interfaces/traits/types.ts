@@ -4,7 +4,7 @@
 import { ITuple } from '@polkadot/types/types';
 import { Enum, Option, Struct } from '@polkadot/types/codec';
 import { u32 } from '@polkadot/types/primitive';
-import { AccountId, Balance, BlockNumber } from '@open-web3/orml-types/interfaces/runtime';
+import { AccountId, Balance, BlockNumber, FixedU128 } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name AuctionInfo */
 export interface AuctionInfo extends Struct {

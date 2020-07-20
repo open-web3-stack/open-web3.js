@@ -49,6 +49,7 @@ import {
   ExtrinsicsWeight,
   Fixed128,
   Fixed64,
+  FixedU128,
   H160,
   H256,
   H512,
@@ -2412,6 +2413,10 @@ declare module '@polkadot/types/types/registry' {
     OracleValue: OracleValue;
     'Option<OracleValue>': Option<OracleValue>;
     'Vec<OracleValue>': Vec<OracleValue>;
+    FixedU128: FixedU128;
+    'Compact<FixedU128>': Compact<FixedU128>;
+    'Option<FixedU128>': Option<FixedU128>;
+    'Vec<FixedU128>': Vec<FixedU128>;
     CallOf: CallOf;
     'Option<CallOf>': Option<CallOf>;
     'Vec<CallOf>': Vec<CallOf>;

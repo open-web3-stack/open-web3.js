@@ -7,6 +7,7 @@ export default {
   },
   types: {
     ...definitions.types,
-    OracleValue: 'FixedU128'
+    OracleValue: 'FixedU128',
+    FixedU128: 'u128'
   }
 } as Definitions;
