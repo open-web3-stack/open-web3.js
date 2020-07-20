@@ -1,19 +1,4 @@
 import { Definitions } from '@polkadot/types/types';
+import traits from '@open-web3/orml-type-definitions/traits';
 
-export default {
-  rpc: {},
-  types: {
-    AuctionInfo: {
-      bid: 'Option<(AccountId, Balance)>',
-      start: 'BlockNumber',
-      end: 'Option<BlockNumber>'
-    },
-    DelayedDispatchTime: {
-      _enum: {
-        At: 'BlockNumber',
-        After: 'BlockNumber'
-      }
-    },
-    DispatchId: 'u32'
-  }
-} as Definitions;
+export default traits as Definitions;

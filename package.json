@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "yarn check-deps && yarn build:interfaces && polkadot-dev-build-ts && (cd packages/api-mobx && cp -r src/templates build)",
-    "build:interfaces": "node -r ts-node/register packages/orml-types/scripts/generate.ts",
+    "build:interfaces": "node -r ts-node/register -r tsconfig-paths/register packages/orml-types/scripts/generate.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx . && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
@@ -33,6 +33,7 @@
     "jest": "^25.2.0",
     "prettier": "^2.0.1",
     "pretty-quick": "^2.0.1",
+    "tsconfig-paths": "^3.9.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
