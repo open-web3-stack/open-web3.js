@@ -22,7 +22,7 @@
     "winston": "^3.2.1"
   },
   "peerDependencies": {
-    "@polkadot/api": "^1.23.1"
+    "@polkadot/api": "^1.27.1"
   },
   "devDependencies": {
     "@types/sequelize": "^4.28.8",
