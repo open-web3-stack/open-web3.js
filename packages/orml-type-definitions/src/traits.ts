@@ -13,6 +13,7 @@ export default {
       }
     },
     DispatchId: 'u32',
-    Price: 'FixedU128'
+    Price: 'FixedU128',
+    FixedU128: 'u128'
   }
 };
