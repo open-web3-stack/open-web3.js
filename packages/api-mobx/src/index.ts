@@ -16,12 +16,12 @@ export interface BaseStorageType {
 }
 
 export interface StorageMap<Key, T> {
-  (key: Key): T;
+  (key: Key): T | null;
   entries: () => ObservableMap<string, T>;
 }
 
 export interface StorageDoubleMap<Key1, Key2, T> {
-  (key1: Key1, key2: Key2): T;
+  (key1: Key1, key2: Key2): T | null;
   entries: (key1: Key1) => ObservableMap<string, T>;
   allEntries: () => ObservableMap<string, ObservableMap<string, T>>;
 }
