@@ -97,7 +97,7 @@ function generateForMeta(
           .items.sort(compareName)
           .map((storageEntry) => {
             const [args, returnType] = entrySignature(allDefs, registry, storageEntry, imports);
-            let entryType = returnType;
+            let entryType = `${returnType} | null`;
 
             if (storageEntry.type.isMap) {
               entryType = `StorageMap<${args.join(', ')}, ${returnType}>`;

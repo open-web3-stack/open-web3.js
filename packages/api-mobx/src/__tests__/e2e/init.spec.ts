@@ -6,6 +6,8 @@ import { createStorage } from '../..';
 import { StorageType } from '../../__mock__/api-mobx';
 
 describe('api-mobx', () => {
+  jest.setTimeout(30_000);
+
   let api: ApiPromise;
   let storage: StorageType;
 
@@ -24,7 +26,21 @@ describe('api-mobx', () => {
         done();
       }
     });
-  }, 30_000);
+  });
+
+  it('starts with null', (done) => {
+    let tick = 0;
+    autorun(() => {
+      const parentHash = storage.system.parentHash;
+      if (tick === 0) {
+        expect(parentHash).toBeNull();
+      } else {
+        expect(parentHash).toBeTruthy();
+        done();
+      }
+      tick++;
+    });
+  });
 
   it('account works', (done) => {
     autorun(() => {
@@ -36,7 +52,7 @@ describe('api-mobx', () => {
         done();
       }
     });
-  }, 30_000);
+  });
 
   it('StorageMap works', (done) => {
     autorun(() => {
@@ -47,5 +63,5 @@ describe('api-mobx', () => {
         done();
       }
     });
-  }, 30_000);
+  });
 });
