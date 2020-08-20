@@ -160,5 +160,6 @@ export function getSimilarTypes(
     }
   }
 
-  return possibleTypes;
+  // api-mobx can't handle UInt8Array
+  return possibleTypes.filter((i) => i !== 'UInt8Array');
 }
