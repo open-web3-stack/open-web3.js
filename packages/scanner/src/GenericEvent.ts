@@ -1,8 +1,8 @@
 import { GenericEvent as _GenericEvent } from '@polkadot/types';
 
-function toHump(name: string) {
-  return name.replace(/\_(\w)/g, (_, l) => l.toUpperCase());
-}
+const toHump = (name: string) => {
+  return name.replace(/_(\w)/g, (_, l) => l.toUpperCase());
+};
 
 export default class GenericEvent extends _GenericEvent {
   get argsDef() {
@@ -15,8 +15,8 @@ export default class GenericEvent extends _GenericEvent {
       }
 
       const doc: string = meta.documentation.join('\n');
-      const def = doc
-        .match(/\[([\w\s,]*)\]/)?.[1]
+      const def = /\[([\w\s,]*)\]/
+        .exec(doc)?.[1]
         .split(',')
         .map((s: string) => s.trim());
 

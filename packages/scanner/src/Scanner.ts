@@ -238,7 +238,7 @@ class Scanner {
     return this.getStorageValue<Vec<EventRecord>>(storageKey, _blockAt);
   }
 
-  public async getEventData(event: EventRecord, index: number) {
+  public getEventData(event: EventRecord, index: number) {
     const documentation = (event.event.meta.toJSON() as any)?.documentation?.join('\n');
 
     return {
