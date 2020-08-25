@@ -9,10 +9,12 @@ export default class GenericEvent extends _GenericEvent {
     try {
       const meta: any = this.meta.toJSON();
       const args = meta?.args;
+
       if (!args || !args.length) {
         return {};
       }
-      const doc = meta.documentation.join('\n');
+
+      const doc: string = meta.documentation.join('\n');
       const def = doc
         .match(/\[([\w\s,]*)\]/)?.[1]
         .split(',')
@@ -20,7 +22,7 @@ export default class GenericEvent extends _GenericEvent {
 
       const data: any = this.data.toJSON();
 
-      if (def.length !== args.length || def.length !== data.length) {
+      if (!def || def.length !== args.length || def.length !== data.length) {
         return null;
       }
 
