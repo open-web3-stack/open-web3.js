@@ -7,6 +7,7 @@ import { createTypeUnsafe } from '@polkadot/types/create';
 import { EventRecord } from '@polkadot/types/interfaces/system';
 import { Observable, range, from, concat, of, throwError, timer } from 'rxjs';
 import { switchMap, map, take, shareReplay, mergeMap, pairwise, catchError, timeout, retryWhen } from 'rxjs/operators';
+import GenericEvent from './GenericEvent';
 
 import {
   BlockAt,
@@ -41,7 +42,10 @@ class Scanner {
   constructor(options: ScannerOptions) {
     this.wsProvider = options.wsProvider;
     this.rpcProvider = options.rpcProvider || options.wsProvider;
-    this.typeProvider = options.types;
+    this.typeProvider = {
+      ...options.types,
+      GenericEvent: GenericEvent
+    };
     this.chainInfo = {};
     this.metadataRequest = {};
   }
@@ -88,19 +92,9 @@ class Scanner {
     const requestes: any[] = [];
 
     requestes.push(
-      this.getEvents(blockAt, chainInfo).then((eventRecords) => {
-        return eventRecords.map((event, index) => {
-          return {
-            index,
-            bytes: event.toHex(),
-            section: event.event.section,
-            method: event.event.method,
-            phaseType: event.phase.type,
-            phaseIndex: event.phase.isNone ? null : (event.phase.value as any).toNumber(),
-            args: event.event.data.toJSON() as any[]
-          } as Event;
-        });
-      })
+      this.getEvents(blockAt, chainInfo).then((eventRecords) =>
+        eventRecords.map((event, index) => this.getEventData(event, index))
+      )
     );
 
     const blockRaw: BlockRaw = await this.rpcProvider.send('chain_getBlock', [blockAt.blockHash]);
@@ -242,6 +236,22 @@ class Scanner {
   public async getEvents(_blockAt: BlockAtOptions, meta: Meta): Promise<Vec<EventRecord>> {
     const storageKey = new StorageKey(meta.registry, meta.metadata.query.system.events);
     return this.getStorageValue<Vec<EventRecord>>(storageKey, _blockAt);
+  }
+
+  public async getEventData(event: EventRecord, index: number) {
+    const documentation = (event.event.meta.toJSON() as any)?.documentation?.join('\n');
+
+    return {
+      index,
+      doc: documentation,
+      bytes: event.toHex(),
+      section: event.event.section,
+      method: event.event.method,
+      phaseType: event.phase.type,
+      phaseIndex: event.phase.isNone ? null : (event.phase.value as any).toNumber(),
+      args: event.event.data.toJSON() as any[],
+      argsDef: (event.event as any).argsDef
+    } as Event;
   }
 
   public async getStorageValue<T>(storageKey: StorageKey, _blockAt: BlockAtOptions): Promise<T> {
