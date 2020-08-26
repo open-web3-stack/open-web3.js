@@ -3,8 +3,8 @@
 
 import { ITuple } from '@polkadot/types/types';
 import { Enum, Option, Struct } from '@polkadot/types/codec';
-import { u128, u32 } from '@polkadot/types/primitive';
-import { AccountId, Balance, BlockNumber } from '@open-web3/orml-types/interfaces/runtime';
+import { u32 } from '@polkadot/types/primitive';
+import { AccountId, Balance, BlockNumber, FixedU128 } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name AuctionInfo */
 export interface AuctionInfo extends Struct {
@@ -23,9 +23,6 @@ export interface DelayedDispatchTime extends Enum {
 
 /** @name DispatchId */
 export interface DispatchId extends u32 {}
-
-/** @name FixedU128 */
-export interface FixedU128 extends u128 {}
 
 /** @name Price */
 export interface Price extends FixedU128 {}
