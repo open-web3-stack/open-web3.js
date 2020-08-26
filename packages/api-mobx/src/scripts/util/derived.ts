@@ -16,7 +16,7 @@ import Vec from '@polkadot/types/codec/Vec';
 import Tuple from '@polkadot/types/codec/Tuple';
 import { AllConvictions } from '@polkadot/types/interfaces/democracy/definitions';
 import GenericAccountId from '@polkadot/types/generic/AccountId';
-import GenericAddress from '@polkadot/types/generic/Address';
+import GenericAddress from '@polkadot/types/generic/LookupSource';
 import Vote from '@polkadot/types/generic/Vote';
 import Null from '@polkadot/types/primitive/Null';
 import * as primitiveClasses from '@polkadot/types/primitive';
