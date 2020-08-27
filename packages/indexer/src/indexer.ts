@@ -231,6 +231,7 @@ export default class Indexer {
             section: event.section,
             method: event.method,
             args: event.args,
+            argsDef: event.argsDef,
             bytes: event.bytes,
             phaseType: event.phaseType,
             phaseIndex: event.phaseIndex

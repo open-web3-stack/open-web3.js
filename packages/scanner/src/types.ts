@@ -54,6 +54,7 @@ export interface Event {
   phaseType: string;
   phaseIndex: number;
   args: any[];
+  argsDef: Record<string, any> | null;
 }
 
 export interface DispatchableCall {

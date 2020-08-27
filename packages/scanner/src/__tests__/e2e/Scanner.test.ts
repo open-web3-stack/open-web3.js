@@ -7,7 +7,7 @@ describe('Scanner', () => {
 
   beforeAll(async () => {
     jest.setTimeout(30000000);
-    const provider = new WsProvider('wss://node-6640517791634960384.jm.onfinality.io/ws');
+    const provider = new WsProvider('wss://testnet-node-1.acala.laminar.one/ws');
     console.log('hhh');
     scanner = new Scanner({ wsProvider: provider, types });
   });
@@ -43,11 +43,12 @@ describe('Scanner', () => {
     expect(request1.registry).toEqual(request0.registry);
   });
 
-  it('getEvents', async () => {
+  it.only('getEvents', async () => {
     // await expect(scanner.getEvents({ blockNumber: -1 })).rejects.toThrow();
     // await expect(scanner.getEvents({ blockNumber: Number.MAX_SAFE_INTEGER })).rejects.toThrow();
     const chainInfo = await scanner.getChainInfo({ blockNumber: 111 });
     const events = await scanner.getEvents({ blockNumber: 111 }, chainInfo);
+    console.log(events);
     expect(events).toBeDefined();
   });
 
@@ -56,27 +57,27 @@ describe('Scanner', () => {
     expect(await scanner.decodeTx('0x280402000b90110eb36e01', { blockNumber: 0 }, chainInfo)).toBeDefined();
   });
 
-  it.only('subscribeNewBlockNumber', done => {
+  it('subscribeNewBlockNumber', (done) => {
     let no = 0;
     let initBlockNumber: number;
-    const s = scanner.subscribeNewBlockNumber().subscribe(number => {
-      console.log(number)
+    const s = scanner.subscribeNewBlockNumber().subscribe((number) => {
+      console.log(number);
     });
 
     setTimeout(() => {
-      scanner.wsProvider.disconnect()
-      console.log('disconnect')
-    }, 30000)
+      scanner.wsProvider.disconnect();
+      console.log('disconnect');
+    }, 30000);
     setTimeout(() => {
-      scanner.wsProvider.connect()
-      console.log('connect')
-    }, 60000)
+      scanner.wsProvider.connect();
+      console.log('connect');
+    }, 60000);
   });
 
-  it('subcribeFinalizedHead', done => {
+  it('subcribeFinalizedHead', (done) => {
     let no = 0;
     let initBlockNumber: number;
-    const s = scanner.subscribeNewBlockNumber('finalize').subscribe(number => {
+    const s = scanner.subscribeNewBlockNumber('finalize').subscribe((number) => {
       if (no === 0) {
         initBlockNumber = number;
       }
@@ -90,21 +91,21 @@ describe('Scanner', () => {
     });
   });
 
-  it('subcribe with a big confirmation', done => {
-    const s = scanner.subscribeNewBlockNumber(Number.MAX_SAFE_INTEGER).subscribe(number => {
+  it('subcribe with a big confirmation', (done) => {
+    const s = scanner.subscribeNewBlockNumber(Number.MAX_SAFE_INTEGER).subscribe((number) => {
       s.unsubscribe();
       expect(number).toBe(0);
       done();
     });
   });
 
-  it('subcribe with a normal confirmation', async done => {
+  it('subcribe with a normal confirmation', async (done) => {
     let no = 0;
     let initBlockNumber: number;
 
     const currentBlockNumber = Number((await scanner.getBlockDetail()).number);
 
-    const s = scanner.subscribeNewBlockNumber(100).subscribe(number => {
+    const s = scanner.subscribeNewBlockNumber(100).subscribe((number) => {
       if (no === 0) {
         initBlockNumber = number;
       }
@@ -120,25 +121,26 @@ describe('Scanner', () => {
     });
   });
 
-  it('subscribe start and end', done => {
+  it('subscribe start and end', (done) => {
     scanner
       .subscribe({
         start: 0,
         concurrent: 50
       })
-      .subscribe(no => {
+      .subscribe((no) => {
         console.error(no);
         // done()
       });
   });
 
-  it('subscribe', done => {
+  it('1subscribe', (done) => {
     console.log('start');
     scanner
       .subscribe({
-        start: 0
+        start: 100,
+        end: 100
       })
-      .subscribe(no => {
+      .subscribe((no) => {
         console.log(no.result?.number);
       });
   });

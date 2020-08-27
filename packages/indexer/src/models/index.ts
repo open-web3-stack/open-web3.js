@@ -214,6 +214,10 @@ export default function init(db: Sequelize): void {
         type: DataTypes.JSONB,
         allowNull: false
       },
+      argsDef: {
+        type: DataTypes.JSONB,
+        allowNull: true
+      },
       bytes: {
         type: DataTypes.BLOB,
         allowNull: false
