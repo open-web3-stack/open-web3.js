@@ -27,15 +27,18 @@ export default class Indexer {
   protected constructor(private readonly db: Sequelize, private readonly scanner: Scanner) {}
 
   static async create(options: IndexerOptions): Promise<Indexer> {
+    log.info('Create Indexer');
     const db = new Sequelize(options.dbUrl, {
       logging: false
     });
     await db.authenticate();
     const wsProvider = new WsProvider(options.wsUrl);
-
+    log.info('Init DB');
     init(db);
     if (options.sync) {
+      log.info('Sync DB');
       await db.sync(options.syncOptions);
+      log.info('Success');
     }
 
     return new Indexer(db, new Scanner({ wsProvider, types: options.types }));
