@@ -4,6 +4,10 @@ export default {
       description: 'Retrieves the oracle value for a given key.',
       params: [
         {
+          name: 'DataProviderId',
+          type: 'ProviderId'
+        },
+        {
           name: 'key',
           type: 'OracleKey' as 'u8'
         }
@@ -12,11 +16,17 @@ export default {
     },
     getAllValues: {
       description: 'Retrieves all oracle values.',
-      params: [],
+      params: [
+        {
+          name: 'DataProviderId',
+          type: 'ProviderId'
+        }
+      ],
       type: 'Vec<(OracleKey, Option<TimestampedValue>)>'
     }
   },
   types: {
+    DataProviderId: 'u8',
     TimestampedValue: {
       value: 'OracleValue',
       timestamp: 'Moment'
