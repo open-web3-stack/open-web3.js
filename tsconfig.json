@@ -25,7 +25,9 @@
       "@open-web3/dispatcher": ["packages/dispatcher/src"],
       "@open-web3/dispatcher/*": ["packages/dispatcher/src/*"],
       "@open-web3/api-mobx": ["packages/api-mobx/src"],
-      "@open-web3/api-mobx/*": ["packages/api-mobx/src/*"]
+      "@open-web3/api-mobx/*": ["packages/api-mobx/src/*"],
+      "@open-web3/asset-metadata": ["packages/asset-metadata/src"],
+      "@open-web3/asset-metadata/*": ["packages/asset-metadata/src/*"]
     },
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types"]
