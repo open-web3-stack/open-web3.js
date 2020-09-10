@@ -1,6 +1,6 @@
 import { ApiRx, WsProvider } from '@polkadot/api';
 import AssetMetadata from '../AssetMetadata';
-import ausdDef from './ausdMetadata.spec';
+import ausdDef from './asudMetadata';
 
 describe('AssetMetadata', (): void => {
   it('new', () => {
