@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/app-util",
-  "version": "0.6.0-beta.9",
+  "version": "0.6.0-beta.12",
   "description": "Utilities for node.js application",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -15,11 +15,11 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@open-web3/util": "^0.6.0-beta.9",
+    "@open-web3/util": "^0.6.0-beta.12",
     "rxjs": "^6.5.5"
   },
   "peerDependencies": {
-    "@polkadot/types": "^1.31.0-beta.8",
+    "@polkadot/types": "^1.32.1",
     "@slack/webhook": "^5.0.3",
     "big.js": "^5.2.2",
     "bn.js": "^5.1.1"

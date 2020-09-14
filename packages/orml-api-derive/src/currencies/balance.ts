@@ -1,15 +1,16 @@
 import { ApiInterfaceRx } from '@polkadot/api/types';
+import { memo } from '@polkadot/api-derive/util';
 import { AccountInfo } from '@polkadot/types/interfaces';
 import { AccountId, Balance, OrmlAccountData } from '@open-web3/orml-types/interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { memo } from '../util';
-
 export function balance(
+  instanceId: string,
   api: ApiInterfaceRx
 ): (address: AccountId | string | Uint8Array, token: any) => Observable<Balance> {
   return memo(
+    instanceId,
     (address: AccountId | string | Uint8Array, token: any): Observable<Balance> => {
       const currencyId = api.registry.createType('CurrencyId' as any, token);
       const nativeCurrencyId = api.consts.currencies.nativeCurrencyId;
