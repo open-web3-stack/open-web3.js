@@ -5,8 +5,8 @@ import { Compact, Struct } from '@polkadot/types/codec';
 import { u32 } from '@polkadot/types/primitive';
 import { Balance, BlockNumber } from '@open-web3/orml-types/interfaces/runtime';
 
-/** @name VestingSchedule */
-export interface VestingSchedule extends Struct {
+/** @name OrmlVestingSchedule */
+export interface OrmlVestingSchedule extends Struct {
   readonly start: BlockNumber;
   readonly period: BlockNumber;
   readonly periodCount: u32;
@@ -14,6 +14,6 @@ export interface VestingSchedule extends Struct {
 }
 
 /** @name VestingScheduleOf */
-export interface VestingScheduleOf extends VestingSchedule {}
+export interface VestingScheduleOf extends OrmlVestingSchedule {}
 
 export type PHANTOM_VESTING = 'vesting';
