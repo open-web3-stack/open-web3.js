@@ -5,7 +5,7 @@ export default {
       params: [
         {
           name: 'DataProviderId',
-          type: 'ProviderId'
+          type: 'DataProviderId'
         },
         {
           name: 'key',
@@ -19,7 +19,7 @@ export default {
       params: [
         {
           name: 'DataProviderId',
-          type: 'ProviderId'
+          type: 'DataProviderId'
         }
       ],
       type: 'Vec<(OracleKey, Option<TimestampedValue>)>'
