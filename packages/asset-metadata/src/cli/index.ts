@@ -43,12 +43,12 @@ Example: transfer 12jXX8aU8QGRrc9zb2vgVdtSnnTsqKZjf3sKYK8haFcPdpr9 10000 --metad
     'parse-numbers': false
   }).argv;
 
-async function makeCall(fn: any) {
+function makeCall(fn: any) {
   console.dir(fn);
   return fn(...params);
 }
 
-async function makeTx(fn: any) {
+function makeTx(fn: any) {
   if (!seed) {
     throw new Error('You need to specify the seed to complete the transaction');
   }
