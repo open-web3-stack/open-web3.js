@@ -44,8 +44,9 @@ Example: transfer 12jXX8aU8QGRrc9zb2vgVdtSnnTsqKZjf3sKYK8haFcPdpr9 10000 --metad
   }).argv;
 
 function makeCall(fn: any) {
-  console.dir(fn);
-  return fn(...params);
+  return fn(...params).then((result) => {
+    console.log(result.toString());
+  });
 }
 
 function makeTx(fn: any) {
@@ -74,7 +75,13 @@ async function run() {
   const provider = new WsProvider(ws || metadata.url);
 
   const types = typesFile ? JSON.parse(fs.readFileSync(path.resolve(process.cwd(), typesFile), 'utf8')) : {};
-  const api = new ApiPromise({ provider, types });
+  const api = new ApiPromise({
+    provider,
+    types: {
+      ...types,
+      ...metadata.types
+    }
+  });
 
   const assetMetadata = new AssetMetadata(api, metadata);
   const fn = assetMetadata[method];
