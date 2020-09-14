@@ -6,3 +6,4 @@ export { default as tokens } from './tokens/definitions';
 export { default as traits } from './traits/definitions';
 export { default as vesting } from './vesting/definitions';
 export { default as graduallyUpdates } from './graduallyUpdates/definitions';
+export { default as rewards } from './rewards/definitions';
