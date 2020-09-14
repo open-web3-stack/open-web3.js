@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { Option, Struct, Vec } from '@polkadot/types/codec';
-import { Bytes, Text, u8 } from '@polkadot/types/primitive';
+import { Text, u8 } from '@polkadot/types/primitive';
 
 /** @name AssetArgDef */
 export interface AssetArgDef extends Struct {
@@ -14,7 +14,7 @@ export interface AssetArgDef extends Struct {
 /** @name AssetMetadataCall */
 export interface AssetMetadataCall extends Struct {
   readonly args: Vec<AssetArgDef>;
-  readonly argSequence: Bytes;
+  readonly argSequence: Vec<u8>;
   readonly section: Text;
   readonly method: Text;
 }
@@ -27,6 +27,7 @@ export interface AssetMetadataCalls extends Struct {
 /** @name AssetMetadataDef */
 export interface AssetMetadataDef extends Struct {
   readonly currencyId: Text;
+  readonly url: Option<Text>;
   readonly description: AssetMetadataDescription;
   readonly operations: AssetMetadataOperationDescription;
 }
@@ -55,7 +56,7 @@ export interface AssetMetadataPath extends Vec<Text> {}
 /** @name AssetMetadataQuery */
 export interface AssetMetadataQuery extends Struct {
   readonly args: Vec<AssetArgDef>;
-  readonly argSequence: Bytes;
+  readonly argSequence: Vec<u8>;
   readonly section: Text;
   readonly method: Text;
   readonly path: AssetMetadataPath;
