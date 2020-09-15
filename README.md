@@ -22,3 +22,5 @@ This monorepo contains all the Javascript packages provided by Open Web3 Stack.
   - JS utilities.
 - [@open-web3/app-util](./packages/app-util)
   - Utilities for node.js application.
+- [@open-web3/asset-metadata](./packages/asset-metadata)
+  - asset metadata.
