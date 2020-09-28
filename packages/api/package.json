@@ -19,6 +19,6 @@
   },
   "peerDependencies": {
     "@polkadot/api": "^2.0.1",
-    "@polkadot/util-crypto": "^1.12.1"
+    "@polkadot/util-crypto": "^3.5.1"
   }
 }
