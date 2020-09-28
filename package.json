@@ -8,9 +8,7 @@
     "packages/*"
   ],
   "resolutions": {
-    "babel-core": "^7.0.0-bridge.0",
-    "typescript": "^3.8.3",
-    "@polkadot/util": "^3.0.1"
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "build": "yarn check-deps && yarn build:interfaces && polkadot-dev-build-ts && (cd packages/api-mobx && cp -r src/templates build)",
