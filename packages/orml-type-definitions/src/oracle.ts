@@ -4,7 +4,7 @@ export default {
       description: 'Retrieves the oracle value for a given key.',
       params: [
         {
-          name: 'DataProviderId',
+          name: 'providerId',
           type: 'DataProviderId'
         },
         {
@@ -18,7 +18,7 @@ export default {
       description: 'Retrieves all oracle values.',
       params: [
         {
-          name: 'DataProviderId',
+          name: 'providerId',
           type: 'DataProviderId'
         }
       ],
@@ -26,7 +26,9 @@ export default {
     }
   },
   types: {
-    DataProviderId: 'u8',
+    DataProviderId: {
+      _enum: ['Aggregated', 'Laminar', 'Band']
+    },
     TimestampedValue: {
       value: 'OracleValue',
       timestamp: 'Moment'
