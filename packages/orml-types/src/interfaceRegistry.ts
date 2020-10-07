@@ -1646,7 +1646,6 @@ declare module '@polkadot/types/types/registry' {
     'Option<CallOf>': Option<CallOf>;
     'Vec<CallOf>': Vec<CallOf>;
     DataProviderId: DataProviderId;
-    'Compact<DataProviderId>': Compact<DataProviderId>;
     'Option<DataProviderId>': Option<DataProviderId>;
     'Vec<DataProviderId>': Vec<DataProviderId>;
     TimestampedValue: TimestampedValue;
