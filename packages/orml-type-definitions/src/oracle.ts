@@ -5,7 +5,7 @@ export default {
       params: [
         {
           name: 'providerId',
-          type: 'DataProviderId'
+          type: 'RpcDataProviderId'
         },
         {
           name: 'key',
