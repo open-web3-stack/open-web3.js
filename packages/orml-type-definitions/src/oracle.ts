@@ -5,7 +5,7 @@ export default {
       params: [
         {
           name: 'providerId',
-          type: 'DataProviderId'
+          type: 'RpcDataProviderId'
         },
         {
           name: 'key',
@@ -19,16 +19,15 @@ export default {
       params: [
         {
           name: 'providerId',
-          type: 'DataProviderId'
+          type: 'RpcDataProviderId'
         }
       ],
       type: 'Vec<(OracleKey, Option<TimestampedValue>)>'
     }
   },
   types: {
-    DataProviderId: {
-      _enum: ['Aggregated', 'Laminar', 'Band']
-    },
+    RpcDataProviderId: 'Text',
+    DataProviderId: 'u8',
     TimestampedValue: {
       value: 'OracleValue',
       timestamp: 'Moment'
