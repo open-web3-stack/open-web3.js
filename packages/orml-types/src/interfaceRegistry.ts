@@ -3,7 +3,7 @@
 
 import { Compact, Option, Raw, Vec } from '@polkadot/types/codec';
 import { BitVec, Bytes, Data, DoNotConstruct, Null, StorageKey, Text, Type, U256, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types/primitive';
-import { CallOf } from '@open-web3/orml-types/interfaces/authority';
+import { CallOf, DispatchTime, ScheduleTaskIndex } from '@open-web3/orml-types/interfaces/authority';
 import { GraduallyUpdate, StorageValue } from '@open-web3/orml-types/interfaces/graduallyUpdates';
 import { DataProviderId, OrderedSet, RpcDataProviderId, TimestampedValue, TimestampedValueOf } from '@open-web3/orml-types/interfaces/oracle';
 import { PoolInfo, Share } from '@open-web3/orml-types/interfaces/rewards';
@@ -1645,6 +1645,13 @@ declare module '@polkadot/types/types/registry' {
     CallOf: CallOf;
     'Option<CallOf>': Option<CallOf>;
     'Vec<CallOf>': Vec<CallOf>;
+    DispatchTime: DispatchTime;
+    'Option<DispatchTime>': Option<DispatchTime>;
+    'Vec<DispatchTime>': Vec<DispatchTime>;
+    ScheduleTaskIndex: ScheduleTaskIndex;
+    'Compact<ScheduleTaskIndex>': Compact<ScheduleTaskIndex>;
+    'Option<ScheduleTaskIndex>': Option<ScheduleTaskIndex>;
+    'Vec<ScheduleTaskIndex>': Vec<ScheduleTaskIndex>;
     RpcDataProviderId: RpcDataProviderId;
     'Option<RpcDataProviderId>': Option<RpcDataProviderId>;
     'Vec<RpcDataProviderId>': Vec<RpcDataProviderId>;
