@@ -8,6 +8,10 @@ export default {
         After: 'BlockNumber'
       }
     },
-    ScheduleTaskIndex: 'u32'
+    ScheduleTaskIndex: 'u32',
+    DelayedOrigin: {
+      delay: 'BlockNumber',
+      origin: 'PalletsOrigin'
+    }
   }
 };
