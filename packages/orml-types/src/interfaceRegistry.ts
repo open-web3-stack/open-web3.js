@@ -3,11 +3,11 @@
 
 import { Compact, Option, Raw, Vec } from '@polkadot/types/codec';
 import { BitVec, Bytes, Data, DoNotConstruct, Null, StorageKey, Text, Type, U256, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types/primitive';
-import { CallOf, DispatchTime, ScheduleTaskIndex } from '@open-web3/orml-types/interfaces/authority';
+import { CallOf, DelayedOrigin, DispatchTime, ScheduleTaskIndex } from '@open-web3/orml-types/interfaces/authority';
 import { GraduallyUpdate, StorageValue } from '@open-web3/orml-types/interfaces/graduallyUpdates';
 import { DataProviderId, OrderedSet, RpcDataProviderId, TimestampedValue, TimestampedValueOf } from '@open-web3/orml-types/interfaces/oracle';
 import { PoolInfo, Share } from '@open-web3/orml-types/interfaces/rewards';
-import { AccountId, AccountIdOf, AccountIndex, Address, AssetId, Balance, BalanceOf, Block, BlockNumber, Call, CallHash, CallHashOf, ChangesTrieConfiguration, Consensus, ConsensusEngineId, Digest, DigestItem, ExtrinsicsWeight, Fixed128, Fixed64, FixedI128, FixedI64, FixedU128, FixedU64, GenericAddress, H160, H256, H512, Hash, Header, I32F32, Index, Justification, KeyTypeId, KeyValue, LockIdentifier, LookupSource, LookupTarget, ModuleId, Moment, OpaqueCall, OracleValue, Origin, PalletVersion, Pays, PerU16, Perbill, Percent, Permill, Perquintill, Phantom, PhantomData, PreRuntime, Releases, RuntimeDbWeight, Seal, SealV0, SignedBlock, StorageData, TransactionPriority, U32F32, ValidatorId, Weight, WeightMultiplier } from '@open-web3/orml-types/interfaces/runtime';
+import { AccountId, AccountIdOf, AccountIndex, Address, AssetId, Balance, BalanceOf, Block, BlockNumber, Call, CallHash, CallHashOf, ChangesTrieConfiguration, Consensus, ConsensusEngineId, Digest, DigestItem, ExtrinsicsWeight, Fixed128, Fixed64, FixedI128, FixedI64, FixedU128, FixedU64, GenericAddress, H160, H256, H512, Hash, Header, I32F32, Index, Justification, KeyTypeId, KeyValue, LockIdentifier, LookupSource, LookupTarget, ModuleId, Moment, OpaqueCall, OracleValue, Origin, OriginCaller, PalletVersion, PalletsOrigin, Pays, PerU16, Perbill, Percent, Permill, Perquintill, Phantom, PhantomData, PreRuntime, Releases, RuntimeDbWeight, Seal, SealV0, SignedBlock, StorageData, TransactionPriority, U32F32, ValidatorId, Weight, WeightMultiplier } from '@open-web3/orml-types/interfaces/runtime';
 import { OrmlAccountData, OrmlBalanceLock } from '@open-web3/orml-types/interfaces/tokens';
 import { AuctionInfo, DelayedDispatchTime, DispatchId, Price } from '@open-web3/orml-types/interfaces/traits';
 import { OrmlVestingSchedule, VestingScheduleOf } from '@open-web3/orml-types/interfaces/vesting';
@@ -20,9 +20,9 @@ import { AccountData, BalanceLock, BalanceLockTo212, BalanceStatus, Reasons, Ves
 import { BlockHash } from '@polkadot/types/interfaces/chain';
 import { PrefixedStorageKey } from '@polkadot/types/interfaces/childstate';
 import { EthereumAddress, StatementKind } from '@polkadot/types/interfaces/claims';
-import { MemberCount, ProposalIndex, Votes, VotesTo230 } from '@polkadot/types/interfaces/collective';
+import { CollectiveOrigin, MemberCount, ProposalIndex, Votes, VotesTo230 } from '@polkadot/types/interfaces/collective';
 import { AuthorityId, RawVRFOutput } from '@polkadot/types/interfaces/consensus';
-import { AliveContractInfo, CodeHash, ContractCallRequest, ContractExecResult, ContractExecResultSuccess, ContractExecResultSuccessTo255, ContractExecResultTo255, ContractInfo, ContractStorageKey, Gas, PrefabWasmModule, PrefabWasmModuleReserved, Schedule, ScheduleTo212, SeedOf, TombstoneContractInfo, TrieId } from '@polkadot/types/interfaces/contracts';
+import { AliveContractInfo, CodeHash, ContractCallRequest, ContractExecResult, ContractExecResultSuccess, ContractExecResultSuccessTo255, ContractExecResultTo255, ContractInfo, ContractStorageKey, Gas, PrefabWasmModule, PrefabWasmModuleReserved, Schedule, ScheduleTo212, ScheduleTo258, SeedOf, TombstoneContractInfo, TrieId } from '@polkadot/types/interfaces/contracts';
 import { AccountVote, AccountVoteSplit, AccountVoteStandard, Conviction, Delegations, PreimageStatus, PreimageStatusAvailable, PriorLock, PropIndex, Proposal, ProxyState, ReferendumIndex, ReferendumInfo, ReferendumInfoFinished, ReferendumInfoTo239, ReferendumStatus, Tally, Voting, VotingDelegating, VotingDirect, VotingDirectVote } from '@polkadot/types/interfaces/democracy';
 import { ApprovalFlag, DefunctVoter, Renouncing, SetIndex, Vote, VoteIndex, VoteThreshold, VoterInfo } from '@polkadot/types/interfaces/elections';
 import { CreatedBlock, ImportedAux } from '@polkadot/types/interfaces/engine';
@@ -43,13 +43,13 @@ import { ProxyAnnouncement, ProxyDefinition, ProxyType } from '@polkadot/types/i
 import { AccountStatus, AccountValidity } from '@polkadot/types/interfaces/purchase';
 import { ActiveRecovery, RecoveryConfig } from '@polkadot/types/interfaces/recovery';
 import { RpcMethods } from '@polkadot/types/interfaces/rpc';
-import { Period, Priority, SchedulePeriod, SchedulePriority, Scheduled, TaskAddress } from '@polkadot/types/interfaces/scheduler';
+import { Period, Priority, SchedulePeriod, SchedulePriority, Scheduled, ScheduledTo254, TaskAddress } from '@polkadot/types/interfaces/scheduler';
 import { FullIdentification, IdentificationTuple, Keys, MembershipProof, SessionIndex, SessionKeys1, SessionKeys2, SessionKeys3, SessionKeys4, SessionKeys5, SessionKeys6, ValidatorCount } from '@polkadot/types/interfaces/session';
 import { Bid, BidKind, SocietyJudgement, SocietyVote, StrikeCount, VouchingStatus } from '@polkadot/types/interfaces/society';
 import { ActiveEraInfo, CompactAssignments, CompactAssignmentsTo257, CompactScore, CompactScoreCompact, ElectionCompute, ElectionResult, ElectionScore, ElectionSize, ElectionStatus, EraIndex, EraPoints, EraRewardPoints, EraRewards, Exposure, Forcing, IndividualExposure, KeyType, MomentOf, Nominations, NominatorIndex, NominatorIndexCompact, OffchainAccuracy, OffchainAccuracyCompact, PhragmenScore, Points, RewardDestination, RewardDestinationTo257, RewardPoint, SlashJournalEntry, SlashingSpans, SlashingSpansTo204, SpanIndex, SpanRecord, StakingLedger, StakingLedgerTo223, StakingLedgerTo240, UnappliedSlash, UnappliedSlashOther, UnlockChunk, ValidatorIndex, ValidatorIndexCompact, ValidatorPrefs, ValidatorPrefsTo145, ValidatorPrefsTo196 } from '@polkadot/types/interfaces/staking';
 import { ApiId, KeyValueOption, ReadProof, RuntimeVersion, RuntimeVersionApi, StorageChangeSet } from '@polkadot/types/interfaces/state';
 import { WeightToFeeCoefficient } from '@polkadot/types/interfaces/support';
-import { AccountInfo, ApplyExtrinsicResult, ChainProperties, ChainType, DigestOf, DispatchClass, DispatchError, DispatchErrorModule, DispatchErrorTo198, DispatchInfo, DispatchInfoTo190, DispatchInfoTo244, DispatchOutcome, DispatchResult, DispatchResultOf, DispatchResultTo198, Event, EventId, EventIndex, EventRecord, Health, InvalidTransaction, Key, LastRuntimeUpgradeInfo, NetworkState, NetworkStatePeerset, NetworkStatePeersetInfo, NodeRole, NotConnectedPeer, Peer, PeerEndpoint, PeerEndpointAddr, PeerInfo, PeerPing, Phase, RefCount, RefCountTo259, TransactionValidityError, UnknownTransaction } from '@polkadot/types/interfaces/system';
+import { AccountInfo, ApplyExtrinsicResult, ChainProperties, ChainType, DigestOf, DispatchClass, DispatchError, DispatchErrorModule, DispatchErrorTo198, DispatchInfo, DispatchInfoTo190, DispatchInfoTo244, DispatchOutcome, DispatchResult, DispatchResultOf, DispatchResultTo198, Event, EventId, EventIndex, EventRecord, Health, InvalidTransaction, Key, LastRuntimeUpgradeInfo, NetworkState, NetworkStatePeerset, NetworkStatePeersetInfo, NodeRole, NotConnectedPeer, Peer, PeerEndpoint, PeerEndpointAddr, PeerInfo, PeerPing, Phase, RawOrigin, RefCount, RefCountTo259, SystemOrigin, TransactionValidityError, UnknownTransaction } from '@polkadot/types/interfaces/system';
 import { Bounty, BountyIndex, BountyStatus, BountyStatusActive, BountyStatusCuratorProposed, BountyStatusPendingPayout, OpenTip, OpenTipFinderTo225, OpenTipTip, OpenTipTo225, TreasuryProposal } from '@polkadot/types/interfaces/treasury';
 import { Multiplier } from '@polkadot/types/interfaces/txpayment';
 import { Multisig, Timepoint } from '@polkadot/types/interfaces/utility';
@@ -237,6 +237,9 @@ declare module '@polkadot/types/types/registry' {
     WithdrawReasons: WithdrawReasons;
     'Option<WithdrawReasons>': Option<WithdrawReasons>;
     'Vec<WithdrawReasons>': Vec<WithdrawReasons>;
+    CollectiveOrigin: CollectiveOrigin;
+    'Option<CollectiveOrigin>': Option<CollectiveOrigin>;
+    'Vec<CollectiveOrigin>': Vec<CollectiveOrigin>;
     MemberCount: MemberCount;
     'Compact<MemberCount>': Compact<MemberCount>;
     'Option<MemberCount>': Option<MemberCount>;
@@ -297,6 +300,9 @@ declare module '@polkadot/types/types/registry' {
     ScheduleTo212: ScheduleTo212;
     'Option<ScheduleTo212>': Option<ScheduleTo212>;
     'Vec<ScheduleTo212>': Vec<ScheduleTo212>;
+    ScheduleTo258: ScheduleTo258;
+    'Option<ScheduleTo258>': Option<ScheduleTo258>;
+    'Vec<ScheduleTo258>': Vec<ScheduleTo258>;
     Schedule: Schedule;
     'Option<Schedule>': Option<Schedule>;
     'Vec<Schedule>': Vec<Schedule>;
@@ -642,6 +648,9 @@ declare module '@polkadot/types/types/registry' {
     Scheduled: Scheduled;
     'Option<Scheduled>': Option<Scheduled>;
     'Vec<Scheduled>': Vec<Scheduled>;
+    ScheduledTo254: ScheduledTo254;
+    'Option<ScheduledTo254>': Option<ScheduledTo254>;
+    'Vec<ScheduledTo254>': Vec<ScheduledTo254>;
     TaskAddress: TaskAddress;
     'Option<TaskAddress>': Option<TaskAddress>;
     'Vec<TaskAddress>': Vec<TaskAddress>;
@@ -954,6 +963,9 @@ declare module '@polkadot/types/types/registry' {
     Phase: Phase;
     'Option<Phase>': Option<Phase>;
     'Vec<Phase>': Vec<Phase>;
+    RawOrigin: RawOrigin;
+    'Option<RawOrigin>': Option<RawOrigin>;
+    'Vec<RawOrigin>': Vec<RawOrigin>;
     RefCount: RefCount;
     'Compact<RefCount>': Compact<RefCount>;
     'Option<RefCount>': Option<RefCount>;
@@ -962,6 +974,9 @@ declare module '@polkadot/types/types/registry' {
     'Compact<RefCountTo259>': Compact<RefCountTo259>;
     'Option<RefCountTo259>': Option<RefCountTo259>;
     'Vec<RefCountTo259>': Vec<RefCountTo259>;
+    SystemOrigin: SystemOrigin;
+    'Option<SystemOrigin>': Option<SystemOrigin>;
+    'Vec<SystemOrigin>': Vec<SystemOrigin>;
     TransactionValidityError: TransactionValidityError;
     'Option<TransactionValidityError>': Option<TransactionValidityError>;
     'Vec<TransactionValidityError>': Vec<TransactionValidityError>;
@@ -1589,6 +1604,12 @@ declare module '@polkadot/types/types/registry' {
     Origin: Origin;
     'Option<Origin>': Option<Origin>;
     'Vec<Origin>': Vec<Origin>;
+    OriginCaller: OriginCaller;
+    'Option<OriginCaller>': Option<OriginCaller>;
+    'Vec<OriginCaller>': Vec<OriginCaller>;
+    PalletsOrigin: PalletsOrigin;
+    'Option<PalletsOrigin>': Option<PalletsOrigin>;
+    'Vec<PalletsOrigin>': Vec<PalletsOrigin>;
     PalletVersion: PalletVersion;
     'Option<PalletVersion>': Option<PalletVersion>;
     'Vec<PalletVersion>': Vec<PalletVersion>;
@@ -1652,6 +1673,9 @@ declare module '@polkadot/types/types/registry' {
     'Compact<ScheduleTaskIndex>': Compact<ScheduleTaskIndex>;
     'Option<ScheduleTaskIndex>': Option<ScheduleTaskIndex>;
     'Vec<ScheduleTaskIndex>': Vec<ScheduleTaskIndex>;
+    DelayedOrigin: DelayedOrigin;
+    'Option<DelayedOrigin>': Option<DelayedOrigin>;
+    'Vec<DelayedOrigin>': Vec<DelayedOrigin>;
     RpcDataProviderId: RpcDataProviderId;
     'Option<RpcDataProviderId>': Option<RpcDataProviderId>;
     'Vec<RpcDataProviderId>': Vec<RpcDataProviderId>;
