@@ -8,9 +8,6 @@ export default {
         After: 'BlockNumber'
       }
     },
-    AsOriginId: {
-      _enum: ['Root', 'AcalaTreasury', 'HonzonTreasury', 'HomaTreasury', 'DSWF']
-    },
     ScheduleTaskIndex: 'u32'
   }
 };
