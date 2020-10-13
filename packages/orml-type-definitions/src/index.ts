@@ -1,12 +1,11 @@
 import authority from './authority';
 import graduallyUpdates from './graduallyUpdates';
 import oracle from './oracle';
+import rewards from './rewards';
 import tokens from './tokens';
 import traits from './traits';
+import { jsonrpcFromDefs, typesAliasFromDefs, typesFromDefs } from './utils';
 import vesting from './vesting';
-import rewards from './rewards';
-import typesFromDefs from './utils/typesFromDefs';
-import jsonrpcFromDefs from './utils/jsonrpcFromDefs';
 
 const defs = {
   authority,
@@ -18,10 +17,6 @@ const defs = {
   rewards
 };
 
-const types = typesFromDefs(defs);
-const rpc = jsonrpcFromDefs(defs);
-
-export default {
-  types,
-  rpc
-};
+export const types = typesFromDefs(defs);
+export const rpc = jsonrpcFromDefs(defs);
+export const typesAlias = typesAliasFromDefs(defs);

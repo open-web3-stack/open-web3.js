@@ -1,8 +1,7 @@
 export default function jsonrpcFromDefs(
-  definitions: Record<string, { rpc?: Record<string, any> }>
+  definitions: Record<string, { rpc?: Record<string, any> }>,
+  jsonrpc: Record<string, Record<string, any>> = {}
 ): Record<string, Record<string, any>> {
-  const jsonrpc: Record<string, Record<string, any>> = {};
-
   Object.keys(definitions)
     .filter((key) => Object.keys(definitions[key]?.rpc || {}).length !== 0)
     .forEach((section): void => {
