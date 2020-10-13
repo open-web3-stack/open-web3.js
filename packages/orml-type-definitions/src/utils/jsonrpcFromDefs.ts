@@ -1,7 +1,9 @@
-export default function jsonrpcFromDefs(definitions: Record<string, { rpc?: Record<string, any> }>) {
+export default function jsonrpcFromDefs(
+  definitions: Record<string, { rpc?: Record<string, any> }>
+): Record<string, Record<string, any>> {
   const jsonrpc: Record<string, Record<string, any>> = {};
 
-  return Object.keys(definitions)
+  Object.keys(definitions)
     .filter((key) => Object.keys(definitions[key]?.rpc || {}).length !== 0)
     .forEach((section): void => {
       jsonrpc[section] = {};
@@ -9,7 +11,7 @@ export default function jsonrpcFromDefs(definitions: Record<string, { rpc?: Reco
         const isSubscription = !!def.pubsub;
 
         jsonrpc[section][method] = {
-          ...(def as any),
+          ...def,
           isSubscription,
           jsonrpc: `${section}_${method}`,
           method,
@@ -17,4 +19,6 @@ export default function jsonrpcFromDefs(definitions: Record<string, { rpc?: Reco
         };
       });
     });
+
+  return jsonrpc;
 }
