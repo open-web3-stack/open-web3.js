@@ -7,7 +7,7 @@ describe('Scanner', () => {
 
   beforeAll(async () => {
     jest.setTimeout(30000000);
-    const provider = new WsProvider('wss://testnet-node-1.acala.laminar.one/ws');
+    const provider = new WsProvider('wss://node-6714447553777491968.jm.onfinality.io/ws');
     console.log('hhh');
     scanner = new Scanner({ wsProvider: provider, types });
   });
@@ -43,7 +43,7 @@ describe('Scanner', () => {
     expect(request1.registry).toEqual(request0.registry);
   });
 
-  it.only('getEvents', async () => {
+  it('getEvents', async () => {
     // await expect(scanner.getEvents({ blockNumber: -1 })).rejects.toThrow();
     // await expect(scanner.getEvents({ blockNumber: Number.MAX_SAFE_INTEGER })).rejects.toThrow();
     const chainInfo = await scanner.getChainInfo({ blockNumber: 111 });
@@ -133,12 +133,12 @@ describe('Scanner', () => {
       });
   });
 
-  it('1subscribe', (done) => {
+  it.only('1subscribe', (done) => {
     console.log('start');
     scanner
       .subscribe({
-        start: 100,
-        end: 100
+        start: 0,
+        end: 1000
       })
       .subscribe((no) => {
         console.log(no.result?.number);

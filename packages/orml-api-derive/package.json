@@ -19,8 +19,8 @@
     "rxjs": "^6.6.3"
   },
   "peerDependencies": {
-    "@polkadot/api": "^2.1.2-8",
-    "@polkadot/rpc-core": "^2.1.2-8"
+    "@polkadot/api": "^2.4.1",
+    "@polkadot/rpc-core": "^2.4.1"
   },
   "devDependencies": {
     "@types/memoizee": "^0.4.3"

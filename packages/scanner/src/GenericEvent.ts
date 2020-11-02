@@ -14,7 +14,8 @@ export default class GenericEvent extends _GenericEvent {
         return {};
       }
 
-      const doc: string = meta.documentation.join('\n');
+      const doc: string = meta.documentation.join('\n').replace(/\\/g, '');
+
       const def = /\[([\w\s,]*)\]/
         .exec(doc)?.[1]
         .split(',')
