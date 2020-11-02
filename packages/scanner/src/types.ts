@@ -1,5 +1,5 @@
 import { WsProvider as _WsProvider, HttpProvider } from '@polkadot/rpc-provider';
-import { RegisteredTypes } from '@polkadot/types/types/registry';
+import { RegisteredTypes as _RegisteredTypes } from '@polkadot/types/types/registry';
 import Metadata from '@polkadot/metadata/Decorated';
 import { Registry } from '@polkadot/types/types';
 
@@ -11,10 +11,12 @@ export type Bytes = string;
 
 export type Confirmation = 'finalize' | number | null;
 
-export interface ScannerOptions extends RegisteredTypes {
+export interface ScannerOptions extends _RegisteredTypes {
   wsProvider: WsProvider;
   rpcProvider?: RpcProvider;
 }
+
+export type RegisteredTypes = _RegisteredTypes;
 
 export interface Header {
   digest: {

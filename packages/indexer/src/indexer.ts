@@ -4,7 +4,7 @@ import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap } from 'rxjs/operators';
 import Scanner from '@open-web3/scanner';
 import {
-  TypeProvider,
+  RegisteredTypes,
   ChainInfo,
   SubscribeBlock,
   SubscribeBlockError,
@@ -14,13 +14,12 @@ import {
 import init, { Status, Block, Metadata, Extrinsic, Events, DispatchableCall } from './models';
 import log from './log';
 
-export type IndexerOptions = {
+export interface IndexerOptions extends RegisteredTypes {
   dbUrl: string;
   wsUrl: string;
-  types?: TypeProvider;
   sync?: boolean;
   syncOptions?: SyncOptions;
-};
+}
 
 export default class Indexer {
   // eslint-disable-next-line

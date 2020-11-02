@@ -18,7 +18,7 @@ function run() {
       concurrent: 1
     })
     .subscribe((no) => {
-      console.log(no?.error);
+      console.log(no?.result?.events);
     });
 }
 

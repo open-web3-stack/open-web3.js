@@ -208,8 +208,8 @@ class Scanner {
     );
 
     return {
-      ...types
-      // GenericEvent: GenericEvent,
+      ...types,
+      GenericEvent: GenericEvent
     };
   }
 
