@@ -1,6 +1,7 @@
 import { WsProvider as _WsProvider, HttpProvider } from '@polkadot/rpc-provider';
-import { Registry, RegistryTypes } from '@polkadot/types/types';
+import { RegisteredTypes } from '@polkadot/types/types/registry';
 import Metadata from '@polkadot/metadata/Decorated';
+import { Registry } from '@polkadot/types/types';
 
 export type WsProvider = _WsProvider;
 export type RpcProvider = _WsProvider | HttpProvider;
@@ -10,12 +11,9 @@ export type Bytes = string;
 
 export type Confirmation = 'finalize' | number | null;
 
-export type TypeProvider = RegistryTypes | ((specVersion: number) => RegistryTypes);
-
-export interface ScannerOptions {
+export interface ScannerOptions extends RegisteredTypes {
   wsProvider: WsProvider;
   rpcProvider?: RpcProvider;
-  types?: TypeProvider;
 }
 
 export interface Header {
@@ -80,6 +78,7 @@ export interface RuntimeVersion {
   implVersion: number;
   specName: string;
   specVersion: number;
+  chainName: string;
 }
 
 export interface BlockAt {

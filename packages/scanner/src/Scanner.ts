@@ -4,12 +4,15 @@ import { ValidatorId, Header as _Header } from '@polkadot/types/interfaces';
 import { HeaderExtended } from '@polkadot/api-derive/type';
 import Decorated from '@polkadot/metadata/Decorated';
 import Metadata from '@polkadot/metadata/Metadata';
-import { createTypeUnsafe } from '@polkadot/types/create';
+import { createType } from '@polkadot/types/create';
 import { EventRecord } from '@polkadot/types/interfaces/system';
 import { Observable, range, from, concat, of, throwError, timer } from 'rxjs';
 import { switchMap, map, take, shareReplay, mergeMap, pairwise, catchError, timeout, retryWhen } from 'rxjs/operators';
 import GenericEvent from './GenericEvent';
+import { RegisteredTypes } from '@polkadot/types/types/registry';
+import { Registry } from '@polkadot/types/types';
 
+import { getSpecTypes } from '@polkadot/types-known';
 import {
   BlockAt,
   ScannerOptions,
@@ -23,7 +26,6 @@ import {
   RuntimeVersion,
   SubcribeOptions,
   ChainInfo,
-  TypeProvider,
   Extrinsic,
   SubscribeBlock,
   SubscribeBlockError,
@@ -34,7 +36,7 @@ import {
 
 class Scanner {
   private rpcProvider: RpcProvider;
-  private typeProvider?: TypeProvider;
+  private knownTypes: RegisteredTypes;
   private metadataRequest: Record<string, Promise<ChainInfo>>;
 
   public wsProvider: WsProvider;
@@ -43,9 +45,12 @@ class Scanner {
   constructor(options: ScannerOptions) {
     this.wsProvider = options.wsProvider;
     this.rpcProvider = options.rpcProvider || options.wsProvider;
-    this.typeProvider = {
-      ...options.types,
-      GenericEvent: GenericEvent
+    this.knownTypes = {
+      types: options.types,
+      typesAlias: options.typesAlias,
+      typesBundle: options.typesBundle,
+      typesChain: options.typesChain,
+      typesSpec: options.typesSpec
     };
     this.chainInfo = {};
     this.metadataRequest = {};
@@ -136,15 +141,19 @@ class Scanner {
 
   public async getHeader(header: Header, _blockAt: BlockAtOptions, meta: Meta): Promise<HeaderExtended> {
     const validators = await this.getSessionValidators(_blockAt);
-    return new HeaderExtended(
-      meta.registry,
-      createTypeUnsafe<_Header>(meta.registry, 'Header', [header]),
-      validators
-    );
+    return new HeaderExtended(meta.registry, meta.registry.createType('Header' as any, header), validators);
   }
 
   public async getRuntimeVersion(blockHash?: Bytes): Promise<RuntimeVersion> {
-    return this.rpcProvider.send('state_getRuntimeVersion', [blockHash]);
+    const [runtimeVesion, chainName] = await Promise.all([
+      this.rpcProvider.send('state_getRuntimeVersion', [blockHash]),
+      this.rpcProvider.send('system_chain', [])
+    ]);
+
+    return {
+      ...runtimeVesion,
+      chainName
+    };
   }
 
   public async getBlockHash(at: number | Bytes): Promise<Bytes> {
@@ -188,32 +197,45 @@ class Scanner {
     }
   }
 
+  public getSpecTypes(version: RuntimeVersion) {
+    const types = getSpecTypes(
+      {
+        knownTypes: this.knownTypes
+      } as Registry,
+      version.chainName,
+      version.specName,
+      version.specVersion
+    );
+
+    return {
+      ...types
+      // GenericEvent: GenericEvent,
+    };
+  }
+
   public async getChainInfo(_blockAt?: BlockAtOptions): Promise<ChainInfo> {
     const { blockHash, blockNumber } = await this.getBlockAt(_blockAt);
     const runtimeVersion = await this.getRuntimeVersion(blockHash);
     const cacheKey = `${runtimeVersion.specName}/${runtimeVersion.specVersion}`;
     if (!this.chainInfo[cacheKey]) {
       const registry = new TypeRegistry();
-      const typeProvider = this.typeProvider;
-      if (typeProvider) {
-        if (typeof typeProvider === 'function') {
-          registry.register(typeProvider(runtimeVersion.specVersion));
-        } else {
-          registry.register(typeProvider);
-        }
-      }
+      registry.register(this.getSpecTypes(runtimeVersion));
 
       // eslint-disable-next-line
       if (!this.metadataRequest[cacheKey]) {
         this.metadataRequest[cacheKey] = this.rpcProvider
           .send('state_getMetadata', [blockHash])
           .then((rpcdata: string) => {
+            const metadata = new Metadata(registry, rpcdata);
+
+            registry.setMetadata(metadata);
+
             return {
               id: cacheKey,
               min: blockNumber,
               max: blockNumber,
               bytes: rpcdata,
-              metadata: new Decorated(registry, new Metadata(registry, rpcdata)),
+              metadata: new Decorated(registry, metadata),
               registry: registry,
               runtimeVersion: runtimeVersion
             };
@@ -259,9 +281,8 @@ class Scanner {
     const blockAt = await this.getBlockAt(_blockAt);
     const { registry } = await this.getChainInfo(_blockAt);
     const raw: Bytes = await this.rpcProvider.send('state_getStorage', [storageKey.toHex(), blockAt.blockHash]);
-
     // eslint-disable-next-line
-    return createTypeUnsafe(registry, storageKey.outputType as string, [u8aToU8a(raw)], true) as any;
+    return registry.createType(storageKey.outputType as any, raw, true) as any;
   }
 
   public decodeTx(txData: Bytes, _blockAt: BlockAtOptions, meta: Meta): Omit<Extrinsic, 'result'> {
