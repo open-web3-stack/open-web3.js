@@ -385,7 +385,7 @@ export default class Indexer {
         minBlockNumber: chainInfo.min,
         maxBlockNumber: chainInfo.max,
         bytes: chainInfo.bytes,
-        json: chainInfo.metadata.metadata.toJSON(),
+        json: JSON.stringify(chainInfo.metadata),
         runtimeVersion: chainInfo.runtimeVersion
       });
     } else {

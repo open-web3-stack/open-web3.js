@@ -1,6 +1,6 @@
 import { WsProvider as _WsProvider, HttpProvider } from '@polkadot/rpc-provider';
 import { RegisteredTypes as _RegisteredTypes } from '@polkadot/types/types/registry';
-import Metadata from '@polkadot/metadata/Decorated';
+import { DecoratedMeta } from '@polkadot/metadata/decorate/types';
 import { Registry } from '@polkadot/types/types';
 
 export type WsProvider = _WsProvider;
@@ -107,13 +107,13 @@ export interface ChainInfo {
   min: number;
   max: number;
   bytes: Bytes;
-  metadata: Metadata;
+  metadata: DecoratedMeta;
   runtimeVersion: RuntimeVersion;
   registry: Registry;
 }
 
 export interface Meta {
-  metadata: Metadata;
+  metadata: DecoratedMeta;
   registry: Registry;
 }
 
