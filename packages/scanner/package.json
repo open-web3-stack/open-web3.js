@@ -15,9 +15,10 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "peerDependencies": {
-    "@polkadot/api": "^2.4.1"
+    "@polkadot/api": "^2.5.1",
+    "@polkadot/metadata": "^2.5.1"
   },
-  "dependencies": {
+  "devDependencies": {
     "@acala-network/type-definitions": "0.4.0-beta.32"
   }
 }

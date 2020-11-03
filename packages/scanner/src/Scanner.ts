@@ -1,10 +1,9 @@
-import { isHex, isNumber, u8aToU8a, u8aToHex } from '@polkadot/util';
+import { isHex, isNumber, u8aToHex } from '@polkadot/util';
 import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from '@polkadot/types';
 import { ValidatorId, Header as _Header } from '@polkadot/types/interfaces';
 import { HeaderExtended } from '@polkadot/api-derive/type';
-import Decorated from '@polkadot/metadata/Decorated';
+import { expandMetadata } from '@polkadot/metadata';
 import Metadata from '@polkadot/metadata/Metadata';
-import { createType } from '@polkadot/types/create';
 import { EventRecord } from '@polkadot/types/interfaces/system';
 import { Observable, range, from, concat, of, throwError, timer } from 'rxjs';
 import { switchMap, map, take, shareReplay, mergeMap, pairwise, catchError, timeout, retryWhen } from 'rxjs/operators';
@@ -235,7 +234,7 @@ class Scanner {
               min: blockNumber,
               max: blockNumber,
               bytes: rpcdata,
-              metadata: new Decorated(registry, metadata),
+              metadata: expandMetadata(registry, metadata),
               registry: registry,
               runtimeVersion: runtimeVersion
             };
