@@ -23,7 +23,7 @@ export default function init(db: Sequelize): void {
         primaryKey: true
       },
       blockNumber: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       timestamp: {
@@ -70,7 +70,7 @@ export default function init(db: Sequelize): void {
         allowNull: false
       },
       blockNumber: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       index: {
@@ -197,7 +197,7 @@ export default function init(db: Sequelize): void {
         allowNull: false
       },
       blockNumber: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       index: {
@@ -260,11 +260,11 @@ export default function init(db: Sequelize): void {
         primaryKey: true
       },
       minBlockNumber: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       maxBlockNumber: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       bytes: {
@@ -288,7 +288,7 @@ export default function init(db: Sequelize): void {
   Status.init(
     {
       blockNumber: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false
       },
@@ -309,7 +309,7 @@ export default function init(db: Sequelize): void {
   EvmLogs.init(
     {
       blockNumber: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       blockHash: {
