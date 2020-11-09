@@ -11,7 +11,7 @@ import {
   DispatchableCall as DispatchableCallType
 } from '@open-web3/scanner/types';
 
-import init, { Status, Block, Metadata, Extrinsic, Events, DispatchableCall } from './models';
+import init, { Status, Block, Metadata, Extrinsic, Events, DispatchableCall, EvmLogs } from './models';
 import log from './log';
 
 export interface IndexerOptions extends RegisteredTypes {
@@ -27,13 +27,19 @@ export default class Indexer {
 
   static async create(options: IndexerOptions): Promise<Indexer> {
     log.info('Create Indexer');
+
     const db = new Sequelize(options.dbUrl, {
       logging: false
     });
+
     await db.authenticate();
+
     const wsProvider = new WsProvider(options.wsUrl);
+
     log.info('Init DB');
+
     init(db);
+
     if (options.sync) {
       log.info('Sync DB');
       await db.sync(options.syncOptions);
@@ -43,24 +49,35 @@ export default class Indexer {
     return new Indexer(db, new Scanner({ wsProvider, types: options.types }));
   }
 
-  async start(): Promise<void> {
+  async start(
+    options: {
+      concurrent?: number;
+      confirmation?: number;
+      blockTime?: number;
+      dbconcurrent?: number;
+    } = {}
+  ): Promise<void> {
+    const { concurrent = 100, confirmation = 4, blockTime = 4000, dbconcurrent = 5 } = options;
     const statuses = (await Status.findOne({ where: { status: 0 }, order: [['blockNumber', 'DESC']] })) as any;
     const lastBlockNumber = statuses ? Number(statuses.blockNumber) : 0;
 
-    await this.fixLostBlock(lastBlockNumber);
+    await this.fixLostBlock(lastBlockNumber, 0, {
+      concurrent,
+      confirmation
+    });
 
-    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent: 100, confirmation: 4 });
+    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent, confirmation });
 
-    source$.pipe(mergeMap((result) => this.pushData(result), 5)).subscribe();
+    source$.pipe(mergeMap((result) => this.pushData(result), dbconcurrent)).subscribe();
 
-    source$.pipe(auditTime(4000 * 10)).subscribe(() => {
+    source$.pipe(auditTime(blockTime * 10)).subscribe(() => {
       for (const id of Object.keys(this.scanner.chainInfo)) {
         this.syncMetadata(this.scanner.chainInfo[id]);
       }
     });
 
     // eslint-disable-next-line
-    source$.pipe(auditTime(3999)).subscribe(async () => {
+    source$.pipe(auditTime(blockTime - 1)).subscribe(async () => {
       const blockNumbers = await this.queryFailBlock();
       for (const number of blockNumbers) {
         await this.deleteBlock(number);
@@ -81,7 +98,7 @@ export default class Indexer {
     //   .subscribe();
   }
 
-  async fixLostBlock(lastBlockNumber: number, low = 0) {
+  async fixLostBlock(lastBlockNumber: number, low: number, { concurrent, confirmation }) {
     if (!low) {
       if (!(await this.noMissBlock(low))) {
         low = 0;
@@ -89,14 +106,23 @@ export default class Indexer {
     }
 
     while (!(await this.noMissBlock(lastBlockNumber))) {
-      const start = await this.findFirstLostBlock(lastBlockNumber, low);
+      const start = await this.findFirstLostBlock(lastBlockNumber, low, concurrent);
+
       if (start < 0) return;
+
       const end = Math.min(start + 200, lastBlockNumber);
-      const source$ = this.scanner.subscribe({ start, end, concurrent: 50, confirmation: 4 }).pipe(
-        mergeMap((result) => {
-          return this.pushData(result);
+      const source$ = this.scanner
+        .subscribe({
+          start,
+          end,
+          concurrent: Math.floor(concurrent / 2),
+          confirmation: confirmation
         })
-      );
+        .pipe(
+          mergeMap((result) => {
+            return this.pushData(result);
+          })
+        );
 
       source$.subscribe();
 
@@ -110,12 +136,12 @@ export default class Indexer {
     }
   }
 
-  async findFirstLostBlock(high: number, low = 0) {
+  async findFirstLostBlock(high: number, low: number, concurrent: number) {
     if (await this.noMissBlock(high)) return -1;
 
     let result = low;
 
-    while (high - low > 200) {
+    while (high - low > concurrent) {
       const mid = low + ((high - low) >> 2);
       const value = await this.noMissBlock(mid);
 
@@ -153,7 +179,8 @@ export default class Indexer {
           this.syncEvents(block, { transaction: t }),
           this.syncExtrinsics(block, { transaction: t }),
           this.syncDispatchableCalls(block, { transaction: t }),
-          this.syncStatus(block.number, block.hash, 0, { transaction: t })
+          this.syncStatus(block.number, block.hash, 0, { transaction: t }),
+          this.syncEvmLogs(block, { transaction: t })
         ])
           .then(() => {
             return t.commit();
@@ -218,6 +245,34 @@ export default class Indexer {
       },
       options || {}
     );
+  }
+
+  async syncEvmLogs(block: SubscribeBlock['result'], options: any) {
+    const logs = block.events.filter((e) => {
+      return e.method.toUpperCase() === 'LOG' && e.section.toUpperCase() === 'EVM';
+    });
+
+    if (logs.length) {
+      for (const [index, log] of logs.entries()) {
+        const tx = block.extrinsics.find((e) => e.index === log.phaseIndex);
+        if (!tx) throw new Error('Error! The extrinsic for event could not be found');
+
+        await EvmLogs.upsert(
+          {
+            transactionHash: tx.hash,
+            blockNumber: block.number,
+            blockHash: block.hash,
+            transactionIndex: log.phaseIndex,
+            removed: false,
+            address: log.args[0].address,
+            data: log.args[0].data,
+            topics: log.args[0].topics,
+            logIndex: index
+          },
+          options
+        );
+      }
+    }
   }
 
   async syncEvents(block: SubscribeBlock['result'], options: any) {
@@ -409,6 +464,9 @@ export default class Indexer {
       }),
       Status.destroy({
         where: { blockNumber: { [Op.gte]: minBlockNumber } }
+      }),
+      EvmLogs.destroy({
+        where: { blockNumber: { [Op.gte]: minBlockNumber } }
       })
     ]);
   }
@@ -422,6 +480,9 @@ export default class Indexer {
         where: { blockNumber: blockNumber }
       }),
       Extrinsic.destroy({
+        where: { blockNumber: blockNumber }
+      }),
+      EvmLogs.destroy({
         where: { blockNumber: blockNumber }
       })
     ]);

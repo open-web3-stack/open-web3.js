@@ -1,6 +1,6 @@
 import { isHex, isNumber, u8aToHex } from '@polkadot/util';
 import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from '@polkadot/types';
-import { ValidatorId, Header as _Header } from '@polkadot/types/interfaces';
+import { ValidatorId } from '@polkadot/types/interfaces';
 import { HeaderExtended } from '@polkadot/api-derive/type';
 import { expandMetadata } from '@polkadot/metadata';
 import Metadata from '@polkadot/metadata/Metadata';
