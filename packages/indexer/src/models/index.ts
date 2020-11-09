@@ -12,6 +12,8 @@ export class Metadata extends Model {}
 
 export class Status extends Model {}
 
+export class EvmLogs extends Model {}
+
 export default function init(db: Sequelize): void {
   Block.init(
     {
@@ -295,6 +297,51 @@ export default function init(db: Sequelize): void {
         allowNull: true
       },
       status: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      }
+    },
+    {
+      sequelize: db
+    }
+  );
+
+  EvmLogs.init(
+    {
+      blockNumber: {
+        type: DataTypes.BIGINT,
+        allowNull: false
+      },
+      blockHash: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      transactionIndex: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      removed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      data: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      topics: {
+        type: DataTypes.JSONB,
+        allowNull: false
+      },
+      transactionHash: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+      },
+      logIndex: {
         type: DataTypes.INTEGER,
         allowNull: false
       }
