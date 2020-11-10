@@ -259,6 +259,7 @@ export default class Indexer {
 
         await EvmLogs.upsert(
           {
+            id: `${block.hash}-${index}`,
             transactionHash: tx.hash,
             blockNumber: block.number,
             blockHash: block.hash,

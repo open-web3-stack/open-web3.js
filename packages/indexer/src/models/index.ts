@@ -308,6 +308,12 @@ export default function init(db: Sequelize): void {
 
   EvmLogs.init(
     {
+      id: {
+        // ${blockNumber}-${index}
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+      },
       blockNumber: {
         type: DataTypes.INTEGER,
         allowNull: false
@@ -338,7 +344,6 @@ export default function init(db: Sequelize): void {
       },
       transactionHash: {
         type: DataTypes.STRING,
-        primaryKey: true,
         allowNull: false
       },
       logIndex: {
