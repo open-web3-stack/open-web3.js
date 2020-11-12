@@ -1,6 +1,19 @@
 # @open-web3/scanner
 
-A monitoring library for Substrate based chain.
+A monitoring library for Substrate based chain. It is more lightweight and generic, and has some unique features for low level data handling e.g. handle and decode batch calls.
+
+## Installation
+Install it via 
+```console
+yarn add @open-web3/scanner
+yarn add @polkadot/api
+```
+
+### Other dependencies
+If you are scanning a particular substrate chain that has custom types, you might need to install its types. In the example given below, please add this to dependencies.
+```
+"@acala-network/type-definitions": "0.4.0-beta.32"
+``` 
 
 ## Example
 
@@ -18,7 +31,7 @@ scanner
     start: 0,
     end: 1000,
     confirmation: 4,
-    concurrent: 10
+    concurrent: 10 // batch call
   })
   .subscribe((result) => {
     console.log(result.result.events);
