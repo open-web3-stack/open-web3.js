@@ -2212,6 +2212,35 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@open-web3/api-mobx@^0.6.0-beta.26":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@open-web3/api-mobx/-/api-mobx-0.6.1.tgz#84e796ed5b6e8f40f974f47c468f30c75fee597a"
+  integrity sha512-c6q9jhYILkcw/3wurWOwVFAkHunSF3oB0i26E6T3ggCmqQV/3iZPqvTVWiFTvoly+ud3/4zQ117k8mc8YbxHxw==
+  dependencies:
+    "@polkadot/util" "^3.7.1"
+    mobx "^5.15.4"
+    mobx-utils "^5.5.7"
+
+"@open-web3/orml-api-derive@^0.6.0-beta.26":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-api-derive/-/orml-api-derive-0.6.1.tgz#9e812943f359281c8e8c75c1cf0a77f3ab0b1e28"
+  integrity sha512-0nLUEfY86gGSynshuUaDuZXyk1OzJ/t0HAgBGHdPtM9do7bQY4Thn+wqzV8j212/cA1VCLejE5wnsw18B7uMNg==
+  dependencies:
+    memoizee "^0.4.14"
+    rxjs "^6.6.3"
+
+"@open-web3/orml-type-definitions@^0.6.0-beta.26", "@open-web3/orml-type-definitions@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.6.1.tgz#eb7fadf598f24f5024f5d2a1fd39ccc97c801104"
+  integrity sha512-6asf2W/sluGQ6LNiGSdCg/Xop54mq/Q2FcV2Z9cBxys6QC4qXfo4JwUL6kJsRh/vcIIbUxoyGgKUrU/6Xdm7wA==
+
+"@open-web3/orml-types@^0.6.0-beta.26":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.6.1.tgz#85eca19146d32c8cef0ace07c2aaf0f13ccc0350"
+  integrity sha512-wP0pguZuIrLpjz3TWrvRHFOp62giZIettAIT6ueED6pVUqNXFersrZZis6RmgbRBZggYhD7FgM/Z+DxVsR7HUQ==
+  dependencies:
+    "@open-web3/orml-type-definitions" "^0.6.1"
+
 "@polkadot/api-derive@^2.3.2-4", "@polkadot/api-derive@^2.5.1":
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/@polkadot/api-derive/-/api-derive-2.5.1.tgz#a70da1e49f21921a892c74e5916f85fba534c17e"
