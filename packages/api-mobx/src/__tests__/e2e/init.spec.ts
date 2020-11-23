@@ -64,4 +64,16 @@ describe('api-mobx', () => {
       }
     });
   });
+
+  it('StorageDoubleMap works', (done) => {
+    autorun(() => {
+      let index = api.createType('EraIndex', 0);
+      let account = api.createType('AccountId', 'CtwdfrhECFs3FpvCGoiE4hwRC4UsSiM8WL899HjRdQbfYZY');
+      let result = storage.staking.erasValidatorPrefs(index, account);
+      console.log(result && result.toJSON());
+      if (result) {
+        done();
+      }
+    });
+  });
 });
