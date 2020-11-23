@@ -22,7 +22,7 @@ export class ObservableStorageEntry {
     private readonly _entry: string,
     private readonly _keys: any[] = []
   ) {
-    const name = [_module, _entry, ..._keys].join('.');
+    const name = [_module, _entry, ..._keys.map((x) => x.toString())].join('.');
     this._atom = createAtom(
       name,
       () => this._start(),
@@ -89,9 +89,9 @@ export class ObservableStorageMapEntries {
     storageEntry.entries().then((val) => {
       transaction(() => {
         for (const [storageKey, value] of val) {
-          const [key1, key2] = storageKey.args.map((i) => i.toString());
+          const [key1, key2] = storageKey.args;
           if (key2) {
-            const name = `${this._module}.${this._entry}.entries().${key1}.${key2}`;
+            const name = `${this._module}.${this._entry}.entries().${key1.toString()}.${key2.toString()}`;
             const values = this._value.get(key1) || createMap(name);
             values.set(key2, value);
             this._value.set(key1, values);
@@ -106,7 +106,7 @@ export class ObservableStorageMapEntries {
     this._unsub = this._tracker.trackPrefix(prefix, (key, value) => {
       const decodedKey = new StorageKey(this._api.registry, key);
       decodedKey.setMeta(storageEntry.creator.meta);
-      const [key1, key2] = decodedKey.args.map((i) => i.toString());
+      const [key1, key2] = decodedKey.args;
 
       if (key2) {
         if (value == null) {
@@ -116,7 +116,7 @@ export class ObservableStorageMapEntries {
             this._value.set(key1, values);
           }
         } else {
-          const name = `${this._module}.${this._entry}.entries().${key1}.${key2}`;
+          const name = `${this._module}.${this._entry}.entries().${key1.toString()}.${key2.toString()}`;
           const values = this._value.get(key1) || createMap(name);
           let type = StorageKey.getType(storageEntry.creator);
           const isOptional = storageEntry.creator.meta.modifier.isOptional;
@@ -176,8 +176,8 @@ export class ObservableStorageDoubleMapEntries {
     storageEntry.entries(this._key).then((val) => {
       transaction(() => {
         for (const [storageKey, value] of val) {
-          const [key1, key2] = storageKey.args.map((i) => i.toString());
-          const name = `${this._module}.${this._entry}.entries(${key1}).${key2}`;
+          const [key1, key2] = storageKey.args;
+          const name = `${this._module}.${this._entry}.entries(${key1.toString()}).${key2.toString()}`;
           const values = this._value.get(key1) || createMap(name);
           values.set(key2, value);
           this._value.set(key1, values);
@@ -189,11 +189,11 @@ export class ObservableStorageDoubleMapEntries {
     this._unsub = this._tracker.trackPrefix(prefix, (key, value) => {
       const decodedKey = new StorageKey(this._api.registry, key);
       decodedKey.setMeta(storageEntry.creator.meta);
-      const [key1, key2] = decodedKey.args.map((i) => i.toString());
+      const [key1, key2] = decodedKey.args;
       if (value == null) {
         this._value.delete(key1);
       } else {
-        const name = `${this._module}.${this._entry}.entries(${key1}).${key2}`;
+        const name = `${this._module}.${this._entry}.entries(${key1.toString()}).${key2.toString()}`;
         const values = this._value.get(key1) || createMap(name);
         let type = StorageKey.getType(storageEntry.creator);
         const isOptional = storageEntry.creator.meta.modifier.isOptional;
