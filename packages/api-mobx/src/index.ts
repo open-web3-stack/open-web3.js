@@ -26,7 +26,7 @@ export interface StorageDoubleMap<Key1, Key2, T> {
   allEntries: () => ObservableMap<string, ObservableMap<string, T>>;
 }
 
-const normalizer = (args: any): string => [...args].map((x) => x.toString()).join('.');
+// const normalizer = (args: any): string => [...args].map((x) => x.toString()).join('.');
 
 export const createStorage = <T>(api: ApiPromise, ws: WsProvider): T => {
   const obj: any = {};
@@ -53,10 +53,10 @@ export const createStorage = <T>(api: ApiPromise, ws: WsProvider): T => {
         const accessorImpl = memoize(
           (key: any) => {
             return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key]);
-          },
-          { normalizer }
+          }
+          // { normalizer }
         );
-        const accessor: any = (key: any) => accessorImpl(key).value;
+        const accessor: any = (key: any) => accessorImpl(key.toString()).value;
         const entries = new ObservableStorageMapEntries(api, tracker, moduleName, entryName);
         accessor.entries = () => entries.value;
         storage[entryName] = accessor;
@@ -64,18 +64,18 @@ export const createStorage = <T>(api: ApiPromise, ws: WsProvider): T => {
         const accessorImpl = memoize(
           (key1: any, key2: any) => {
             return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key1, key2]);
-          },
-          { normalizer }
+          }
+          // { normalizer }
         );
-        const accessor: any = (key1: any, key2: any) => accessorImpl(key1, key2).value;
+        const accessor: any = (key1: any, key2: any) => accessorImpl(key1.toString(), key2.toString()).value;
         const entries = new ObservableStorageMapEntries(api, tracker, moduleName, entryName);
         const entriesImpl = memoize(
           (key: any) => {
             return new ObservableStorageDoubleMapEntries(api, tracker, moduleName, entryName, key);
-          },
-          { normalizer }
+          }
+          // { normalizer }
         );
-        accessor.entries = (key1: any) => entriesImpl(key1).value.get(key1);
+        accessor.entries = (key1: any) => entriesImpl(key1.toString()).value.get(key1.toString());
         accessor.allEntries = () => entries.value;
         storage[entryName] = accessor;
       }
