@@ -6,8 +6,7 @@ import Handlebars from 'handlebars';
 
 import { TypeDef, TypeDefInfo } from '@polkadot/types/create/types';
 
-import { getTypeDef } from '@polkadot/types/create';
-import { paramsNotation } from '@polkadot/types/codec/utils';
+import { getTypeDef, paramsNotation } from '@polkadot/types/create';
 
 import { setImports, ModuleTypes, TypeImports } from './imports';
 import { readTemplate } from './file';
