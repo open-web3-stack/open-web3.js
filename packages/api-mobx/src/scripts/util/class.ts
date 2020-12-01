@@ -4,7 +4,7 @@
 
 import { Constructor } from '@polkadot/types/types';
 
-import UInt from '@polkadot/types/codec/UInt';
+import { UInt } from '@polkadot/types/codec/UInt';
 import { isChildClass } from '@polkadot/util';
 
 /** @internal */
