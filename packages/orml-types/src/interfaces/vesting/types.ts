@@ -1,9 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import { Compact, Struct } from '@polkadot/types/codec';
-import { u32 } from '@polkadot/types/primitive';
-import { Balance, BlockNumber } from '@open-web3/orml-types/interfaces/runtime';
+import type { Compact, Struct, u32 } from '@polkadot/types';
+import type { Balance, BlockNumber } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name OrmlVestingSchedule */
 export interface OrmlVestingSchedule extends Struct {

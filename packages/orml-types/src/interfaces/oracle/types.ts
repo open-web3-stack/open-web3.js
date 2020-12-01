@@ -1,9 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import { Struct, Vec } from '@polkadot/types/codec';
-import { Text, u8 } from '@polkadot/types/primitive';
-import { AccountId, Moment, OracleValue } from '@open-web3/orml-types/interfaces/runtime';
+import type { Struct, Text, Vec, u8 } from '@polkadot/types';
+import type { AccountId, Moment, OracleValue } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name DataProviderId */
 export interface DataProviderId extends u8 {}

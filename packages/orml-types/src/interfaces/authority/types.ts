@@ -1,9 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import { Enum, Struct } from '@polkadot/types/codec';
-import { u32 } from '@polkadot/types/primitive';
-import { BlockNumber, Call, PalletsOrigin } from '@open-web3/orml-types/interfaces/runtime';
+import type { Enum, Struct, u32 } from '@polkadot/types';
+import type { BlockNumber, Call, PalletsOrigin } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name CallOf */
 export interface CallOf extends Call {}

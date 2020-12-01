@@ -1,8 +1,7 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import { Struct } from '@polkadot/types/codec';
-import { Bytes, StorageKey } from '@polkadot/types/primitive';
+import type { Bytes, StorageKey, Struct } from '@polkadot/types';
 
 /** @name GraduallyUpdate */
 export interface GraduallyUpdate extends Struct {
