@@ -1,36 +1,34 @@
-import { isHex, isNumber, u8aToHex } from '@polkadot/util';
-import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from '@polkadot/types';
-import { ValidatorId } from '@polkadot/types/interfaces';
 import { HeaderExtended } from '@polkadot/api-derive/type';
-import { expandMetadata } from '@polkadot/metadata';
-import { Metadata } from '@polkadot/metadata';
-import { EventRecord } from '@polkadot/types/interfaces/system';
-import { Observable, range, from, concat, of, throwError, timer } from 'rxjs';
-import { switchMap, map, take, shareReplay, mergeMap, pairwise, catchError, timeout, retryWhen } from 'rxjs/operators';
-import GenericEvent from './GenericEvent';
-import { RegisteredTypes } from '@polkadot/types/types/registry';
-import { Registry } from '@polkadot/types/types';
-
+import { expandMetadata, Metadata } from '@polkadot/metadata';
+import { GenericExtrinsic, StorageKey, TypeRegistry, Vec } from '@polkadot/types';
 import { getSpecTypes } from '@polkadot/types-known';
+import { ValidatorId } from '@polkadot/types/interfaces';
+import { EventRecord } from '@polkadot/types/interfaces/system';
+import { Registry } from '@polkadot/types/types';
+import { RegisteredTypes } from '@polkadot/types/types/registry';
+import { isHex, isNumber, u8aToHex } from '@polkadot/util';
+import { concat, from, Observable, of, range, throwError, timer } from 'rxjs';
+import { catchError, map, mergeMap, pairwise, retryWhen, shareReplay, switchMap, take, timeout } from 'rxjs/operators';
+import GenericEvent from './GenericEvent';
 import {
-  BlockAt,
-  ScannerOptions,
-  RpcProvider,
-  Bytes,
-  BlockAtOptions,
   Block,
-  Header,
+  BlockAt,
+  BlockAtOptions,
   BlockRaw,
-  Confirmation,
-  RuntimeVersion,
-  SubcribeOptions,
+  Bytes,
   ChainInfo,
+  Confirmation,
+  Event,
   Extrinsic,
+  Header,
+  Meta,
+  RpcProvider,
+  RuntimeVersion,
+  ScannerOptions,
+  SubcribeOptions,
   SubscribeBlock,
   SubscribeBlockError,
-  Event,
-  WsProvider,
-  Meta
+  WsProvider
 } from './types';
 
 class Scanner {
