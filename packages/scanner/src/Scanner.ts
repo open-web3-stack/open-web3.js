@@ -3,7 +3,7 @@ import { TypeRegistry, StorageKey, Vec, GenericExtrinsic } from '@polkadot/types
 import { ValidatorId } from '@polkadot/types/interfaces';
 import { HeaderExtended } from '@polkadot/api-derive/type';
 import { expandMetadata } from '@polkadot/metadata';
-import Metadata from '@polkadot/metadata/Metadata';
+import { Metadata } from '@polkadot/metadata';
 import { EventRecord } from '@polkadot/types/interfaces/system';
 import { Observable, range, from, concat, of, throwError, timer } from 'rxjs';
 import { switchMap, map, take, shareReplay, mergeMap, pairwise, catchError, timeout, retryWhen } from 'rxjs/operators';

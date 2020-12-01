@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@polkadot/util": "^3.7.1",
+    "@polkadot/util": "^4.2.1",
     "mobx": "^5.15.4",
     "mobx-utils": "^5.5.7"
   },
