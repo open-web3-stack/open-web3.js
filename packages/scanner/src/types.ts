@@ -11,6 +11,15 @@ export type Bytes = string;
 
 export type Confirmation = 'finalize' | number | null;
 
+export interface Extrinsic extends DispatchableCall {
+  tip: string;
+  nonce: number;
+  signer: string | null;
+  result: string;
+  bytes: Bytes;
+  hash: Bytes;
+}
+
 export interface ScannerOptions extends _RegisteredTypes {
   wsProvider: WsProvider;
   rpcProvider?: RpcProvider;
@@ -62,15 +71,6 @@ export interface DispatchableCall {
   section: string;
   method: string;
   args: Record<string, any>;
-}
-
-export interface Extrinsic extends DispatchableCall {
-  tip: string;
-  nonce: number;
-  signer: string | null;
-  result: string;
-  bytes: Bytes;
-  hash: Bytes;
 }
 
 export interface RuntimeVersion {

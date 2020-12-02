@@ -41,7 +41,7 @@ export default class CryptoCompareFetcher implements FetcherInterface {
       e: this.source,
       fsym: base,
       tsyms: quote,
-      api_key: this.apiKey // eslint-disable-line @typescript-eslint/camelcase
+      api_key: this.apiKey
     };
     return axios.get('/data/price', { params, baseURL, timeout: this.timeout }).then((res) => {
       const price = res.data[quote];
