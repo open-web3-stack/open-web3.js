@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/api-mobx",
-  "version": "0.7.0-beta.5",
+  "version": "0.8.1",
   "description": "MobX integration for polkadot.js",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
