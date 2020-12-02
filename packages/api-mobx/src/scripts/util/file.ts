@@ -21,5 +21,6 @@ export function writeFile(dest: string, generator: () => string, noLog?: boolean
 }
 
 export function readTemplate(path: string): string {
+  // eslint-disable-next-line node/no-path-concat
   return fs.readFileSync(`${__dirname}/../../templates/${path}.hbs`).toString();
 }
