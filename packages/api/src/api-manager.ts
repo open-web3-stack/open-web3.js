@@ -1,4 +1,6 @@
-import { WsProvider, ApiPromise, Keyring } from '@polkadot/api';
+import { ApiPromise } from '@polkadot/api';
+import { WsProvider } from '@polkadot/rpc-provider';
+import { Keyring } from '@polkadot/keyring';
 import { isKeyringPair } from '@polkadot/api/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { SubmittableExtrinsic, ApiOptions, AddressOrPair } from '@polkadot/api/types';

@@ -1,6 +1,6 @@
 import { transaction, createAtom } from 'mobx';
 import { Atom } from 'mobx/lib/core/atom';
-import { WsProvider } from '@polkadot/api';
+import { WsProvider } from '@polkadot/rpc-provider';
 import subscribeStorage from './rpc';
 
 export type Callback = (key: string, valueHex: string) => void;

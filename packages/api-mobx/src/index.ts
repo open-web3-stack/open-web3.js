@@ -1,6 +1,7 @@
 import { ObservableMap } from 'mobx';
 import memoize from 'memoizee';
-import { ApiPromise, WsProvider } from '@polkadot/api';
+import { ApiPromise } from '@polkadot/api';
+import { WsProvider } from '@polkadot/rpc-provider';
 import { stringCamelCase } from '@polkadot/util';
 import StateTracker from './stateTracker';
 import {
