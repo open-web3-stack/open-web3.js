@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { ApiPromise, WsProvider } from '@polkadot/api';
+import { ApiPromise } from '@polkadot/api';
+import { WsProvider } from '@polkadot/rpc-provider';
 import { Keyring } from '@polkadot/keyring';
 import fs from 'fs';
 import path from 'path';

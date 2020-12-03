@@ -1,4 +1,4 @@
-import { WsProvider } from '@polkadot/api';
+import { WsProvider } from '@polkadot/rpc-provider';
 import { isNumber } from '@polkadot/util';
 
 export function createMethodSubscribe<T>(
