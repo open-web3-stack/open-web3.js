@@ -21,8 +21,6 @@ interface This {
 
 const NO_CODEC = ['Tuple', 'VecFixed'];
 
-const TYPES_NON_PRIMITIVE = ['Metadata'];
-
 export const HEADER = (type: 'chain' | 'defs'): string =>
   `// Auto-generated via \`yarn polkadot-types-from-${type}\`, do not edit\n/* eslint-disable */\n\n`;
 
@@ -32,8 +30,8 @@ Handlebars.registerPartial({
 });
 
 Handlebars.registerHelper({
-  imports () {
-    const { imports, types } = this as unknown as This;
+  imports() {
+    const { imports, types } = (this as unknown) as This;
     const defs = [
       {
         file: '@polkadot/metadata',
@@ -56,9 +54,7 @@ Handlebars.registerHelper({
     ];
 
     return defs.reduce((result, { file, types }): string => {
-      return types.length
-        ? `${result}import type { ${types.sort().join(', ')} } from '${file}';\n`
-        : result;
+      return types.length ? `${result}import type { ${types.sort().join(', ')} } from '${file}';\n` : result;
     }, '');
   },
   trim(options: { fn: (self: unknown) => string }) {

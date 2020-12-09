@@ -39,7 +39,16 @@ export interface TypeImports {
 // imports in the output file, dep-duped and sorted
 /** @internal */
 export function setImports(allDefs: Record<string, ModuleTypes>, imports: TypeImports, types: string[]): void {
-  const { codecTypes, extrinsicTypes, genericTypes, ignoredTypes, localTypes, metadataTypes, primitiveTypes, typesTypes } = imports;
+  const {
+    codecTypes,
+    extrinsicTypes,
+    genericTypes,
+    ignoredTypes,
+    localTypes,
+    metadataTypes,
+    primitiveTypes,
+    typesTypes
+  } = imports;
 
   types.forEach((type): void => {
     if (ignoredTypes.includes(type)) {
@@ -126,6 +135,7 @@ export function createImports(
 
       return local;
     }, {}),
+    metadataTypes: {},
     primitiveTypes: {},
     typeToModule,
     typesTypes: {}
