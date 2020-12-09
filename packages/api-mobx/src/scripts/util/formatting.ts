@@ -19,7 +19,7 @@ interface This {
   }[];
 }
 
-const TYPES_NON_PRIMITIVE = ['Metadata'];
+const NO_CODEC = ['Tuple', 'VecFixed'];
 
 export const HEADER = (type: 'chain' | 'defs'): string =>
   `// Auto-generated via \`yarn polkadot-types-from-${type}\`, do not edit\n/* eslint-disable */\n\n`;
@@ -34,34 +34,27 @@ Handlebars.registerHelper({
     const { imports, types } = (this as unknown) as This;
     const defs = [
       {
-        file: '@polkadot/types/types',
-        types: Object.keys(imports.typesTypes)
-      },
-      {
-        file: '@polkadot/types/codec',
-        types: Object.keys(imports.codecTypes).filter((name) => name !== 'Tuple')
-      },
-      {
-        file: '@polkadot/types/extrinsic',
-        types: Object.keys(imports.extrinsicTypes)
-      },
-      {
-        file: '@polkadot/types/generic',
-        types: Object.keys(imports.genericTypes)
-      },
-      {
-        file: '@polkadot/types/primitive',
-        types: Object.keys(imports.primitiveTypes).filter((name) => !TYPES_NON_PRIMITIVE.includes(name))
+        file: '@polkadot/metadata',
+        types: Object.keys(imports.metadataTypes)
       },
       {
         file: '@polkadot/types',
-        types: Object.keys(imports.primitiveTypes).filter((name) => TYPES_NON_PRIMITIVE.includes(name))
+        types: [
+          ...Object.keys(imports.codecTypes).filter((name) => !NO_CODEC.includes(name)),
+          ...Object.keys(imports.extrinsicTypes),
+          ...Object.keys(imports.genericTypes),
+          ...Object.keys(imports.primitiveTypes)
+        ]
+      },
+      {
+        file: '@polkadot/types/types',
+        types: Object.keys(imports.typesTypes)
       },
       ...types
     ];
 
     return defs.reduce((result, { file, types }): string => {
-      return types.length ? `${result}import { ${types.sort().join(', ')} } from '${file}';\n` : result;
+      return types.length ? `${result}import type { ${types.sort().join(', ')} } from '${file}';\n` : result;
     }, '');
   },
   trim(options: { fn: (self: unknown) => string }) {
