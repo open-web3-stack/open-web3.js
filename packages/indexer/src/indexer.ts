@@ -46,7 +46,17 @@ export default class Indexer {
       log.info('Success');
     }
 
-    return new Indexer(db, new Scanner({ wsProvider, types: options.types }));
+    return new Indexer(
+      db,
+      new Scanner({
+        wsProvider,
+        types: options.types,
+        typesAlias: options.typesAlias,
+        typesSpec: options.typesSpec,
+        typesChain: options.typesChain,
+        typesBundle: options.typesBundle
+      })
+    );
   }
 
   async start(
