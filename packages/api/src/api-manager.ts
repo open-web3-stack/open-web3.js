@@ -128,7 +128,7 @@ export default class ApiManager {
           logger.debug('signAndSend send error', {
             error,
             from: address,
-            method: `${tx.method.sectionName}.${tx.method.methodName}`,
+            method: `${tx.method.section}.${tx.method.method}`,
             tip: options.tip
           });
 
@@ -214,7 +214,7 @@ export default class ApiManager {
         logger.debug('signAndSend sending', {
           from: address,
           nonce: signed.nonce.toJSON(),
-          method: `${signed.method.sectionName}.${signed.method.methodName}`,
+          method: `${signed.method.section}.${signed.method.method}`,
           args: tx.args.map((x) => x.toHuman()).join(', '),
           hash: txHash
         });

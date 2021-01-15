@@ -2,6 +2,7 @@ import authority from './authority';
 import graduallyUpdates from './graduallyUpdates';
 import oracle from './oracle';
 import rewards from './rewards';
+import runtime from './runtime';
 import tokens from './tokens';
 import traits from './traits';
 import { jsonrpcFromDefs, typesAliasFromDefs, typesFromDefs } from './utils';
@@ -14,7 +15,8 @@ const defs = {
   tokens,
   traits,
   vesting,
-  rewards
+  rewards,
+  runtime
 };
 
 export const types = typesFromDefs(defs);
