@@ -15,9 +15,9 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "peerDependencies": {
-    "@polkadot/api": "^3.0.1",
-    "@polkadot/typegen": "^3.0.1",
-    "@polkadot/types": "^3.0.1"
+    "@polkadot/api": "^3.4.1",
+    "@polkadot/typegen": "^3.4.1",
+    "@polkadot/types": "^3.4.1"
   },
   "dependencies": {
     "@open-web3/orml-type-definitions": "^0.8.2-5"

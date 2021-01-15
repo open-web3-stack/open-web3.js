@@ -20,7 +20,7 @@
     "mobx-utils": "^5.5.7"
   },
   "peerDependencies": {
-    "@polkadot/api": "^3.0.1",
-    "@polkadot/types": "^3.0.1"
+    "@polkadot/api": "^3.4.1",
+    "@polkadot/types": "^3.4.1"
   }
 }
