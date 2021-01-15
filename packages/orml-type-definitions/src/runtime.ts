@@ -2,7 +2,7 @@ export default {
   rpc: {},
   types: {
     OracleValue: 'FixedU128',
-    Address: 'LookupSource',
-    LookupSource: 'IndicesLookupSource'
+    Address: 'GenericMultiAddress',
+    LookupSource: 'GenericMultiAddress'
   }
 };
