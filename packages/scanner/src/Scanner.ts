@@ -291,8 +291,8 @@ class Scanner {
       hash: u8aToHex(extrinsic.hash),
       tip: extrinsic.tip.toString(),
       nonce: extrinsic.nonce.toNumber(),
-      method: extrinsic.method.methodName,
-      section: extrinsic.method.sectionName,
+      method: extrinsic.method.method,
+      section: extrinsic.method.section,
       signer: extrinsic.isSigned ? extrinsic.signer.toString() : null,
       callIndex,
       args

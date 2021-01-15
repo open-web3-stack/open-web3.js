@@ -1,6 +1,6 @@
 export default {
   rpc: {},
   types: {
-    LookupSource: 'GenericMultiAddress'
+    OracleValue: 'FixedU128'
   }
 };
