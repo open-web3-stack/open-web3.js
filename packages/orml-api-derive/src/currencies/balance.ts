@@ -15,7 +15,7 @@ export function balance(
       return api.rpc.system.properties().pipe(
         mergeMap((properties) => {
           const currencyId = api.registry.createType('CurrencyId' as any, token);
-          const nativeTokenSymbol = properties.tokenSymbol.unwrapOrDefault().toString();
+          const nativeTokenSymbol = properties.tokenSymbol.unwrapOrDefault()[0].toString();
           const nativeCurrencyId = api.registry.createType(
             'CurrencyId' as any,
             (api.registry.getDefinition('CurrencyId') || '').includes('"Token":"TokenSymbol"')
