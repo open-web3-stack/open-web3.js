@@ -1880,12 +1880,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/api-mobx@workspace:packages/api-mobx"
   dependencies:
-    "@polkadot/util": ^5.0.1
     mobx: ^5.15.4
     mobx-utils: ^5.5.7
   peerDependencies:
     "@polkadot/api": ^3.6.4
-    "@polkadot/types": ^3.6.4
   languageName: unknown
   linkType: soft
 
@@ -1896,7 +1894,6 @@ __metadata:
     "@open-web3/util": ^0.8.2-7
   peerDependencies:
     "@polkadot/api": ^3.6.4
-    "@polkadot/util-crypto": ^5.0.1
   languageName: unknown
   linkType: soft
 
@@ -2073,7 +2070,6 @@ __metadata:
     rxjs: ^6.6.3
   peerDependencies:
     "@polkadot/api": ^3.6.4
-    "@polkadot/rpc-core": ^3.6.4
   languageName: unknown
   linkType: soft
 
@@ -2098,7 +2094,6 @@ __metadata:
   peerDependencies:
     "@polkadot/api": ^3.6.4
     "@polkadot/typegen": ^3.6.4
-    "@polkadot/types": ^3.6.4
   languageName: unknown
   linkType: soft
 
@@ -2109,7 +2104,6 @@ __metadata:
     "@acala-network/type-definitions": 0.4.0-beta.32
   peerDependencies:
     "@polkadot/api": ^3.6.4
-    "@polkadot/metadata": ^3.6.4
   languageName: unknown
   linkType: soft
 
@@ -2305,7 +2299,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/util@npm:5.4.4, @polkadot/util@npm:^5.0.1, @polkadot/util@npm:^5.4.4":
+"@polkadot/util@npm:5.4.4, @polkadot/util@npm:^5.4.4":
   version: 5.4.4
   resolution: "@polkadot/util@npm:5.4.4"
   dependencies:
