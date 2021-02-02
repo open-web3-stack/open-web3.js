@@ -8,6 +8,6 @@ export default {
       perBlock: 'StorageValue'
     },
     StorageKeyBytes: 'Vec<u8>',
-    StorageValueBytes: 'Vec<u8>',
+    StorageValueBytes: 'Vec<u8>'
   }
 };
