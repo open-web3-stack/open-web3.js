@@ -6,6 +6,8 @@ export default {
       key: 'StorageKey',
       targetValue: 'StorageValue',
       perBlock: 'StorageValue'
-    }
+    },
+    StorageKeyBytes: 'Vec<u8>',
+    StorageValueBytes: 'Vec<u8>'
   }
 };
