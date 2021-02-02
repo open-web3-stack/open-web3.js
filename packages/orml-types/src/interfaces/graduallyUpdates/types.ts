@@ -10,7 +10,13 @@ export interface GraduallyUpdate extends Struct {
   readonly perBlock: StorageValue;
 }
 
+/** @name StorageKeyBytes */
+export interface StorageKeyBytes extends Bytes {}
+
 /** @name StorageValue */
 export interface StorageValue extends Bytes {}
+
+/** @name StorageValueBytes */
+export interface StorageValueBytes extends Bytes {}
 
 export type PHANTOM_GRADUALLYUPDATES = 'graduallyUpdates';

@@ -3,7 +3,7 @@
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
 import type { CallOf, DelayedOrigin, DispatchTime, ScheduleTaskIndex } from '@open-web3/orml-types/interfaces/authority';
-import type { GraduallyUpdate, StorageValue } from '@open-web3/orml-types/interfaces/graduallyUpdates';
+import type { GraduallyUpdate, StorageKeyBytes, StorageValue, StorageValueBytes } from '@open-web3/orml-types/interfaces/graduallyUpdates';
 import type { DataProviderId, OrderedSet, RpcDataProviderId, TimestampedValue, TimestampedValueOf } from '@open-web3/orml-types/interfaces/oracle';
 import type { PoolInfo, Share } from '@open-web3/orml-types/interfaces/rewards';
 import type { AccountId, AccountIdOf, AccountIndex, Address, AssetId, Balance, BalanceOf, Block, BlockNumber, Call, CallHash, CallHashOf, ChangesTrieConfiguration, Consensus, ConsensusEngineId, Digest, DigestItem, ExtrinsicsWeight, Fixed128, Fixed64, FixedI128, FixedI64, FixedU128, FixedU64, H1024, H128, H160, H2048, H256, H512, H64, Hash, Header, I32F32, Index, IndicesLookupSource, Justification, KeyTypeId, KeyValue, LockIdentifier, LookupSource, LookupTarget, ModuleId, Moment, MultiAddress, OpaqueCall, OracleValue, Origin, OriginCaller, PalletVersion, PalletsOrigin, Pays, PerU16, Perbill, Percent, Permill, Perquintill, Phantom, PhantomData, PreRuntime, Releases, RuntimeDbWeight, Seal, SealV0, SignedBlock, StorageData, TransactionPriority, U32F32, ValidatorId, ValidatorIdOf, Weight, WeightMultiplier } from '@open-web3/orml-types/interfaces/runtime';
@@ -785,6 +785,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<StorageHasherV12>': Option<StorageHasherV12>;
     'Option<StorageHasherV9>': Option<StorageHasherV9>;
     'Option<StorageKey>': Option<StorageKey>;
+    'Option<StorageKeyBytes>': Option<StorageKeyBytes>;
     'Option<StorageKind>': Option<StorageKind>;
     'Option<StorageMetadataLatest>': Option<StorageMetadataLatest>;
     'Option<StorageMetadataV10>': Option<StorageMetadataV10>;
@@ -792,6 +793,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<StorageMetadataV12>': Option<StorageMetadataV12>;
     'Option<StorageMetadataV9>': Option<StorageMetadataV9>;
     'Option<StorageValue>': Option<StorageValue>;
+    'Option<StorageValueBytes>': Option<StorageValueBytes>;
     'Option<StoredPendingChange>': Option<StoredPendingChange>;
     'Option<StoredState>': Option<StoredState>;
     'Option<StrikeCount>': Option<StrikeCount>;
@@ -1523,6 +1525,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<StorageHasherV12>': Vec<StorageHasherV12>;
     'Vec<StorageHasherV9>': Vec<StorageHasherV9>;
     'Vec<StorageKey>': Vec<StorageKey>;
+    'Vec<StorageKeyBytes>': Vec<StorageKeyBytes>;
     'Vec<StorageKind>': Vec<StorageKind>;
     'Vec<StorageMetadataLatest>': Vec<StorageMetadataLatest>;
     'Vec<StorageMetadataV10>': Vec<StorageMetadataV10>;
@@ -1530,6 +1533,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<StorageMetadataV12>': Vec<StorageMetadataV12>;
     'Vec<StorageMetadataV9>': Vec<StorageMetadataV9>;
     'Vec<StorageValue>': Vec<StorageValue>;
+    'Vec<StorageValueBytes>': Vec<StorageValueBytes>;
     'Vec<StoredPendingChange>': Vec<StoredPendingChange>;
     'Vec<StoredState>': Vec<StoredState>;
     'Vec<StrikeCount>': Vec<StrikeCount>;
@@ -2261,6 +2265,7 @@ declare module '@polkadot/types/types/registry' {
     StorageHasherV12: StorageHasherV12;
     StorageHasherV9: StorageHasherV9;
     StorageKey: StorageKey;
+    StorageKeyBytes: StorageKeyBytes;
     StorageKind: StorageKind;
     StorageMetadataLatest: StorageMetadataLatest;
     StorageMetadataV10: StorageMetadataV10;
@@ -2268,6 +2273,7 @@ declare module '@polkadot/types/types/registry' {
     StorageMetadataV12: StorageMetadataV12;
     StorageMetadataV9: StorageMetadataV9;
     StorageValue: StorageValue;
+    StorageValueBytes: StorageValueBytes;
     StoredPendingChange: StoredPendingChange;
     StoredState: StoredState;
     StrikeCount: StrikeCount;
