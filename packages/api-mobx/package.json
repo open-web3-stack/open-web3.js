@@ -15,12 +15,10 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@polkadot/util": "^5.0.1",
     "mobx": "^5.15.4",
     "mobx-utils": "^5.5.7"
   },
   "peerDependencies": {
-    "@polkadot/api": "^3.6.4",
-    "@polkadot/types": "^3.6.4"
+    "@polkadot/api": "^3.6.4"
   }
 }
