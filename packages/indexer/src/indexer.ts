@@ -61,22 +61,29 @@ export default class Indexer {
 
   async start(
     options: {
+      start?: number;
+      end?: number;
+      timeout?: number;
       concurrent?: number;
       confirmation?: number;
       blockTime?: number;
       dbconcurrent?: number;
     } = {}
   ): Promise<void> {
-    const { concurrent = 100, confirmation = 4, blockTime = 4000, dbconcurrent = 5 } = options;
-    const statuses = (await Status.findOne({ where: { status: 0 }, order: [['blockNumber', 'DESC']] })) as any;
-    const lastBlockNumber = statuses ? Number(statuses.blockNumber) : 0;
+    const { start, end, timeout, concurrent = 100, confirmation = 4, blockTime = 4000, dbconcurrent = 5 } = options;
+    let startBlockNumber = start;
 
-    await this.fixLostBlock(lastBlockNumber, 0, {
-      concurrent,
-      confirmation
-    });
+    if (!startBlockNumber) {
+      const statuses = (await Status.findOne({ where: { status: 0 }, order: [['blockNumber', 'DESC']] })) as any;
+      const lastBlockNumber = statuses ? Number(statuses.blockNumber) : 0;
+      await this.fixLostBlock(lastBlockNumber, 0, {
+        concurrent,
+        confirmation
+      });
+      startBlockNumber = lastBlockNumber;
+    }
 
-    const source$ = this.scanner.subscribe({ start: lastBlockNumber, concurrent, confirmation });
+    const source$ = this.scanner.subscribe({ start: startBlockNumber, end, timeout, concurrent, confirmation });
 
     source$.pipe(mergeMap((result) => this.pushData(result), dbconcurrent)).subscribe();
 
