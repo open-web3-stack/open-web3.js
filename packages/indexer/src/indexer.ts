@@ -71,16 +71,16 @@ export default class Indexer {
     } = {}
   ): Promise<void> {
     const { start, end, timeout, concurrent = 100, confirmation = 4, blockTime = 4000, dbconcurrent = 5 } = options;
-    let startBlockNumber = start
+    let startBlockNumber = start;
 
-    if(!startBlockNumber) {
+    if (!startBlockNumber) {
       const statuses = (await Status.findOne({ where: { status: 0 }, order: [['blockNumber', 'DESC']] })) as any;
       const lastBlockNumber = statuses ? Number(statuses.blockNumber) : 0;
       await this.fixLostBlock(lastBlockNumber, 0, {
         concurrent,
         confirmation
       });
-      startBlockNumber = lastBlockNumber
+      startBlockNumber = lastBlockNumber;
     }
 
     const source$ = this.scanner.subscribe({ start: startBlockNumber, end, timeout, concurrent, confirmation });
