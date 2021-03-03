@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/orml-api-derive",
-  "version": "0.8.2-10",
+  "version": "0.8.2-11",
   "description": "Polkadot.js derives library for ORML",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
