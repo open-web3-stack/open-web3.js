@@ -5,6 +5,7 @@ import rewards from './rewards';
 import runtime from './runtime';
 import tokens from './tokens';
 import traits from './traits';
+import xTokens from './x-tokens';
 import { jsonrpcFromDefs, typesAliasFromDefs, typesFromDefs } from './utils';
 import vesting from './vesting';
 
@@ -16,6 +17,7 @@ const defs = {
   traits,
   vesting,
   rewards,
+  xTokens,
   runtime
 };
 
