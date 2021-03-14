@@ -27,5 +27,6 @@ module.exports = {
     '<rootDir>/packages/orml-types/build',
     '<rootDir>/packages/scanner/build',
     '<rootDir>/packages/util/build'
-  ]
+  ],
+  transformIgnorePatterns: ['/node_modules/(?!@polkadot|@babel/runtime/helpers/esm/)']
 };
