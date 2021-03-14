@@ -19,6 +19,6 @@
     "mobx-utils": "^5.5.7"
   },
   "peerDependencies": {
-    "@polkadot/api": "^3.6.4"
+    "@polkadot/api": "^4.0.3"
   }
 }
