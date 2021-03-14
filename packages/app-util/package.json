@@ -16,10 +16,10 @@
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
     "@open-web3/util": "^0.8.2-11",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.6"
   },
   "peerDependencies": {
-    "@polkadot/types": "^3.6.4",
+    "@polkadot/types": "^4.0.3",
     "@slack/webhook": "^5.0.3",
     "big.js": "^5.2.2",
     "bn.js": "^5.1.1"
