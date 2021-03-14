@@ -16,7 +16,7 @@
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
     "@open-web3/util": "^0.8.2-11",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.6"
   },
   "peerDependencies": {
     "@polkadot/types": "^4.0.3",

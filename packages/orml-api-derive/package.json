@@ -16,7 +16,7 @@
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
     "memoizee": "^0.4.14",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.6"
   },
   "peerDependencies": {
     "@polkadot/api": "^4.0.3"
