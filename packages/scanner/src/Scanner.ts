@@ -139,7 +139,7 @@ class Scanner {
 
   public async getHeader(header: Header, _blockAt: BlockAtOptions, meta: Meta): Promise<HeaderExtended> {
     const validators = await this.getSessionValidators(_blockAt);
-    return createHeaderExtended(meta.registry, meta.registry.createType('Header' as any, header), validators);
+    return createHeaderExtended(meta.registry, meta.registry.createType('Header', header), validators);
   }
 
   public async getRuntimeVersion(blockHash?: Bytes): Promise<RuntimeVersion> {
