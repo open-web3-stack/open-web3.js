@@ -1,4 +1,5 @@
-import { HeaderExtended } from '@polkadot/api-derive/type';
+import { HeaderExtended } from '@polkadot/api-derive/types';
+import { createHeaderExtended } from '@polkadot/api-derive';
 import { expandMetadata, Metadata } from '@polkadot/metadata';
 import { GenericExtrinsic, StorageKey, TypeRegistry, Vec } from '@polkadot/types';
 import { getSpecTypes } from '@polkadot/types-known';
@@ -138,7 +139,7 @@ class Scanner {
 
   public async getHeader(header: Header, _blockAt: BlockAtOptions, meta: Meta): Promise<HeaderExtended> {
     const validators = await this.getSessionValidators(_blockAt);
-    return new HeaderExtended(meta.registry, meta.registry.createType('Header' as any, header), validators);
+    return createHeaderExtended(meta.registry, meta.registry.createType('Header' as any, header), validators);
   }
 
   public async getRuntimeVersion(blockHash?: Bytes): Promise<RuntimeVersion> {

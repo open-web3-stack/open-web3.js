@@ -18,6 +18,6 @@
     "@open-web3/util": "^0.9.1"
   },
   "peerDependencies": {
-    "@polkadot/api": "^4.0.3"
+    "@polkadot/api": "^4.2.1"
   }
 }
