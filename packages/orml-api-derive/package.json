@@ -19,7 +19,7 @@
     "rxjs": "^6.6.6"
   },
   "peerDependencies": {
-    "@polkadot/api": "^4.0.3"
+    "@polkadot/api": "^4.2.1"
   },
   "devDependencies": {
     "@types/memoizee": "^0.4.3"
