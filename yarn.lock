@@ -2178,7 +2178,7 @@ __metadata:
     mobx: ^5.15.4
     mobx-utils: ^5.5.7
   peerDependencies:
-    "@polkadot/api": ^4.2.1
+    "@polkadot/api": 4.*
   languageName: unknown
   linkType: soft
 
@@ -2186,9 +2186,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/api@workspace:packages/api"
   dependencies:
-    "@open-web3/util": ^0.9.2-0
+    "@open-web3/util": 0.9.3
   peerDependencies:
-    "@polkadot/api": ^4.2.1
+    "@polkadot/api": 4.*
   languageName: unknown
   linkType: soft
 
@@ -2196,21 +2196,18 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/app-util@workspace:packages/app-util"
   dependencies:
-    "@open-web3/util": ^0.9.2-0
+    "@open-web3/util": 0.9.3
     rxjs: ^6.6.6
   peerDependencies:
-    "@polkadot/types": ^4.2.1
-    "@slack/webhook": ^5.0.3
-    big.js: ^5.2.2
-    bn.js: ^5.1.1
+    "@polkadot/types": 4.*
+    "@slack/webhook": 5.*
+    big.js: 5.*
   peerDependenciesMeta:
     "@polkadot/types":
       optional: true
     "@slack/webhook":
       optional: true
     big.js:
-      optional: true
-    bn.js:
       optional: true
   languageName: unknown
   linkType: soft
@@ -2219,16 +2216,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/asset-metadata@workspace:packages/asset-metadata"
   dependencies:
-    "@polkadot/api": ^4.2.1
     yargs: ^16.0.3
+  peerDependencies:
+    "@polkadot/api": 4.*
   bin:
     substrate-asset: ./cli/index.js
   languageName: unknown
   linkType: soft
 
-"@open-web3/dev-config@npm:^0.1.10":
-  version: 0.1.10
-  resolution: "@open-web3/dev-config@npm:0.1.10"
+"@open-web3/dev-config@npm:^0.1.12":
+  version: 0.1.12
+  resolution: "@open-web3/dev-config@npm:0.1.12"
   dependencies:
     "@babel/cli": ^7.12.1
     "@babel/core": ^7.12.3
@@ -2291,7 +2289,7 @@ __metadata:
     typedoc: ^0.19.2
     typedoc-plugin-markdown: ^3.0.11
     typedoc-plugin-no-inherit: ^1.2.0
-    typescript: ^4.0.5
+    typescript: ^4.2.4
     yargs: ^16.1.1
   bin:
     polkadot-ci-ghact-build: scripts/polkadot-ci-ghact-build.cjs
@@ -2316,7 +2314,7 @@ __metadata:
     polkadot-exec-typedoc: scripts/polkadot-exec-typedoc.cjs
     polkadot-exec-vuepress: scripts/polkadot-exec-vuepress.cjs
     polkadot-exec-webpack: scripts/polkadot-exec-webpack.cjs
-  checksum: 90f03ba91c5a3e2b9b489345b949e27de2e4b7e066cc12d86a8f2366c2fec921165363b2c638fe5dbeb64ea64ce7dae20e3b75b0befe99d409d247e7d9700b95
+  checksum: 75d2af489600370fbacd9a075fa991ee44c26cf8e2edfcdeb2af5203528da4f611daf0490f25a71545deac8c7b5adbeff987317b36a85f92b033110ca36da7a2
   languageName: node
   linkType: hard
 
@@ -2324,7 +2322,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/dispatcher@workspace:packages/dispatcher"
   dependencies:
-    "@open-web3/util": ^0.9.2-0
+    "@open-web3/util": 0.9.3
   languageName: unknown
   linkType: soft
 
@@ -2332,7 +2330,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/fetcher@workspace:packages/fetcher"
   dependencies:
-    "@open-web3/util": ^0.9.2-0
+    "@open-web3/util": 0.9.3
     "@types/jest": ^25.2.3
     axios: ^0.19.2
     ccxt: ^1.26.3
@@ -2344,7 +2342,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/indexer@workspace:packages/indexer"
   dependencies:
-    "@open-web3/scanner": ^0.9.2-0
+    "@open-web3/scanner": 0.9.3
     "@types/sequelize": ^4.28.8
     pg: ^8.4.2
     rxjs: ^6.6.6
@@ -2352,7 +2350,7 @@ __metadata:
     ts-node: ^8.10.2
     winston: ^3.2.1
   peerDependencies:
-    "@polkadot/api": ^4.2.1
+    "@polkadot/api": 4.*
   languageName: unknown
   linkType: soft
 
@@ -2364,11 +2362,11 @@ __metadata:
     memoizee: ^0.4.14
     rxjs: ^6.6.6
   peerDependencies:
-    "@polkadot/api": ^4.2.1
+    "@polkadot/api": 4.*
   languageName: unknown
   linkType: soft
 
-"@open-web3/orml-type-definitions@^0.9.2-0, @open-web3/orml-type-definitions@workspace:packages/orml-type-definitions":
+"@open-web3/orml-type-definitions@0.9.3, @open-web3/orml-type-definitions@workspace:packages/orml-type-definitions":
   version: 0.0.0-use.local
   resolution: "@open-web3/orml-type-definitions@workspace:packages/orml-type-definitions"
   languageName: unknown
@@ -2385,24 +2383,24 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/orml-types@workspace:packages/orml-types"
   dependencies:
-    "@open-web3/orml-type-definitions": ^0.9.2-0
+    "@open-web3/orml-type-definitions": 0.9.3
   peerDependencies:
-    "@polkadot/api": ^4.2.1
-    "@polkadot/typegen": ^4.2.1
+    "@polkadot/api": 4.*
+    "@polkadot/typegen": 4.*
   languageName: unknown
   linkType: soft
 
-"@open-web3/scanner@^0.9.2-0, @open-web3/scanner@workspace:packages/scanner":
+"@open-web3/scanner@0.9.3, @open-web3/scanner@workspace:packages/scanner":
   version: 0.0.0-use.local
   resolution: "@open-web3/scanner@workspace:packages/scanner"
   dependencies:
     "@acala-network/type-definitions": 0.4.0-beta.32
   peerDependencies:
-    "@polkadot/api": ^4.2.1
+    "@polkadot/api": 4.x
   languageName: unknown
   linkType: soft
 
-"@open-web3/util@^0.9.2-0, @open-web3/util@workspace:packages/util":
+"@open-web3/util@0.9.3, @open-web3/util@workspace:packages/util":
   version: 0.0.0-use.local
   resolution: "@open-web3/util@workspace:packages/util"
   dependencies:
@@ -10990,14 +10988,14 @@ resolve@1.1.7:
     "@babel/core": ^7.12.8
     "@babel/register": ^7.12.1
     "@babel/runtime": ^7.12.5
-    "@open-web3/dev-config": ^0.1.10
+    "@open-web3/dev-config": ^0.1.12
     "@polkadot/api": ^4.2.1
     "@polkadot/typegen": ^4.2.1
     "@types/jest": ^25.2.3
     jest: ^25.5.4
     ts-node: ^8.10.2
     tsconfig-paths: ^3.9.0
-    typescript: ^4.1.2
+    typescript: ^4.2.4
   languageName: unknown
   linkType: soft
 
@@ -12336,23 +12334,23 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.1.2":
-  version: 4.1.3
-  resolution: "typescript@npm:4.1.3"
+"typescript@npm:^4.2.4":
+  version: 4.2.4
+  resolution: "typescript@npm:4.2.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 4f7ab1506ea22c7a1c313ec5b4285e93ce08d709ad6086d02d3096adb399ca339972ee56d1e578213c51dd0fb7b0fad50283c2d3c39642405644458ae29774f8
+  checksum: edaede2fa77f56b7fba80ee624a2368ab1216e75b0434d968ccb47ab0a5e2f6d94f848b3b111c1237dd71e988cd376af26370dcdad3b94355c76e759f0dd0a1e
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^4.1.2#builtin<compat/typescript>":
-  version: 4.1.3
-  resolution: "typescript@patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"
+"typescript@patch:typescript@npm%3A^4.2.4#builtin<compat/typescript>":
+  version: 4.2.4
+  resolution: "typescript@patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 017af992148346e671d5b83b041773825888e9c94db8d2b9472cdbb6d6f0ee85927817473121524d319f8be6ffe5a6904d27ff6ef21356d2274fcadd52e17938
+  checksum: 3be44317593182e8ce494c114e7ad9b0bb2553a22f3085cc6da4f0a36912c20850daa9be4c898af2ab6fc8b12f430c1c9e46ac715721867cd38643f2350d3ef9
   languageName: node
   linkType: hard
 
