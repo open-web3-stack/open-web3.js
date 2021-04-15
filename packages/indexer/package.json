@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/indexer",
-  "version": "0.9.2-0",
+  "version": "0.9.3",
   "description": "A node.js indexer server for Substrate based chain",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -15,14 +15,14 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@open-web3/scanner": "^0.9.2-0",
+    "@open-web3/scanner": "0.9.3",
     "pg": "^8.4.2",
     "rxjs": "^6.6.6",
     "sequelize": "^6.3.5",
     "winston": "^3.2.1"
   },
   "peerDependencies": {
-    "@polkadot/api": "^4.2.1"
+    "@polkadot/api": "4.*"
   },
   "devDependencies": {
     "@types/sequelize": "^4.28.8",

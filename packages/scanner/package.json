@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/scanner",
-  "version": "0.9.2-0",
+  "version": "0.9.3",
   "description": "A monitoring library for Substrate based chain",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "peerDependencies": {
-    "@polkadot/api": "^4.2.1"
+    "@polkadot/api": "4.x"
   },
   "devDependencies": {
     "@acala-network/type-definitions": "0.4.0-beta.32"
