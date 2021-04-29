@@ -248,8 +248,9 @@ class Scanner {
     return this.chainInfo[cacheKey];
   }
 
-  public async getSessionValidators(_blockAt: BlockAtOptions): Promise<Vec<ValidatorId>> {
+  public async getSessionValidators(_blockAt: BlockAtOptions): Promise<Vec<ValidatorId> | []> {
     const { metadata, registry } = await this.getChainInfo(_blockAt);
+    if (!metadata.query.session) return [];
     const storageKey = new StorageKey(registry, metadata.query.session.validators);
     return this.getStorageValue<Vec<ValidatorId>>(storageKey, _blockAt);
   }
