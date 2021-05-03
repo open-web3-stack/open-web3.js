@@ -10,6 +10,12 @@ export default {
         {
           name: 'key',
           type: 'OracleKey' as 'u8'
+        },
+        {
+          name: 'at',
+          type: 'BlockHash',
+          isHistoric: true,
+          isOptional: true
         }
       ],
       type: 'Option<TimestampedValue>'
@@ -20,6 +26,12 @@ export default {
         {
           name: 'providerId',
           type: 'RpcDataProviderId'
+        },
+        {
+          name: 'at',
+          type: 'BlockHash',
+          isHistoric: true,
+          isOptional: true
         }
       ],
       type: 'Vec<(OracleKey, Option<TimestampedValue>)>'
