@@ -219,6 +219,8 @@ class Scanner {
       const registry = new TypeRegistry();
       registry.register(this.getSpecTypes(runtimeVersion));
 
+      registry.knownTypes.typesAlias = this.knownTypes.typesAlias;
+
       // eslint-disable-next-line
       if (!this.metadataRequest[cacheKey]) {
         this.metadataRequest[cacheKey] = this.rpcProvider
