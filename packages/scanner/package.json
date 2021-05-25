@@ -18,6 +18,6 @@
     "@polkadot/api": "4.x"
   },
   "devDependencies": {
-    "@acala-network/type-definitions": "0.4.0-beta.32"
+    "@acala-network/type-definitions": "0.7.3"
   }
 }

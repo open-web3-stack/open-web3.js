@@ -16,9 +16,9 @@
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
-    "big.js": "^5.2.2"
+    "big.js": "^6.1.1"
   },
   "devDependencies": {
-    "@types/big.js": "^4.0.5"
+    "@types/big.js": "^6.1.0"
   }
 }

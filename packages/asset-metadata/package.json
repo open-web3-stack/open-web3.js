@@ -21,6 +21,6 @@
     "@polkadot/api": "4.*"
   },
   "dependencies": {
-    "yargs": "^16.0.3"
+    "yargs": "^17.0.1"
   }
 }
