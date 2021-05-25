@@ -2281,7 +2281,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/api@npm:4.11.2, @polkadot/api@npm:^4.11.2":
+"@polkadot/api@npm:4.11.2, @polkadot/api@npm:^4.2.1":
   version: 4.11.2
   resolution: "@polkadot/api@npm:4.11.2"
   dependencies:
@@ -2370,7 +2370,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/typegen@npm:^4.11.2":
+"@polkadot/typegen@npm:^4.2.1":
   version: 4.11.2
   resolution: "@polkadot/typegen@npm:4.11.2"
   dependencies:
@@ -10143,8 +10143,8 @@ __metadata:
     "@babel/register": ^7.12.1
     "@babel/runtime": ^7.12.5
     "@open-web3/dev-config": ^0.1.13
-    "@polkadot/api": ^4.11.2
-    "@polkadot/typegen": ^4.11.2
+    "@polkadot/api": ^4.2.1
+    "@polkadot/typegen": ^4.2.1
     "@types/jest": ^26.0.23
     jest: ^26.6.3
     ts-node: ^10.0.0
