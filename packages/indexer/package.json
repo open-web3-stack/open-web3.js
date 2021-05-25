@@ -16,16 +16,16 @@
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
     "@open-web3/scanner": "0.9.4-3",
-    "pg": "^8.4.2",
+    "pg": "^8.6.0",
     "rxjs": "^6.6.6",
-    "sequelize": "^6.3.5",
-    "winston": "^3.2.1"
+    "sequelize": "^6.6.2",
+    "winston": "^3.3.3"
   },
   "peerDependencies": {
     "@polkadot/api": "4.*"
   },
   "devDependencies": {
-    "@types/sequelize": "^4.28.8",
-    "ts-node": "^8.10.2"
+    "@types/sequelize": "^4.28.9",
+    "ts-node": "^10.0.0"
   }
 }
