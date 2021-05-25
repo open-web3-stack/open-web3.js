@@ -17,7 +17,7 @@
   "dependencies": {
     "@open-web3/scanner": "0.9.4-3",
     "pg": "^8.6.0",
-    "rxjs": "^6.6.7",
+    "rxjs": "^6.6.6",
     "sequelize": "^6.6.2",
     "winston": "^3.3.3"
   },

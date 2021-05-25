@@ -2005,7 +2005,7 @@ __metadata:
   resolution: "@open-web3/app-util@workspace:packages/app-util"
   dependencies:
     "@open-web3/util": 0.9.4-3
-    rxjs: ^6.6.7
+    rxjs: ^6.6.6
   peerDependencies:
     "@polkadot/types": 4.*
     "@slack/webhook": 5.*
@@ -2153,7 +2153,7 @@ __metadata:
     "@open-web3/scanner": 0.9.4-3
     "@types/sequelize": ^4.28.9
     pg: ^8.6.0
-    rxjs: ^6.6.7
+    rxjs: ^6.6.6
     sequelize: ^6.6.2
     ts-node: ^10.0.0
     winston: ^3.3.3
@@ -2168,7 +2168,7 @@ __metadata:
   dependencies:
     "@types/memoizee": ^0.4.5
     memoizee: ^0.4.15
-    rxjs: ^6.6.7
+    rxjs: ^6.6.6
   peerDependencies:
     "@polkadot/api": 4.*
   languageName: unknown
@@ -10122,15 +10122,6 @@ __metadata:
   dependencies:
     tslib: ^1.9.0
   checksum: c97b410e791b3259439be48cd37119b63eedc3809a5895d884a7ac27a6934ae4ec246be3d76f1b2f3b47c72a96500ad30977545dc8b0f4a0f98c52f5f773a8ea
-  languageName: node
-  linkType: hard
-
-"rxjs@npm:^6.6.7":
-  version: 6.6.7
-  resolution: "rxjs@npm:6.6.7"
-  dependencies:
-    tslib: ^1.9.0
-  checksum: 1146975cbd5388ee5e61450235dc5670931e43cce71813f567977d334acc4d75c6e8d9d293df67e1fb31510b99fc8957943d4a9b550d109e4dc69967a8471543
   languageName: node
   linkType: hard
 
