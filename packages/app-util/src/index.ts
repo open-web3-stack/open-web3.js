@@ -69,6 +69,7 @@ export const configureLogger = (options: {
   level?: string;
   color?: boolean;
   heartbeatGroup?: HeartbeatGroup;
+  output?: LoggerOutput;
 }) => {
   injectInspect();
 
@@ -82,6 +83,9 @@ export const configureLogger = (options: {
   const panicModeDuration = 1000 * 5; // 5s
   const filters = options.filter?.split(',');
   const color = options.color === undefined ? !options.production : options.color;
+  const output =
+    options.output ||
+    ((payload) => consoleOutput({ ...payload, args: payload.args.map((a) => inspect(a, false, 5, color)) }));
 
   let panicModeEndTime = 0;
 
@@ -127,7 +131,7 @@ export const configureLogger = (options: {
         return empty();
       })
     )
-    .pipe(tap((payload) => consoleOutput({ ...payload, args: payload.args.map((a) => inspect(a, false, 5, color)) }))); // log everything
+    .pipe(tap(output)); // log everything
 
   if (slackWebhook) {
     try {
