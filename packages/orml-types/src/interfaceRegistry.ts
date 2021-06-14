@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
-import type { CallOf, DelayedOrigin, DispatchTime, ScheduleTaskIndex } from '@open-web3/orml-types/interfaces/authority';
+import type { AuthorityOrigin, CallOf, DelayedOrigin, DispatchTime, ScheduleTaskIndex } from '@open-web3/orml-types/interfaces/authority';
 import type { GraduallyUpdate, StorageKeyBytes, StorageValue, StorageValueBytes } from '@open-web3/orml-types/interfaces/graduallyUpdates';
 import type { DataProviderId, OrderedSet, RpcDataProviderId, TimestampedValue, TimestampedValueOf } from '@open-web3/orml-types/interfaces/oracle';
 import type { PoolInfo, Share } from '@open-web3/orml-types/interfaces/rewards';
@@ -209,6 +209,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<AuthorityId>': Option<AuthorityId>;
     'Option<AuthorityIndex>': Option<AuthorityIndex>;
     'Option<AuthorityList>': Option<AuthorityList>;
+    'Option<AuthorityOrigin>': Option<AuthorityOrigin>;
     'Option<AuthoritySignature>': Option<AuthoritySignature>;
     'Option<AuthorityWeight>': Option<AuthorityWeight>;
     'Option<AvailabilityBitfield>': Option<AvailabilityBitfield>;
@@ -987,6 +988,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<AuthorityId>': Vec<AuthorityId>;
     'Vec<AuthorityIndex>': Vec<AuthorityIndex>;
     'Vec<AuthorityList>': Vec<AuthorityList>;
+    'Vec<AuthorityOrigin>': Vec<AuthorityOrigin>;
     'Vec<AuthoritySignature>': Vec<AuthoritySignature>;
     'Vec<AuthorityWeight>': Vec<AuthorityWeight>;
     'Vec<AvailabilityBitfield>': Vec<AvailabilityBitfield>;
@@ -1765,6 +1767,7 @@ declare module '@polkadot/types/types/registry' {
     AuthorityId: AuthorityId;
     AuthorityIndex: AuthorityIndex;
     AuthorityList: AuthorityList;
+    AuthorityOrigin: AuthorityOrigin;
     AuthoritySignature: AuthoritySignature;
     AuthorityWeight: AuthorityWeight;
     AvailabilityBitfield: AvailabilityBitfield;
