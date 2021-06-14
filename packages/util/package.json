@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/util",
-  "version": "0.9.4-6",
+  "version": "0.9.4-7",
   "description": "JS utilities",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
