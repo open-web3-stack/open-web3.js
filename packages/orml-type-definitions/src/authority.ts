@@ -12,6 +12,7 @@ export default {
     DelayedOrigin: {
       delay: 'BlockNumber',
       origin: 'PalletsOrigin'
-    }
+    },
+    AuthorityOrigin: 'DelayedOrigin'
   }
 };
