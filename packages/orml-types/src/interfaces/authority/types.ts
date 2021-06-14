@@ -4,6 +4,9 @@
 import type { Enum, Struct, u32 } from '@polkadot/types';
 import type { BlockNumber, Call, PalletsOrigin } from '@open-web3/orml-types/interfaces/runtime';
 
+/** @name AuthorityOrigin */
+export interface AuthorityOrigin extends DelayedOrigin {}
+
 /** @name CallOf */
 export interface CallOf extends Call {}
 
