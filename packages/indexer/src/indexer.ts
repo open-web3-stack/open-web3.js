@@ -1,4 +1,4 @@
-import { Sequelize, Op, SyncOptions } from 'sequelize';
+import { Sequelize, Op, Options, SyncOptions } from 'sequelize';
 import { Registry } from '@polkadot/types/types';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import log from './log';
 
 export interface IndexerOptions extends RegisteredTypes {
   dbUrl: string;
+  dbOptions?: Options;
   wsUrl: string;
   sync?: boolean;
   syncOptions?: SyncOptions;
@@ -28,9 +29,7 @@ export default class Indexer {
   static async create(options: IndexerOptions): Promise<Indexer> {
     log.info('Create Indexer');
 
-    const db = new Sequelize(options.dbUrl, {
-      logging: false
-    });
+    const db = new Sequelize(options.dbUrl, options.dbOptions);
 
     await db.authenticate();
 
@@ -85,7 +84,7 @@ export default class Indexer {
 
     const source$ = this.scanner.subscribe({ start: startBlockNumber, end, timeout, concurrent, confirmation });
 
-    source$.pipe(mergeMap((result) => this.pushData(result), dbconcurrent)).subscribe();
+    source$.pipe(mergeMap(result => this.pushData(result), dbconcurrent)).subscribe();
 
     source$.pipe(auditTime(blockTime * 10)).subscribe(() => {
       for (const id of Object.keys(this.scanner.chainInfo)) {
@@ -136,7 +135,7 @@ export default class Indexer {
           confirmation: confirmation
         })
         .pipe(
-          mergeMap((result) => {
+          mergeMap(result => {
             return this.pushData(result);
           })
         );
@@ -205,7 +204,7 @@ export default class Indexer {
           .then(() => {
             return log.info(`${block.number}-${block.hash}`);
           })
-          .catch(async (error) => {
+          .catch(async error => {
             t.rollback();
             log.error(`${block.number}-${block.hash}`, error, { errorCode: 2 });
             await this.syncStatus(block.number, block.hash, 2);
@@ -228,7 +227,7 @@ export default class Indexer {
       order: [['updatedAt', 'asc']],
       attributes: ['blockNumber']
     });
-    return result.map((r) => r.toJSON()).map((r: any) => Number(r.blockNumber));
+    return result.map(r => r.toJSON()).map((r: any) => Number(r.blockNumber));
   }
 
   async getBlock(blockNumber: number) {
@@ -265,13 +264,13 @@ export default class Indexer {
   }
 
   async syncEvmLogs(block: SubscribeBlock['result'], options: any) {
-    const logs = block.events.filter((e) => {
+    const logs = block.events.filter(e => {
       return e.method.toUpperCase() === 'LOG' && e.section.toUpperCase() === 'EVM';
     });
 
     if (logs.length) {
       for (const [index, log] of logs.entries()) {
-        const tx = block.extrinsics.find((e) => e.index === log.phaseIndex);
+        const tx = block.extrinsics.find(e => e.index === log.phaseIndex);
         if (!tx) throw new Error('Error! The extrinsic for event could not be found');
 
         await EvmLogs.upsert(

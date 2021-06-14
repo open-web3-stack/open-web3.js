@@ -10,10 +10,18 @@ import { types, typesBundle } from '@acala-network/type-definitions';
 
 const run = async () => {
   const dbUrl = 'postgres://postgres:postgres@127.0.0.1:5432/postgres';
+  const dbOptions = {
+    logging: false,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: true
+    }
+  };
   const wsUrl = 'ws://127.0.0.1:9944';
 
   const indexer = await Indexer.create({
     dbUrl,
+    dbOptions,
     wsUrl,
     types,
     typesBundle,
@@ -26,7 +34,7 @@ const run = async () => {
   });
 };
 
-run().catch((err) => {
+run().catch(err => {
   console.error(err);
 });
 ```
