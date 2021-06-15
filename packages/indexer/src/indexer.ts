@@ -1,4 +1,4 @@
-import { Sequelize, Op, SyncOptions } from 'sequelize';
+import { Sequelize, Op, Options, SyncOptions } from 'sequelize';
 import { Registry } from '@polkadot/types/types';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import log from './log';
 
 export interface IndexerOptions extends RegisteredTypes {
   dbUrl: string;
+  dbOptions?: Options;
   wsUrl: string;
   sync?: boolean;
   syncOptions?: SyncOptions;
@@ -28,9 +29,7 @@ export default class Indexer {
   static async create(options: IndexerOptions): Promise<Indexer> {
     log.info('Create Indexer');
 
-    const db = new Sequelize(options.dbUrl, {
-      logging: false
-    });
+    const db = new Sequelize(options.dbUrl, options.dbOptions);
 
     await db.authenticate();
 
