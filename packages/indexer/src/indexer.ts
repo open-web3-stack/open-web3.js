@@ -28,7 +28,7 @@ export default class Indexer {
 
   static async create(options: IndexerOptions): Promise<Indexer> {
     log.info('Create Indexer');
-    
+
     const db = new Sequelize(options.dbUrl, options.dbOptions);
 
     await db.authenticate();
