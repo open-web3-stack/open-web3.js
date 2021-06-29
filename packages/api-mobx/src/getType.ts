@@ -28,16 +28,20 @@ export function unwrapStorageType(type: StorageEntryTypeLatest, isOptional?: boo
 }
 
 /** @internal */
-export function getType(value: StorageKey | StorageEntry | [StorageEntry, any]): string {
+export function getType(value: StorageKey | StorageEntry | [StorageEntry, any]): keyof InterfaceTypes {
   if (value instanceof StorageKey) {
-    return value.outputType;
+    let type = value.outputType;
+    if (value.meta?.modifier.isOptional) {
+      type = `Option<${type}>`;
+    }
+    return type as keyof InterfaceTypes;
   } else if (isFunction(value)) {
-    return unwrapStorageType(value.meta.type);
+    return unwrapStorageType(value.meta.type, value.meta.modifier.isOptional);
   } else if (Array.isArray(value)) {
     const [fn] = value;
 
     if (fn.meta) {
-      return unwrapStorageType(fn.meta.type);
+      return unwrapStorageType(fn.meta.type, fn.meta.modifier.isOptional);
     }
   }
 

@@ -2,7 +2,7 @@ import { createAtom, ObservableMap, observable, transaction } from 'mobx';
 import { Atom } from 'mobx/lib/core/atom';
 import { ApiPromise } from '@polkadot/api';
 import { StorageKey } from '@polkadot/types';
-import { u8aToHex, hexToU8a } from '@polkadot/util';
+import { u8aToHex } from '@polkadot/util';
 import { getType } from './getType';
 
 import StateTracker from './stateTracker';
@@ -46,7 +46,7 @@ export class ObservableStorageEntry {
         this._value = null;
       } else {
         const type = getType(storageEntry.creator);
-        this._value = this._api.createType(type as any, hexToU8a(value));
+        this._value = this._api.createType(type, value);
       }
       this._atom.reportChanged();
     });
@@ -119,12 +119,8 @@ export class ObservableStorageMapEntries {
         } else {
           const name = `${this._module}.${this._entry}.entries().${key1}.${key2}`;
           const values = this._value.get(key1) || createMap(name);
-          let type = getType(storageEntry.creator);
-          const isOptional = storageEntry.creator.meta.modifier.isOptional;
-          if (isOptional) {
-            type = `Option<${type}>`;
-          }
-          values.set(key2, this._api.createType(type as any, value));
+          const type = getType(storageEntry.creator);
+          values.set(key2, this._api.createType(type, value));
           this._value.set(key1, values);
         }
       } else {
@@ -132,7 +128,7 @@ export class ObservableStorageMapEntries {
           this._value.delete(key1);
         } else {
           const type = getType(storageEntry.creator);
-          this._value.set(key1, this._api.createType(type as any, hexToU8a(value)));
+          this._value.set(key1, this._api.createType(type, value));
         }
       }
     });
@@ -196,12 +192,8 @@ export class ObservableStorageDoubleMapEntries {
       } else {
         const name = `${this._module}.${this._entry}.entries(${key1}).${key2}`;
         const values = this._value.get(key1) || createMap(name);
-        let type = getType(storageEntry.creator);
-        const isOptional = storageEntry.creator.meta.modifier.isOptional;
-        if (isOptional) {
-          type = `Option<${type}>`;
-        }
-        values.set(key2, this._api.createType(type as any, hexToU8a(value)));
+        const type = getType(storageEntry.creator);
+        values.set(key2, this._api.createType(type, value));
         this._value.set(key1, values);
       }
     });
