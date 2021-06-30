@@ -19,6 +19,6 @@
     "big.js": "^6.1.1"
   },
   "devDependencies": {
-    "@types/big.js": "^6.1.0"
+    "@types/big.js": "^6.1.1"
   }
 }
