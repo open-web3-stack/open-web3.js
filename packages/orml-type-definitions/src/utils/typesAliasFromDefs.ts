@@ -1,4 +1,4 @@
-import merge from 'lodash/merge';
+import merge from 'lodash.merge';
 
 export default function typesAliasFromDefs(
   definitions: Record<string, Record<string, any>>,

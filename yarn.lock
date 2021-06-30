@@ -2179,6 +2179,9 @@ __metadata:
 "@open-web3/orml-type-definitions@0.9.4-10, @open-web3/orml-type-definitions@workspace:packages/orml-type-definitions":
   version: 0.0.0-use.local
   resolution: "@open-web3/orml-type-definitions@workspace:packages/orml-type-definitions"
+  dependencies:
+    "@types/lodash.merge": ^4.6.6
+    lodash.merge: ^4.6.2
   languageName: unknown
   linkType: soft
 
@@ -2732,6 +2735,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 3aaf557d5b82e733d5a17b7f55af5d6be953363c3a594f006d64265790fe87c301c6e1400c0b6b1cf72add50a0ceddc25afb8231ab8302a2e5b6ebfbfac30e5d
+  languageName: node
+  linkType: hard
+
+"@types/lodash.merge@npm:^4.6.6":
+  version: 4.6.6
+  resolution: "@types/lodash.merge@npm:4.6.6"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 63967ce1520f5fee268a1a81b042bc4730e9a11a0ce140634c73fd77f10c18c7d5b9ea79555e6f16d67308d29cfa67ef670b44aadbfc6690b8d7fc080ba369b5
   languageName: node
   linkType: hard
 
@@ -7975,6 +7987,13 @@ __metadata:
   dependencies:
     p-locate: ^4.1.0
   checksum: c58f49d45c8672d0a290dea0ce41fcb27205b3f2d61452ba335ef3b42ad36c10c31b1f061b46d96dd4b81e9a00e8a2897bc124d75623b80a9f6d36b1e754a6b5
+  languageName: node
+  linkType: hard
+
+"lodash.merge@npm:^4.6.2":
+  version: 4.6.2
+  resolution: "lodash.merge@npm:4.6.2"
+  checksum: 4e2bb42a87a148991458d7c384bc197e96f7115e9536fc8e2c86ae9e99ce1c1f693ff15eb85761952535f48d72253aed8e673d9f32dde3e671cd91e3fde220a7
   languageName: node
   linkType: hard
 
