@@ -7,8 +7,9 @@ describe('Scanner', () => {
 
   beforeAll(async () => {
     jest.setTimeout(30000000);
-    const provider = new WsProvider('wss://node-6714447553777491968.jm.onfinality.io/ws');
+    const provider = new WsProvider('wss://kusama-rpc.polkadot.io/');
     scanner = new Scanner({ wsProvider: provider, types });
+    await provider.isReady;
   });
 
   afterAll(async () => {

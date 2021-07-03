@@ -31,7 +31,7 @@ Handlebars.registerPartial({
 
 Handlebars.registerHelper({
   imports() {
-    const { imports, types } = (this as unknown) as This;
+    const { imports, types } = this as unknown as This;
     const defs = [
       {
         file: '@polkadot/metadata',

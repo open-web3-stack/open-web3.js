@@ -20,5 +20,8 @@
   },
   "peerDependencies": {
     "@polkadot/api": "4.*"
+  },
+  "devDependencies": {
+    "@acala-network/api": "^0.7.4-20"
   }
 }

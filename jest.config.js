@@ -28,5 +28,5 @@ module.exports = {
     '<rootDir>/packages/scanner/build',
     '<rootDir>/packages/util/build'
   ],
-  transformIgnorePatterns: ['/node_modules/(?!@polkadot|@babel/runtime/helpers/esm/)']
+  transformIgnorePatterns: ['/node_modules/(?!@polkadot|@acala-network|@babel/runtime/helpers/esm/)']
 };

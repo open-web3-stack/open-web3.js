@@ -1,8 +1,6 @@
 import { AnyNumber } from '@polkadot/types/types';
-import { Option } from '@polkadot/types/codec';
-import { AccountId, BalanceOf, Hash } from '@polkadot/types/interfaces/runtime';
+import { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 import { EraIndex, ValidatorPrefs } from '@polkadot/types/interfaces/staking';
-import { ActiveRecovery } from '@polkadot/types/interfaces/recovery';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { StorageDoubleMap, StorageMap, BaseStorageType } from '@open-web3/api-mobx/src';
 

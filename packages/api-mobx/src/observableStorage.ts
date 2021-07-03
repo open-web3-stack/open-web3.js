@@ -2,13 +2,20 @@ import { createAtom, ObservableMap, observable, transaction } from 'mobx';
 import { Atom } from 'mobx/lib/core/atom';
 import { ApiPromise } from '@polkadot/api';
 import { StorageKey } from '@polkadot/types';
-import { u8aToHex } from '@polkadot/util';
+import { Option } from '@polkadot/types/codec';
+import { u8aToHex, hexToU8a, u8aToU8a } from '@polkadot/util';
 import { getType } from './getType';
 
 import StateTracker from './stateTracker';
 
 const createMap = (name: string) => {
   return observable.map({}, { deep: false, name });
+};
+
+const isTreatAsHex = (key: string): boolean => {
+  // :code is problematic - it does not have the length attached, which is
+  // unlike all other storage entries where it is indeed properly encoded
+  return ['0x3a636f6465'].includes(key);
 };
 
 export class ObservableStorageEntry {
@@ -40,13 +47,20 @@ export class ObservableStorageEntry {
       this._atom.reportChanged();
     });
 
-    const key = storageEntry.key(...this._keys);
+    const key = storageEntry.key(...this._keys.map((x) => u8aToU8a(x)));
     this._unsub = this._tracker.trackKey(key, (key, value) => {
-      if (value == null) {
+      const { isEmpty, fallback, modifier } = storageEntry.creator.meta;
+      const input = isEmpty ? (fallback ? hexToU8a(fallback.toHex()) : undefined) : value;
+      if (input == null) {
         this._value = null;
       } else {
         const type = getType(storageEntry.creator);
-        this._value = this._api.createType(type, value);
+        const formatted = this._api.createType(type, isTreatAsHex(key) ? input : u8aToU8a(input));
+        if (modifier.isOptional) {
+          this._value = new Option(this._api.registry, type, formatted);
+        } else {
+          this._value = formatted;
+        }
       }
       this._atom.reportChanged();
     });
@@ -109,8 +123,11 @@ export class ObservableStorageMapEntries {
       decodedKey.setMeta(storageEntry.creator.meta);
       const [key1, key2] = decodedKey.args.map((i) => i.toString());
 
+      const { isEmpty, fallback, modifier } = storageEntry.creator.meta;
+      const input = isEmpty ? (fallback ? hexToU8a(fallback.toHex()) : undefined) : value;
+
       if (key2) {
-        if (value == null) {
+        if (input == null) {
           const values = this._value.get(key1);
           if (values) {
             values.delete(key2);
@@ -120,15 +137,26 @@ export class ObservableStorageMapEntries {
           const name = `${this._module}.${this._entry}.entries().${key1}.${key2}`;
           const values = this._value.get(key1) || createMap(name);
           const type = getType(storageEntry.creator);
-          values.set(key2, this._api.createType(type, value));
+
+          const formatted = this._api.createType(type, isTreatAsHex(key) ? input : u8aToU8a(input));
+          if (modifier.isOptional) {
+            values.set(key2, new Option(this._api.registry, type, formatted));
+          } else {
+            values.set(key2, formatted);
+          }
           this._value.set(key1, values);
         }
       } else {
-        if (value == null) {
+        if (input == null) {
           this._value.delete(key1);
         } else {
           const type = getType(storageEntry.creator);
-          this._value.set(key1, this._api.createType(type, value));
+          const formatted = this._api.createType(type, isTreatAsHex(key) ? input : u8aToU8a(input));
+          if (modifier.isOptional) {
+            this._value.set(key1, new Option(this._api.registry, type, formatted));
+          } else {
+            this._value.set(key1, formatted);
+          }
         }
       }
     });
@@ -187,13 +215,20 @@ export class ObservableStorageDoubleMapEntries {
       const decodedKey = new StorageKey(this._api.registry, key);
       decodedKey.setMeta(storageEntry.creator.meta);
       const [key1, key2] = decodedKey.args.map((i) => i.toString());
-      if (value == null) {
+      const { isEmpty, fallback, modifier } = storageEntry.creator.meta;
+      const input = isEmpty ? (fallback ? hexToU8a(fallback.toHex()) : undefined) : value;
+      if (input == null) {
         this._value.delete(key1);
       } else {
         const name = `${this._module}.${this._entry}.entries(${key1}).${key2}`;
         const values = this._value.get(key1) || createMap(name);
         const type = getType(storageEntry.creator);
-        values.set(key2, this._api.createType(type, value));
+        const formatted = this._api.createType(type, isTreatAsHex(key) ? input : u8aToU8a(input));
+        if (modifier.isOptional) {
+          values.set(key2, new Option(this._api.registry, type, formatted));
+        } else {
+          values.set(key2, formatted);
+        }
         this._value.set(key1, values);
       }
     });

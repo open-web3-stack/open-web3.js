@@ -23,11 +23,9 @@ export interface StorageMap<Key, T> {
 
 export interface StorageDoubleMap<Key1, Key2, T> {
   (key1: Key1, key2: Key2): T | null;
-  entries: (key1: Key1) => ObservableMap<string, T>;
+  entries: (key1: Key1) => ObservableMap<string, T> | null;
   allEntries: () => ObservableMap<string, ObservableMap<string, T>>;
 }
-
-// const normalizer = (args: any): string => [...args].map((x) => x.toString()).join('.');
 
 export const createStorage = <T>(api: ApiPromise, ws: WsProvider): T => {
   const obj: any = {};
@@ -51,31 +49,22 @@ export const createStorage = <T>(api: ApiPromise, ws: WsProvider): T => {
           get: () => val.value
         });
       } else if (type.isMap) {
-        const accessorImpl = memoize(
-          (key: any) => {
-            return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key]);
-          }
-          // { normalizer }
-        );
+        const accessorImpl = memoize((key: any) => {
+          return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key]);
+        });
         const accessor: any = (key: any) => accessorImpl(key.toString()).value;
         const entries = new ObservableStorageMapEntries(api, tracker, moduleName, entryName);
         accessor.entries = () => entries.value;
         storage[entryName] = accessor;
       } else if (type.isDoubleMap) {
-        const accessorImpl = memoize(
-          (key1: any, key2: any) => {
-            return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key1, key2]);
-          }
-          // { normalizer }
-        );
+        const accessorImpl = memoize((key1: any, key2: any) => {
+          return new ObservableStorageEntry(api, tracker, moduleName, entryName, [key1, key2]);
+        });
         const accessor: any = (key1: any, key2: any) => accessorImpl(key1.toString(), key2.toString()).value;
         const entries = new ObservableStorageMapEntries(api, tracker, moduleName, entryName);
-        const entriesImpl = memoize(
-          (key: any) => {
-            return new ObservableStorageDoubleMapEntries(api, tracker, moduleName, entryName, key);
-          }
-          // { normalizer }
-        );
+        const entriesImpl = memoize((key: any) => {
+          return new ObservableStorageDoubleMapEntries(api, tracker, moduleName, entryName, key);
+        });
         accessor.entries = (key1: any) => entriesImpl(key1.toString()).value.get(key1.toString());
         accessor.allEntries = () => entries.value;
         storage[entryName] = accessor;
