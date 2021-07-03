@@ -47,7 +47,7 @@ export class ObservableStorageEntry {
       this._atom.reportChanged();
     });
 
-    const key = storageEntry.key(...this._keys.map((x) => u8aToU8a(x)));
+    const key = storageEntry.key(...this._keys);
     this._unsub = this._tracker.trackKey(key, (key, value) => {
       const { isEmpty, fallback, modifier } = storageEntry.creator.meta;
       const input = isEmpty ? (fallback ? hexToU8a(fallback.toHex()) : undefined) : value;
