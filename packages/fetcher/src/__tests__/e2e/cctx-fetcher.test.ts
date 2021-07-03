@@ -22,5 +22,5 @@ describe('CCXTFetcher', () => {
 
     const btc_usdt = await binance.getPrice('BTC/USDT');
     console.log('Binance BTC/USDT', btc_usdt);
-  });
+  }, 30_000);
 });

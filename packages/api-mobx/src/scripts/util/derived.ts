@@ -126,7 +126,7 @@ export function getSimilarTypes(
     }
 
     possibleTypes.push('Uint8Array');
-  } else if (isChildClass((AbstractInt as unknown) as Constructor<UInt>, Clazz) || isChildClass(Compact, Clazz)) {
+  } else if (isChildClass(AbstractInt as unknown as Constructor<UInt>, Clazz) || isChildClass(Compact, Clazz)) {
     possibleTypes.push('AnyNumber', 'Uint8Array');
   } else if (isChildClass(GenericAddress, Clazz)) {
     possibleTypes.push('Address', 'AccountId', 'AccountIndex', 'string', 'Uint8Array');

@@ -7,41 +7,30 @@ import type { StorageEntry } from '@polkadot/types/primitive/types';
 import type { InterfaceTypes } from '@polkadot/types/types';
 import { isFunction } from '@polkadot/util';
 
-function getStorageType(type: StorageEntryTypeLatest): [boolean, string] {
+function getStorageType(type: StorageEntryTypeLatest): keyof InterfaceTypes {
   if (type.isPlain) {
-    return [false, type.asPlain.toString()];
+    return type.asPlain.toString() as keyof InterfaceTypes;
+  } else if (type.isMap) {
+    return type.asMap.value.toString() as keyof InterfaceTypes;
   } else if (type.isDoubleMap) {
-    return [false, type.asDoubleMap.value.toString()];
+    return type.asDoubleMap.value.toString() as keyof InterfaceTypes;
+  } else if (type.isNMap) {
+    return type.asNMap.value.toString() as keyof InterfaceTypes;
   }
-
-  return [false, type.asMap.value.toString()];
-}
-
-// we unwrap the type here, turning into an output usable for createType
-/** @internal */
-export function unwrapStorageType(type: StorageEntryTypeLatest, isOptional?: boolean): keyof InterfaceTypes {
-  const [hasWrapper, outputType] = getStorageType(type);
-
-  return isOptional && !hasWrapper
-    ? (`Option<${outputType}>` as keyof InterfaceTypes)
-    : (outputType as keyof InterfaceTypes);
+  return 'Raw';
 }
 
 /** @internal */
 export function getType(value: StorageKey | StorageEntry | [StorageEntry, any]): keyof InterfaceTypes {
   if (value instanceof StorageKey) {
-    let type = value.outputType;
-    if (value.meta?.modifier.isOptional) {
-      type = `Option<${type}>`;
-    }
-    return type as keyof InterfaceTypes;
+    return value.outputType as keyof InterfaceTypes;
   } else if (isFunction(value)) {
-    return unwrapStorageType(value.meta.type, value.meta.modifier.isOptional);
+    return getStorageType(value.meta.type);
   } else if (Array.isArray(value)) {
     const [fn] = value;
 
     if (fn.meta) {
-      return unwrapStorageType(fn.meta.type, fn.meta.modifier.isOptional);
+      return getStorageType(fn.meta.type);
     }
   }
 
