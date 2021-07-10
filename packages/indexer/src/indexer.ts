@@ -422,7 +422,7 @@ export default class Indexer {
           );
         });
       } else if (call.section === 'sudo' && call.method === 'sudo') {
-        const childCall = call.args.call as ChildCall;
+        const childCall = (call.args.call || call.args.proposal) as ChildCall;
         const { section, method } = decodeCallIndex(childCall.callIndex);
         handle(
           {
