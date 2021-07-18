@@ -1,5 +1,5 @@
-import { HeaderExtended } from '@polkadot/api-derive/types';
 import { createHeaderExtended } from '@polkadot/api-derive';
+import { HeaderExtended } from '@polkadot/api-derive/types';
 import { expandMetadata, Metadata } from '@polkadot/metadata';
 import { GenericExtrinsic, StorageKey, TypeRegistry, Vec } from '@polkadot/types';
 import { getSpecTypes } from '@polkadot/types-known';
@@ -12,6 +12,7 @@ import { concat, from, Observable, of, range, throwError, timer } from 'rxjs';
 import { catchError, map, mergeMap, pairwise, retryWhen, shareReplay, switchMap, take, timeout } from 'rxjs/operators';
 import GenericEvent from './GenericEvent';
 import {
+  ApiType,
   Block,
   BlockAt,
   BlockAtOptions,
@@ -36,7 +37,7 @@ class Scanner {
   private rpcProvider: RpcProvider;
   private knownTypes: RegisteredTypes;
   private metadataRequest: Record<string, Promise<ChainInfo>>;
-
+  private api: ApiType;
   public wsProvider: WsProvider;
   public chainInfo: Record<string, ChainInfo>;
 
@@ -44,14 +45,15 @@ class Scanner {
     this.wsProvider = options.wsProvider;
     this.rpcProvider = options.rpcProvider || options.wsProvider;
     this.knownTypes = {
-      types: options.types,
-      typesAlias: options.typesAlias,
-      typesBundle: options.typesBundle,
-      typesChain: options.typesChain,
-      typesSpec: options.typesSpec
+      types: options.types || options.api?.registry.knownTypes.types,
+      typesAlias: options.typesAlias || options.api?.registry.knownTypes.typesAlias,
+      typesBundle: options.typesBundle || options.api?.registry.knownTypes.typesBundle,
+      typesChain: options.typesChain || options.api?.registry.knownTypes.typesChain,
+      typesSpec: options.typesSpec || options.api?.registry.knownTypes.typesSpec
     };
     this.chainInfo = {};
     this.metadataRequest = {};
+    this.api = options.api;
   }
 
   private createMethodSubscribe<T>(methods: string[], ...params: any[]): Observable<T> {
@@ -204,7 +206,6 @@ class Scanner {
       version.specName,
       version.specVersion
     );
-
     return {
       ...types,
       GenericEvent: GenericEvent
@@ -219,6 +220,11 @@ class Scanner {
       const registry = new TypeRegistry();
       registry.register(this.getSpecTypes(runtimeVersion));
 
+      const chainProperties = registry.createType('ChainProperties', {
+        ss58Format: this.api ? this.api.registry.chainSS58 : 42
+      });
+
+      registry.setChainProperties(chainProperties);
       registry.knownTypes.typesAlias = this.knownTypes.typesAlias;
 
       // eslint-disable-next-line

@@ -1,10 +1,12 @@
-import { WsProvider as _WsProvider, HttpProvider } from '@polkadot/rpc-provider';
-import { RegisteredTypes as _RegisteredTypes } from '@polkadot/types/types/registry';
+import { ApiPromise } from '@polkadot/api';
 import { DecoratedMeta } from '@polkadot/metadata/decorate/types';
+import { HttpProvider, WsProvider as _WsProvider } from '@polkadot/rpc-provider';
 import { Registry } from '@polkadot/types/types';
+import { RegisteredTypes as _RegisteredTypes } from '@polkadot/types/types/registry';
 
 export type WsProvider = _WsProvider;
 export type RpcProvider = _WsProvider | HttpProvider;
+export type ApiType = ApiPromise | undefined;
 
 export type Hex = string;
 export type Bytes = string;
@@ -23,6 +25,7 @@ export interface Extrinsic extends DispatchableCall {
 export interface ScannerOptions extends _RegisteredTypes {
   wsProvider: WsProvider;
   rpcProvider?: RpcProvider;
+  api?: ApiPromise;
 }
 
 export type RegisteredTypes = _RegisteredTypes;

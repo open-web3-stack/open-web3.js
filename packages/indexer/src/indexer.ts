@@ -1,5 +1,6 @@
 import { Sequelize, Op, Options, SyncOptions } from 'sequelize';
 import { Registry } from '@polkadot/types/types';
+import { ApiPromise } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap } from 'rxjs/operators';
 import Scanner from '@open-web3/scanner';
@@ -35,6 +36,8 @@ export default class Indexer {
 
     const wsProvider = new WsProvider(options.wsUrl);
 
+    const api = await ApiPromise.create({ provider: wsProvider });
+
     log.info('Init DB');
 
     init(db);
@@ -53,7 +56,8 @@ export default class Indexer {
         typesAlias: options.typesAlias,
         typesSpec: options.typesSpec,
         typesChain: options.typesChain,
-        typesBundle: options.typesBundle
+        typesBundle: options.typesBundle,
+        api
       })
     );
   }
