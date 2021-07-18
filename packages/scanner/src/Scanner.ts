@@ -45,11 +45,11 @@ class Scanner {
     this.wsProvider = options.wsProvider;
     this.rpcProvider = options.rpcProvider || options.wsProvider;
     this.knownTypes = {
-      types: options.types || options.api?.registry.knownTypes.types,
-      typesAlias: options.typesAlias || options.api?.registry.knownTypes.typesAlias,
-      typesBundle: options.typesBundle || options.api?.registry.knownTypes.typesBundle,
-      typesChain: options.typesChain || options.api?.registry.knownTypes.typesChain,
-      typesSpec: options.typesSpec || options.api?.registry.knownTypes.typesSpec
+      types: options.types,
+      typesAlias: options.typesAlias,
+      typesBundle: options.typesBundle,
+      typesChain: options.typesChain,
+      typesSpec: options.typesSpec
     };
     this.chainInfo = {};
     this.metadataRequest = {};
