@@ -1,6 +1,5 @@
 import { Sequelize, Op, Options, SyncOptions } from 'sequelize';
 import { Registry } from '@polkadot/types/types';
-import { ApiPromise } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { auditTime, mergeMap } from 'rxjs/operators';
 import Scanner from '@open-web3/scanner';
@@ -35,9 +34,6 @@ export default class Indexer {
     await db.authenticate();
 
     const wsProvider = new WsProvider(options.wsUrl);
-
-    // if I don't instantiate ApiPromise from wsProvider, it fails with `Error: Websocket not connected`
-    const _api = await ApiPromise.create({ provider: wsProvider });
 
     log.info('Init DB');
 
