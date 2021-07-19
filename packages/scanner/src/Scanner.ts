@@ -12,7 +12,6 @@ import { concat, from, Observable, of, range, throwError, timer } from 'rxjs';
 import { catchError, map, mergeMap, pairwise, retryWhen, shareReplay, switchMap, take, timeout } from 'rxjs/operators';
 import GenericEvent from './GenericEvent';
 import {
-  ApiType,
   Block,
   BlockAt,
   BlockAtOptions,
@@ -37,7 +36,6 @@ class Scanner {
   private rpcProvider: RpcProvider;
   private knownTypes: RegisteredTypes;
   private metadataRequest: Record<string, Promise<ChainInfo>>;
-  private api: ApiType;
   public wsProvider: WsProvider;
   public chainInfo: Record<string, ChainInfo>;
 
@@ -53,7 +51,6 @@ class Scanner {
     };
     this.chainInfo = {};
     this.metadataRequest = {};
-    this.api = options.api;
   }
 
   private createMethodSubscribe<T>(methods: string[], ...params: any[]): Observable<T> {
@@ -219,12 +216,8 @@ class Scanner {
     if (!this.chainInfo[cacheKey]) {
       const registry = new TypeRegistry();
       registry.register(this.getSpecTypes(runtimeVersion));
-
-      const chainProperties = registry.createType('ChainProperties', {
-        ss58Format: this.api ? this.api.registry.chainSS58 : 42
-      });
-
-      registry.setChainProperties(chainProperties);
+      const properties = await this.rpcProvider.send('system_properties', []);
+      registry.setChainProperties(registry.createType('ChainProperties', properties));
       registry.knownTypes.typesAlias = this.knownTypes.typesAlias;
 
       // eslint-disable-next-line
