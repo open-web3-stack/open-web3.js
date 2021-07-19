@@ -1,5 +1,5 @@
-import { HeaderExtended } from '@polkadot/api-derive/types';
 import { createHeaderExtended } from '@polkadot/api-derive';
+import { HeaderExtended } from '@polkadot/api-derive/types';
 import { expandMetadata, Metadata } from '@polkadot/metadata';
 import { GenericExtrinsic, StorageKey, TypeRegistry, Vec } from '@polkadot/types';
 import { getSpecTypes } from '@polkadot/types-known';
@@ -36,7 +36,6 @@ class Scanner {
   private rpcProvider: RpcProvider;
   private knownTypes: RegisteredTypes;
   private metadataRequest: Record<string, Promise<ChainInfo>>;
-
   public wsProvider: WsProvider;
   public chainInfo: Record<string, ChainInfo>;
 
@@ -204,7 +203,6 @@ class Scanner {
       version.specName,
       version.specVersion
     );
-
     return {
       ...types,
       GenericEvent: GenericEvent
@@ -218,7 +216,8 @@ class Scanner {
     if (!this.chainInfo[cacheKey]) {
       const registry = new TypeRegistry();
       registry.register(this.getSpecTypes(runtimeVersion));
-
+      const properties = await this.rpcProvider.send('system_properties', []);
+      registry.setChainProperties(registry.createType('ChainProperties', properties));
       registry.knownTypes.typesAlias = this.knownTypes.typesAlias;
 
       // eslint-disable-next-line

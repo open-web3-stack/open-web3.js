@@ -1,7 +1,7 @@
-import { WsProvider as _WsProvider, HttpProvider } from '@polkadot/rpc-provider';
-import { RegisteredTypes as _RegisteredTypes } from '@polkadot/types/types/registry';
 import { DecoratedMeta } from '@polkadot/metadata/decorate/types';
+import { HttpProvider, WsProvider as _WsProvider } from '@polkadot/rpc-provider';
 import { Registry } from '@polkadot/types/types';
+import { RegisteredTypes as _RegisteredTypes } from '@polkadot/types/types/registry';
 
 export type WsProvider = _WsProvider;
 export type RpcProvider = _WsProvider | HttpProvider;
