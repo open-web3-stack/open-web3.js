@@ -57,7 +57,7 @@ export default class Indexer {
         typesAlias: options.typesAlias,
         typesSpec: options.typesSpec,
         typesChain: options.typesChain,
-        typesBundle: options.typesBundle,
+        typesBundle: options.typesBundle
       })
     );
   }
