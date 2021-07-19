@@ -36,7 +36,8 @@ export default class Indexer {
 
     const wsProvider = new WsProvider(options.wsUrl);
 
-    const api = await ApiPromise.create({ provider: wsProvider });
+    // if I don't instantiate ApiPromise from wsProvider, it fails with `Error: Websocket not connected`
+    const _api = await ApiPromise.create({ provider: wsProvider });
 
     log.info('Init DB');
 
@@ -57,7 +58,6 @@ export default class Indexer {
         typesSpec: options.typesSpec,
         typesChain: options.typesChain,
         typesBundle: options.typesBundle,
-        api
       })
     );
   }
