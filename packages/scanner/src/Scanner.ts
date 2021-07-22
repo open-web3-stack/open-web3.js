@@ -110,18 +110,27 @@ class Scanner {
 
     const [events, author] = await Promise.all(requestes as [Promise<Event[]>, Promise<string>]);
 
-    const extrinsics = blockRaw.block.extrinsics.map((extrinsic, index) => {
+    const extrinsicsPromises = blockRaw.block.extrinsics.map(async (extrinsic, index) => {
       const event = [...events].reverse().find(({ phaseIndex }) => phaseIndex === index);
       const result =
         event && (event.method === 'ExtrinsicFailed' || event.method === 'ExtrinsicSuccess') ? event.method : '';
-
-      return {
-        index,
-        result,
-        ...this.decodeTx(extrinsic, blockAt, chainInfo)
-      };
+      try {
+        return {
+          index,
+          result,
+          ...this.decodeTx(extrinsic, blockAt, chainInfo)
+        };
+      } catch (error) {
+        const chainInfo = await this.getChainInfo({ blockNumber: blockAt.blockNumber - 1 });
+        return {
+          index,
+          result,
+          ...this.decodeTx(extrinsic, blockAt, chainInfo)
+        };
+      }
     });
 
+    const extrinsics = await Promise.all(extrinsicsPromises);
     const timestamp = extrinsics?.[0]?.args?.now;
 
     return {
@@ -282,7 +291,12 @@ class Scanner {
     const { registry } = await this.getChainInfo(_blockAt);
     const raw: Bytes = await this.rpcProvider.send('state_getStorage', [storageKey.toHex(), blockAt.blockHash]);
     // eslint-disable-next-line
-    return registry.createType(storageKey.outputType as any, raw, true) as any;
+    try {
+      return registry.createType(storageKey.outputType as any, raw, true) as any;
+    } catch (err) {
+      const chainInfo = await this.getChainInfo({ blockNumber: blockAt.blockNumber - 1 });
+      return chainInfo.registry.createType(storageKey.outputType as any, raw, true) as any;
+    }
   }
 
   public decodeTx(txData: Bytes, _blockAt: BlockAtOptions, meta: Meta): Omit<Extrinsic, 'result'> {
