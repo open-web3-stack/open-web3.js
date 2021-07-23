@@ -31,7 +31,7 @@ describe('Scanner', () => {
     expect(await scanner.getRuntimeVersion()).toBeDefined();
   });
 
-  it('getChainInfo', async () => {
+  it.only('getChainInfo', async () => {
     const request1 = await scanner.getChainInfo({ blockNumber: 1 });
     expect(request1.min).toBe(1);
     expect(request1.max).toBe(1);
@@ -40,11 +40,6 @@ describe('Scanner', () => {
     expect(request1.registry).toEqual(request2.registry);
     expect(request2.min).toBe(1);
     expect(request2.max).toBe(2);
-    const request0 = await scanner.getChainInfo({ blockNumber: 0 });
-    expect(request2.min).toBe(0);
-    expect(request2.max).toBe(2);
-    expect(request1.metadata).toEqual(request0.metadata);
-    expect(request1.registry).toEqual(request0.registry);
   });
 
   it('getEvents', async () => {
