@@ -194,6 +194,11 @@ class Scanner {
     }
   }
 
+  public async getParentHash(_blockHash?: Bytes): Promise<Bytes> {
+    const header = await this.rpcProvider.send('chain_getHeader', _blockHash ? [_blockHash] : []);
+    return header.parentHash as Bytes;
+  }
+
   public getSpecTypes(version: RuntimeVersion) {
     const types = getSpecTypes(
       {
@@ -211,7 +216,8 @@ class Scanner {
 
   public async getChainInfo(_blockAt?: BlockAtOptions): Promise<ChainInfo> {
     const { blockHash, blockNumber } = await this.getBlockAt(_blockAt);
-    const runtimeVersion = await this.getRuntimeVersion(blockHash);
+    const parentHash = await this.getParentHash(blockHash);
+    const runtimeVersion = await this.getRuntimeVersion(parentHash);
     const cacheKey = `${runtimeVersion.specName}/${runtimeVersion.specVersion}`;
     if (!this.chainInfo[cacheKey]) {
       const registry = new TypeRegistry();
@@ -223,7 +229,7 @@ class Scanner {
       // eslint-disable-next-line
       if (!this.metadataRequest[cacheKey]) {
         this.metadataRequest[cacheKey] = this.rpcProvider
-          .send('state_getMetadata', [blockHash])
+          .send('state_getMetadata', [parentHash])
           .then((rpcdata: string) => {
             const metadata = new Metadata(registry, rpcdata);
 
