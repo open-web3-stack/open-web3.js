@@ -5,7 +5,7 @@
 import { StorageEntryMetadataLatest } from '@polkadot/types/interfaces/metadata';
 import { Registry, RegisteredTypes, TypeDef } from '@polkadot/types/types';
 
-import { Metadata } from '@polkadot/metadata/Metadata';
+import { Metadata } from '@polkadot/types';
 import * as defaultDefs from '@polkadot/types/interfaces/definitions';
 import { unwrapStorageType } from '@polkadot/types/primitive/StorageKey';
 import { TypeRegistry } from '@polkadot/types/create';

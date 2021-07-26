@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import Handlebars from 'handlebars';
+import * as Handlebars from 'handlebars';
 
 import { TypeDef, TypeDefInfo } from '@polkadot/types/create/types';
 
@@ -34,13 +34,10 @@ Handlebars.registerHelper({
     const { imports, types } = this as unknown as This;
     const defs = [
       {
-        file: '@polkadot/metadata',
-        types: Object.keys(imports.metadataTypes)
-      },
-      {
         file: '@polkadot/types',
         types: [
           ...Object.keys(imports.codecTypes).filter((name) => !NO_CODEC.includes(name)),
+          ... Object.keys(imports.metadataTypes),
           ...Object.keys(imports.extrinsicTypes),
           ...Object.keys(imports.genericTypes),
           ...Object.keys(imports.primitiveTypes)

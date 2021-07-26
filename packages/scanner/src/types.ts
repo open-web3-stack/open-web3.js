@@ -1,4 +1,4 @@
-import { DecoratedMeta } from '@polkadot/metadata/decorate/types';
+import { DecoratedMeta } from '@polkadot/types/metadata/decorate/types';
 import { HttpProvider, WsProvider as _WsProvider } from '@polkadot/rpc-provider';
 import { Registry } from '@polkadot/types/types';
 import { RegisteredTypes as _RegisteredTypes } from '@polkadot/types/types/registry';
