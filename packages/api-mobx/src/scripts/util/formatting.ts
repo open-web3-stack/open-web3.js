@@ -37,7 +37,7 @@ Handlebars.registerHelper({
         file: '@polkadot/types',
         types: [
           ...Object.keys(imports.codecTypes).filter((name) => !NO_CODEC.includes(name)),
-          ... Object.keys(imports.metadataTypes),
+          ...Object.keys(imports.metadataTypes),
           ...Object.keys(imports.extrinsicTypes),
           ...Object.keys(imports.genericTypes),
           ...Object.keys(imports.primitiveTypes)
