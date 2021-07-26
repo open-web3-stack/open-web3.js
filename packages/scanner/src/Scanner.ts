@@ -1,7 +1,6 @@
 import { createHeaderExtended } from '@polkadot/api-derive';
 import { HeaderExtended } from '@polkadot/api-derive/types';
-import { expandMetadata, Metadata } from '@polkadot/metadata';
-import { GenericExtrinsic, StorageKey, TypeRegistry, Vec } from '@polkadot/types';
+import { GenericExtrinsic, StorageKey, TypeRegistry, Vec, Metadata, expandMetadata } from '@polkadot/types';
 import { getSpecTypes } from '@polkadot/types-known';
 import { ValidatorId } from '@polkadot/types/interfaces';
 import { EventRecord } from '@polkadot/types/interfaces/system';
