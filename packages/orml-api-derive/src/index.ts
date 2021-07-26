@@ -1,7 +1,9 @@
 import { DeriveCustom } from '@polkadot/api-derive';
 
-import * as currencies from './currencies';
+import { balance } from './currencies';
 
 export const derive: DeriveCustom = {
-  currencies
+  currencies: {
+    balance: balance as any
+  }
 };

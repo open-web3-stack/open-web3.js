@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "peerDependencies": {
-    "@polkadot/api": "4.*"
+    "@polkadot/api": "5.*"
   },
   "dependencies": {
     "yargs": "^17.0.1"

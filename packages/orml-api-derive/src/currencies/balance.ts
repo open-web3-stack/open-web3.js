@@ -5,10 +5,10 @@ import { AccountId, Balance, OrmlAccountData } from '@open-web3/orml-types/inter
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
-export function balance(
+export const balance = (
   instanceId: string,
   api: ApiInterfaceRx
-): (address: AccountId | string | Uint8Array, token: any) => Observable<Balance> {
+): ((address: AccountId | string | Uint8Array, token: any) => Observable<Balance>) => {
   return memo(instanceId, (address: AccountId | string | Uint8Array, token: any): Observable<Balance> => {
     return api.rpc.system.properties().pipe(
       mergeMap((properties) => {
@@ -39,4 +39,4 @@ export function balance(
       })
     );
   });
-}
+};

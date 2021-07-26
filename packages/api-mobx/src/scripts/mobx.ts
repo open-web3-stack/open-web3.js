@@ -2,8 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import Handlebars from 'handlebars';
-
 import { StorageEntryMetadataLatest } from '@polkadot/types/interfaces/metadata';
 import { Registry, RegisteredTypes, TypeDef } from '@polkadot/types/types';
 
@@ -26,6 +24,8 @@ import {
 } from './util';
 import { ModuleTypes } from './util/imports';
 
+import * as Handlebars from 'handlebars';
+
 Handlebars.registerHelper('inc', function (value) {
   return parseInt(value) + 1;
 });
@@ -40,7 +40,7 @@ function entrySignature(
 ): [string[], string] {
   const format = (type: string | TypeDef) => formatType(allDefs, type, imports);
 
-  const outputType = unwrapStorageType(storageEntry.type, storageEntry.modifier.isOptional);
+  const outputType = unwrapStorageType(registry, storageEntry.type, storageEntry.modifier.isOptional);
 
   if (storageEntry.type.isPlain) {
     setImports(allDefs, imports, [storageEntry.type.asPlain.toString()]);
@@ -109,7 +109,7 @@ function generateForMeta(
 
             return {
               args,
-              docs: storageEntry.documentation,
+              docs: storageEntry.docs,
               entryType,
               name: stringCamelCase(storageEntry.name.toString()),
               returnType
