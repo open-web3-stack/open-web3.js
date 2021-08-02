@@ -1,6 +1,6 @@
 import { createHeaderExtended } from '@polkadot/api-derive';
 import { HeaderExtended } from '@polkadot/api-derive/types';
-import { GenericExtrinsic, StorageKey, TypeRegistry, Vec, Metadata, expandMetadata } from '@polkadot/types';
+import { expandMetadata, GenericExtrinsic, Metadata, StorageKey, TypeRegistry, Vec } from '@polkadot/types';
 import { getSpecTypes } from '@polkadot/types-known';
 import { ValidatorId } from '@polkadot/types/interfaces';
 import { EventRecord } from '@polkadot/types/interfaces/system';
@@ -215,8 +215,11 @@ class Scanner {
 
   public async getChainInfo(_blockAt?: BlockAtOptions): Promise<ChainInfo> {
     const { blockHash, blockNumber } = await this.getBlockAt(_blockAt);
-    const parentHash = await this.getParentHash(blockHash);
-    const runtimeVersion = await this.getRuntimeVersion(parentHash);
+    let hashForMetadata = await this.getParentHash(blockHash);
+    if (blockNumber === 0) {
+      hashForMetadata = blockHash;
+    }
+    const runtimeVersion = await this.getRuntimeVersion(hashForMetadata);
     const cacheKey = `${runtimeVersion.specName}/${runtimeVersion.specVersion}`;
     if (!this.chainInfo[cacheKey]) {
       const registry = new TypeRegistry();
@@ -228,7 +231,7 @@ class Scanner {
       // eslint-disable-next-line
       if (!this.metadataRequest[cacheKey]) {
         this.metadataRequest[cacheKey] = this.rpcProvider
-          .send('state_getMetadata', [parentHash])
+          .send('state_getMetadata', [hashForMetadata])
           .then((rpcdata: string) => {
             const metadata = new Metadata(registry, rpcdata);
 
