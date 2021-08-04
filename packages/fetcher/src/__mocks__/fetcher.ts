@@ -11,19 +11,13 @@ const prices: { [key: string]: { [key: string]: string } } = {
   },
   kraken: {
     'ETH/USD': '150.53'
-  },
-  CCCAGG: {
-    'ETH/USD': '152.42',
-    'BTC/USD': '7310.38'
   }
 };
 
 export default class Fetcher implements FetcherInterface {
-  public readonly source: string;
   private readonly exchange: any;
 
   constructor(source: string) {
-    this.source = source;
     this.exchange = prices[source];
   }
 
