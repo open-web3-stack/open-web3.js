@@ -1,4 +1,3 @@
-import bn from 'big.js';
 import ccxt, { Ticker, Exchange } from 'ccxt';
 import { FetcherInterface } from './types';
 

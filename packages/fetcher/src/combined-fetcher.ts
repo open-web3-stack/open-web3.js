@@ -41,8 +41,11 @@ export default class CombinedFetcher implements FetcherInterface {
    * @param {number} [minValidPrices=3] number of min valid prices to provide a median
    * @memberof CombinedFetcher
    */
-  constructor(private readonly fetchers: FetcherInterface[], private readonly options: CombinedFetcherOptions = { minValidPriceSources: 3}) {
-    this.source = fetchers.map(x => x.source).join(",");
+  constructor(
+    private readonly fetchers: FetcherInterface[],
+    private readonly options: CombinedFetcherOptions = { minValidPriceSources: 3 }
+  ) {
+    this.source = fetchers.map((x) => x.source).join(',');
   }
 
   /**
@@ -54,16 +57,19 @@ export default class CombinedFetcher implements FetcherInterface {
    */
   async getPrice(pair: string): Promise<string> {
     // fetch from all sources
-    const results = await Promise.all(this.fetchers
-      .map((fetcher) => fetcher.getPrice(pair)
-      .then(price => {
-        const weight = this.options.weights?.[fetcher.source] || 1;
-        return Array(weight).fill(price);
-      })
-      .catch((error) => error))
+    const results = await Promise.all(
+      this.fetchers.map((fetcher) =>
+        fetcher
+          .getPrice(pair)
+          .then((price) => {
+            const weight = this.options.weights?.[fetcher.source] || 1;
+            return Array(weight).fill(price);
+          })
+          .catch((error) => error)
+      )
     );
 
-    const validResults = results.filter(i => !(i instanceof Error));
+    const validResults = results.filter((i) => !(i instanceof Error));
 
     // ensure enough price sources
     if (validResults.length < this.options.minValidPriceSources) {
