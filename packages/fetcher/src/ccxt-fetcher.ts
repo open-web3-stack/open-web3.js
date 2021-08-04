@@ -1,3 +1,4 @@
+import bn from 'big.js';
 import ccxt, { Ticker, Exchange } from 'ccxt';
 import { FetcherInterface } from './types';
 
@@ -9,7 +10,7 @@ import { FetcherInterface } from './types';
  * @implements {FetcherInterface}
  */
 export default class CCXTFetcher implements FetcherInterface {
-  public readonly source: string;
+  private readonly source: string;
   private readonly exchange: Exchange;
 
   /**
@@ -27,15 +28,14 @@ export default class CCXTFetcher implements FetcherInterface {
    * Fetch price for a given pair.
    *
    * @param {string} pair
-   * @returns {Promise<string>} vwap price
+   * @returns {Promise<string>} (bid + ask) / 2
    * @memberof CCXTFetcher
    */
   getPrice(pair: string): Promise<string> {
     return this.exchange.fetchTicker(pair).then((ticker: Ticker) => {
-      if (ticker.vwap) {
-        return ticker.vwap.toString();
-      }
-      throw Error('VWAP price undefined');
+      // bid & ask avg
+      const price = bn(ticker.bid).add(bn(ticker.ask)).div(2);
+      return price.toString();
     });
   }
 }

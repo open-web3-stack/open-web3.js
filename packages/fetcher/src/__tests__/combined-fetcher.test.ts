@@ -10,26 +10,17 @@ describe('CombinedFetcher', () => {
 
   ['bittrex', 'coinbase', 'kraken'].forEach((source) => {
     fetchers.push(new CCXTFetcher(source));
+    fetchers.push(new CryptoCompareFetcher(source, '123'));
   });
-  fetchers.push(new CryptoCompareFetcher('CCCAGG', ''));
 
-  const options = {
-    minValidPriceSources: 3,
-    weights: {
-      bittrex: 2,
-      coinbase: 4,
-      kraken: 3,
-      CCCAGG: 5
-    }
-  };
-  const fetcher = new CombinedFetcher(fetchers, options);
+  const fetcher = new CombinedFetcher(fetchers);
 
   it('getPrice', async () => {
     const eth_price = await fetcher.getPrice('ETH/USD');
-    expect(eth_price).toEqual('151.02');
+    expect(eth_price).toEqual('150.53');
 
     const btc_price = await fetcher.getPrice('BTC/USD');
-    expect(btc_price).toEqual('7310.38');
+    expect(btc_price).toEqual('7310.82');
 
     await expect(fetcher.getPrice('EUR/USD')).rejects.toThrowError('not enough prices');
   });
