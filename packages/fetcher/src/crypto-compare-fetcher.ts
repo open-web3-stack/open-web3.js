@@ -11,7 +11,7 @@ const baseURL = 'https://min-api.cryptocompare.com';
  * @implements {FetcherInterface}
  */
 export default class CryptoCompareFetcher implements FetcherInterface {
-  private readonly source: string;
+  public readonly source: string;
   private readonly apiKey: string;
   private readonly timeout: number;
 

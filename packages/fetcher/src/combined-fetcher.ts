@@ -21,6 +21,11 @@ export class CombinedFetcherError extends Error {
   }
 }
 
+export type CombinedFetcherOptions = {
+  minValidPriceSources: number;
+  weights?: Record<string, number>;
+};
+
 /**
  * CombinedFetcher will fetch prices from provided fetchers and find a median.
  *
@@ -29,18 +34,18 @@ export class CombinedFetcherError extends Error {
  * @implements {FetcherInterface}
  */
 export default class CombinedFetcher implements FetcherInterface {
-  private readonly minValidPrices: number;
-  private readonly fetchers: FetcherInterface[];
-
+  public readonly source: string;
   /**
    * Creates an instance of CombinedFetcher.
    * @param {FetcherInterface[]} fetchers
    * @param {number} [minValidPrices=3] number of min valid prices to provide a median
    * @memberof CombinedFetcher
    */
-  constructor(fetchers: FetcherInterface[], minValidPrices = 3) {
-    this.minValidPrices = minValidPrices;
-    this.fetchers = fetchers;
+  constructor(
+    private readonly fetchers: FetcherInterface[],
+    private readonly options: CombinedFetcherOptions = { minValidPriceSources: 3 }
+  ) {
+    this.source = fetchers.map((x) => x.source).join(',');
   }
 
   /**
@@ -52,16 +57,28 @@ export default class CombinedFetcher implements FetcherInterface {
    */
   async getPrice(pair: string): Promise<string> {
     // fetch from all sources
-    const results = await Promise.all(this.fetchers.map((fetcher) => fetcher.getPrice(pair).catch((error) => error)));
+    const results = await Promise.all(
+      this.fetchers.map((fetcher) =>
+        fetcher
+          .getPrice(pair)
+          .then((price) => {
+            const weight = this.options.weights?.[fetcher.source] || 1;
+            return Array(weight).fill(price);
+          })
+          .catch((error) => error)
+      )
+    );
 
-    // get prices
-    const prices = results.filter((i) => typeof i === 'string') as string[];
+    const validResults = results.filter((i) => !(i instanceof Error));
 
-    // ensure enough prices
-    if (prices.length < this.minValidPrices) {
+    // ensure enough price sources
+    if (validResults.length < this.options.minValidPriceSources) {
       const errors = results.filter((i) => i instanceof Error);
       throw new CombinedFetcherError('not enough prices', errors);
     }
+
+    // get prices
+    const prices = validResults.flat().filter((i) => typeof i === 'string') as string[];
 
     // return median
     return median(prices);
