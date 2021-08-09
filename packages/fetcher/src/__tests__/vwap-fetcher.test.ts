@@ -8,7 +8,7 @@ const sleep = (n: number) => new Promise(resolve => {
     setTimeout(resolve, n);
 });
 
-const TIMEFRAME = 5 * 60 * 1_000;
+const timeframe = 5 * 60 * 1_000;
 
 describe('VWAPFetcher', () => {
     const fetcher = new VWAPFetcher(new CCXTFetcher('kraken'));
@@ -18,13 +18,13 @@ describe('VWAPFetcher', () => {
         const now = Date.now();
         const [needs, since] = fetcher['needsFeeding'](key);
         expect(needs).toBeTruthy();
-        expect(since).toBeLessThanOrEqual(now - 5 * TIMEFRAME);
-        expect(since).toBeGreaterThanOrEqual(now - 5 * TIMEFRAME - 10);
+        expect(since).toBeLessThanOrEqual(now - 5 * timeframe);
+        expect(since).toBeGreaterThanOrEqual(now - 5 * timeframe - 10);
     });
 
     it('should feed data', () => {
         const now = Date.now();
-        const timestamps = [now - TIMEFRAME - 1, now - TIMEFRAME * 2 - 2, now - 120000, now - 100000, now - 200000, now - 1000];
+        const timestamps = [now - timeframe - 1, now - timeframe * 2 - 2, now - 120000, now - 100000, now - 200000, now - 1000];
         const data = timestamps.map((x, i) => ({ 
             timestamp: x,
             amount: i + 1,
