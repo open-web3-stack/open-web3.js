@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/api",
-  "version": "0.9.4-19",
+  "version": "0.9.4-23",
   "description": "Extended API library for polkadot.js",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@open-web3/util": "0.9.4-19"
+    "@open-web3/util": "0.9.4-23"
   },
   "peerDependencies": {
     "@polkadot/api": "5.*"

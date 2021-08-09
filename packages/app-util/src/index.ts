@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import { inspect } from 'util';
-import { Subject, of, empty, from } from 'rxjs';
+import { Subject, of, EMPTY, from } from 'rxjs';
 import { mergeMap, tap, bufferTime, filter } from 'rxjs/operators';
 
 import {
@@ -61,9 +61,16 @@ export const injectInspect = () => {
   };
 };
 
+interface SlackWebhookOptions {
+  url: string;
+  level?: LoggerLevel;
+  bufferTime?: number;
+  bufferSize?: number;
+}
+
 export const configureLogger = (options: {
   logger?: Logger;
-  slackWebhook?: string;
+  slackWebhook?: string | SlackWebhookOptions;
   production?: boolean;
   filter?: string;
   level?: string;
@@ -76,7 +83,9 @@ export const configureLogger = (options: {
   const logger = options.logger || defaultLogger;
 
   const defaultLevel = levelToNumber(toLevel(options.level) || LoggerLevel.Log);
-  const slackWebhook = options.production && options.slackWebhook;
+  const slackWebhookOptions =
+    options.production &&
+    (typeof options.slackWebhook === 'string' ? { url: options.slackWebhook } : options.slackWebhook);
   const slackLevel = levelToNumber(LoggerLevel.Info);
   const bufferSize = 20;
   const panicModeLevel = levelToNumber(LoggerLevel.Warn);
@@ -128,15 +137,19 @@ export const configureLogger = (options: {
           buffer.shift();
         }
 
-        return empty();
+        return EMPTY;
       })
     )
     .pipe(tap(output)); // log everything
 
-  if (slackWebhook) {
+  if (slackWebhookOptions) {
     try {
       const { IncomingWebhook } = require('@slack/webhook');
-      const webhook = new IncomingWebhook(slackWebhook);
+      const webhook = new IncomingWebhook(slackWebhookOptions.url);
+
+      const optionBufferTime = slackWebhookOptions.bufferTime || 2000;
+      const optionBufferSize = slackWebhookOptions.bufferSize || 10;
+
       observable
         // send to slack in panic mode or above slackLevel
         .pipe(
@@ -144,8 +157,8 @@ export const configureLogger = (options: {
             (payload) => payload.timestamp.valueOf() < panicModeEndTime || levelToNumber(payload.level) >= slackLevel
           )
         )
-        // avoid too many requests, up to 10 messages
-        .pipe(bufferTime(2000, 2000, 10))
+        // avoid too many requests
+        .pipe(bufferTime(optionBufferTime, optionBufferTime, optionBufferSize))
         .pipe(
           tap((payloads) => {
             if (payloads.length === 0) {
