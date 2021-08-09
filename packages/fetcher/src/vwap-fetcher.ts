@@ -2,12 +2,12 @@ import assert from 'assert';
 import { PriceFetcher, TradesFetcher, Trade } from './types';
 
 // weight for each group [0-5min, 5-10min, 10-15min, 15-20min, 20-25min, >25min]
-const weights = [1, 0.8, 0.6, 0.4, 0.2, 0.01];
+const weights = [1, 0.8, 0.6, 0.4, 0.2, 0.001];
 
 // timeframe to group trades
 const timeframe = 5 * 60 * 1_000; // 5min
 
-// Any trade older than 25min will have a weight of 0.01,
+// Any trade older than 25min will have a weight of 0.001,
 // so it's pointless to keep data in cache more than 60min.
 // One way of using a greater window might be aggregate old
 // trades hourly so they won't take too much memory

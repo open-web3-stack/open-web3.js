@@ -12,5 +12,5 @@ const input = [130, 120, 125, 130, 120, 100, 110].map((price, i) => ({
 
 it('calculate volume weighted average price', () => {
     const price = VWAPFetcher['calculateVWAP'](input, now);
-    expect(price).toBe('125.52980132450332');
+    expect(price).toBe('125.6528980679547');
 });
