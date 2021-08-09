@@ -1,5 +1,5 @@
 import bn from 'big.js';
-import { FetcherInterface } from './types';
+import { PriceFetcher } from './types';
 
 const median = (pricesUnsorted: string[]): string => {
   const prices = pricesUnsorted.sort();
@@ -21,26 +21,31 @@ export class CombinedFetcherError extends Error {
   }
 }
 
+export type CombinedFetcherConfig = {
+  minValidPriceSources: number;
+  weights?: Record<string, number>;
+};
+
 /**
  * CombinedFetcher will fetch prices from provided fetchers and find a median.
  *
  * @export
  * @class CombinedFetcher
- * @implements {FetcherInterface}
+ * @implements {PriceFetcher}
  */
-export default class CombinedFetcher implements FetcherInterface {
-  private readonly minValidPrices: number;
-  private readonly fetchers: FetcherInterface[];
-
+export default class CombinedFetcher implements PriceFetcher {
+  public readonly source: string;
   /**
    * Creates an instance of CombinedFetcher.
-   * @param {FetcherInterface[]} fetchers
-   * @param {number} [minValidPrices=3] number of min valid prices to provide a median
+   * @param {PriceFetcher[]} fetchers
+   * @param {number} [minValidPriceSources=3] number of min valid price sources to provide a median
    * @memberof CombinedFetcher
    */
-  constructor(fetchers: FetcherInterface[], minValidPrices = 3) {
-    this.minValidPrices = minValidPrices;
-    this.fetchers = fetchers;
+  constructor(
+    private readonly fetchers: PriceFetcher[],
+    private readonly config: CombinedFetcherConfig = { minValidPriceSources: 3 }
+  ) {
+    this.source = fetchers.map((x) => x.source).join(',');
   }
 
   /**
@@ -52,16 +57,28 @@ export default class CombinedFetcher implements FetcherInterface {
    */
   async getPrice(pair: string): Promise<string> {
     // fetch from all sources
-    const results = await Promise.all(this.fetchers.map((fetcher) => fetcher.getPrice(pair).catch((error) => error)));
+    const results = await Promise.all(
+      this.fetchers.map((fetcher) =>
+        fetcher
+          .getPrice(pair)
+          .then((price) => {
+            const weight = this.config.weights?.[fetcher.source] || 1;
+            return Array(weight).fill(price);
+          })
+          .catch((error) => error)
+      )
+    );
 
-    // get prices
-    const prices = results.filter((i) => typeof i === 'string') as string[];
+    const validResults = results.filter((i) => !(i instanceof Error));
 
-    // ensure enough prices
-    if (prices.length < this.minValidPrices) {
+    // ensure enough price sources
+    if (validResults.length < this.config.minValidPriceSources) {
       const errors = results.filter((i) => i instanceof Error);
       throw new CombinedFetcherError('not enough prices', errors);
     }
+
+    // get prices
+    const prices = validResults.flat().filter((i) => typeof i === 'string') as string[];
 
     // return median
     return median(prices);

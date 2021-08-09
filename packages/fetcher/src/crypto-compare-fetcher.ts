@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FetcherInterface } from './types';
+import { PriceFetcher } from './types';
 
 const baseURL = 'https://min-api.cryptocompare.com';
 
@@ -8,13 +8,9 @@ const baseURL = 'https://min-api.cryptocompare.com';
  *
  * @export
  * @class CryptoCompareFetcher
- * @implements {FetcherInterface}
+ * @implements {PriceFetcher}
  */
-export default class CryptoCompareFetcher implements FetcherInterface {
-  private readonly source: string;
-  private readonly apiKey: string;
-  private readonly timeout: number;
-
+export default class CryptoCompareFetcher implements PriceFetcher {
   /**
    * Creates an instance of CryptoCompareFetcher.
    * @param {string} source
@@ -22,11 +18,7 @@ export default class CryptoCompareFetcher implements FetcherInterface {
    * @param {number} timeout milliseconds
    * @memberof CryptoCompareFetcher
    */
-  constructor(source: string, apiKey: string, timeout = 2000) {
-    this.source = source;
-    this.apiKey = apiKey;
-    this.timeout = timeout;
-  }
+  constructor(public readonly source: string, private readonly apiKey: string, private readonly timeout = 2000) {}
 
   /**
    * Fetch price for a give pair.
