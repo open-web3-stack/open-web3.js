@@ -22,6 +22,7 @@ export default class VWAPFetcher implements PriceFetcher {
   /**
    * Create new instance
    *
+   * @param exchange TradesFetcher
    * @param tolerance Time period in which the data is considered fresh
    * and there's no need to fetch new data. This helps not hitting the API
    * every seconds. Default value 5min
