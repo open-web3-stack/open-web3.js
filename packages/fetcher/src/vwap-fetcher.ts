@@ -49,7 +49,7 @@ export default class VWAPFetcher implements PriceFetcher {
 
     const newTrades = oldTrades.filter((i) => i.timestamp >= validAfter);
 
-    trades.sort((a, b) => b.timestamp - a.timestamp).forEach((i) => newTrades.push(i));
+    VWAPFetcher.aggregateTrades(trades.sort((a, b) => b.timestamp - a.timestamp)).forEach((i) => newTrades.push(i));
 
     this.trades[pair] = newTrades;
 
@@ -156,5 +156,50 @@ export default class VWAPFetcher implements PriceFetcher {
     const price = cost / volume;
 
     return price.toString();
+  }
+
+  /**
+   * Aggregate trades in timeframes
+   *
+   * @param trades Trades
+   * @param timeframe Timeframe default 20sec
+   * @returns Aggregated trades
+   */
+  private static aggregateTrades(trades: Trade[], timeframe = 20_000): Trade[] {
+    const aggregated: Trade[] = [];
+    let start = trades[0].timestamp;
+    while (true) {
+      let group: Trade[];
+      const timestamp = start;
+      const end = start - timeframe;
+      const index = trades.findIndex((i) => i.timestamp < end);
+      if (index > 0) {
+        group = trades.slice(0, index);
+        trades = trades.slice(index);
+      } else {
+        group = trades;
+        trades = [];
+      }
+
+      let cost = 0;
+      let volume = 0;
+      group.forEach(i => {
+        cost += i.price * i.amount;
+        volume += i.amount;
+      });
+
+      if (volume !== 0) {
+        const price = cost / volume;
+        const trade = { timestamp, amount: volume, price };
+        aggregated.push(trade);
+      }
+
+      if (trades.length > 0) {
+        start = trades[0].timestamp;
+      } else {
+        break;
+      }
+    }
+    return aggregated;
   }
 }

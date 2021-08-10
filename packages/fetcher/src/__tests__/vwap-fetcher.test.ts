@@ -24,12 +24,11 @@ describe('VWAPFetcher', () => {
 
     it('should feed data', () => {
         const now = Date.now();
-        const timestamps = [now - timeframe - 1, now - timeframe * 2 - 2, now - 120000, now - 100000, now - 200000, now - 1000];
+        const timestamps = [now - timeframe - 1, now - timeframe * 2 - 2, now - 130000, now - 100000, now - 200000, now - 1000];
         const data = timestamps.map((x, i) => ({ 
             timestamp: x,
             amount: i + 1,
-            price: 123 + i,
-            cost: (123 + i) * (i + 1),
+            price: 123 + i
         } as Trade));
         fetcher['feed'](key, data, now);
         const sorted = fetcher['trades'][key];
