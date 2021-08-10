@@ -183,7 +183,7 @@ export default class VWAPFetcher implements PriceFetcher {
 
       let cost = 0;
       let volume = 0;
-      group.forEach(i => {
+      group.forEach((i) => {
         cost += i.price * i.amount;
         volume += i.amount;
       });
