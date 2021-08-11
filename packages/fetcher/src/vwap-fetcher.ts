@@ -25,7 +25,7 @@ export default class VWAPFetcher implements PriceFetcher {
    * @param exchange TradesFetcher
    * @param tolerance Time period in which the data is considered fresh
    * and there's no need to fetch new data. This helps not hitting the API
-   * every seconds. Default value 5min
+   * every seconds. Default value 5sec
    */
   constructor(private readonly exchange: TradesFetcher, private readonly tolerance = 5 * 1_000) {
     assert(this.exchange.hasFetchTrades);
