@@ -1,4 +1,4 @@
-import { FetcherInterface } from '../types';
+import { PriceFetcher } from '../types';
 
 const prices: { [key: string]: { [key: string]: string } } = {
   bittrex: {
@@ -11,13 +11,17 @@ const prices: { [key: string]: { [key: string]: string } } = {
   },
   kraken: {
     'ETH/USD': '150.53'
+  },
+  CCCAGG: {
+    'ETH/USD': '152.42',
+    'BTC/USD': '7310.38'
   }
 };
 
-export default class Fetcher implements FetcherInterface {
+export default class Fetcher implements PriceFetcher {
   private readonly exchange: any;
 
-  constructor(source: string) {
+  constructor(public readonly source: string) {
     this.exchange = prices[source];
   }
 
