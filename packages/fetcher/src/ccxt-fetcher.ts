@@ -1,5 +1,5 @@
 import bn from 'big.js';
-import ccxt, { Exchange, Ticker } from 'ccxt';
+import ccxt, { Exchange } from 'ccxt';
 import { PriceFetcher, TradesFetcher, Trade } from './types';
 
 /**
@@ -29,12 +29,11 @@ export default class CCXTFetcher implements PriceFetcher, TradesFetcher {
    * @returns {Promise<string>} (bid + ask) / 2
    * @memberof CCXTFetcher
    */
-  getPrice(pair: string): Promise<string> {
-    return this.exchange.fetchTicker(pair).then((ticker: Ticker) => {
-      // bid & ask avg
-      const price = bn(ticker.bid).add(bn(ticker.ask)).div(2);
-      return price.toString();
-    });
+  async getPrice(pair: string): Promise<string> {
+    const ticker = await this.exchange.fetchTicker(pair);
+    // bid & ask avg
+    const price = bn(ticker.bid).add(bn(ticker.ask)).div(2);
+    return price.toString();
   }
 
   get hasFetchTrades(): boolean {
