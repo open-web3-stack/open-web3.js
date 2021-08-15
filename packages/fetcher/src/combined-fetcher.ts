@@ -2,15 +2,18 @@ import bn from 'big.js';
 import { PriceFetcher } from './types';
 import logger from './logger';
 
-const median = (pricesUnsorted: string[]): string => {
+const median = (pricesUnsorted: string[], pair: string): string => {
   const prices = pricesUnsorted.sort();
   const mid = Math.ceil(prices.length / 2);
-  return prices.length % 2 === 0
-    ? bn(prices[mid])
-        .add(bn(prices[mid - 1]))
-        .div(2)
-        .toString()
-    : prices[mid - 1];
+  const medianPrice =
+    prices.length % 2 === 0
+      ? bn(prices[mid])
+          .add(bn(prices[mid - 1]))
+          .div(2)
+          .toString()
+      : prices[mid - 1];
+  logger.debug(`find median ${pair}`, { prices, medianPrice });
+  return medianPrice;
 };
 
 export class CombinedFetcherError extends Error {
@@ -80,9 +83,7 @@ export default class CombinedFetcher implements PriceFetcher {
     // get prices
     const prices = validResults.flat().filter((i) => typeof i === 'string') as string[];
 
-    logger.debug("find median", prices);
-
     // return median
-    return median(prices);
+    return median(prices, pair);
   }
 }
