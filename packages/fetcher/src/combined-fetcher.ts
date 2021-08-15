@@ -1,5 +1,6 @@
 import bn from 'big.js';
 import { PriceFetcher } from './types';
+import logger from './logger';
 
 const median = (pricesUnsorted: string[]): string => {
   const prices = pricesUnsorted.sort();
@@ -60,6 +61,7 @@ export default class CombinedFetcher implements PriceFetcher {
           .getPrice(pair)
           .then((price) => {
             const weight = this.config?.weights?.[fetcher.source] || 1;
+            logger.debug(`${fetcher.source} ${pair}`, { price, weight });
             return Array(weight).fill(price);
           })
           .catch((error) => error)
@@ -77,6 +79,8 @@ export default class CombinedFetcher implements PriceFetcher {
 
     // get prices
     const prices = validResults.flat().filter((i) => typeof i === 'string') as string[];
+
+    logger.debug("find median", prices);
 
     // return median
     return median(prices);
