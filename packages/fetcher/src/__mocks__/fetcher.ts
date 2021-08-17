@@ -21,7 +21,7 @@ const prices: { [key: string]: { [key: string]: string } } = {
 export default class Fetcher implements PriceFetcher {
   private readonly exchange: any;
 
-  constructor(public readonly source: string) {
+  constructor(public readonly source: string, public readonly weight = 1) {
     this.exchange = prices[source];
   }
 

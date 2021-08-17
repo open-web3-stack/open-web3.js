@@ -2,7 +2,7 @@ import CoinGeckoFetcher from '../../coingecko-fetcher';
 
 describe('CoinGeckoFetcher', () => {
   it('getPrice', async () => {
-    let fetcher = new CoinGeckoFetcher({
+    let fetcher = new CoinGeckoFetcher(1, {
       'btc': 'bitcoin',
       'eth': 'ethereum',
       'dot': 'polkadot',

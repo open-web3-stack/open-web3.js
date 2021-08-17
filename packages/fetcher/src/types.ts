@@ -1,5 +1,6 @@
 export interface PriceFetcher {
   source: string;
+  weight: number;
   getPrice(pair: string): Promise<string>;
 }
 

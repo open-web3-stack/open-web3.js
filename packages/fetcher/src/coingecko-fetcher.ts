@@ -1,3 +1,4 @@
+import assert from 'assert';
 import axios from 'axios';
 import { PriceFetcher } from './types';
 
@@ -8,10 +9,17 @@ export default class CoinGeckoFetcher implements PriceFetcher {
 
   /**
    * Creates an instance of CoinGecko
+   * @param weight Weight of the price source. Used by CombinedFetcher. Default = 1
    * @param ids IDs mapping i.e: { btc: 'bitcoin', eth: 'ethereum', dot: 'polkadot', kar: 'karura' }
    * @param timeout Request timeout
    */
-  constructor(private readonly ids: Record<string, string>, private readonly timeout = 2_000) {}
+  constructor(
+    public readonly weight = 1,
+    private readonly ids: Record<string, string>,
+    private readonly timeout = 2_000
+  ) {
+    assert(Number.isInteger(weight), 'Weight should be integer');
+  }
 
   /**
    * Fetch price for a given pair.
