@@ -1,3 +1,4 @@
+import assert from 'assert';
 import bn from 'big.js';
 import { PriceFetcher } from './types';
 import logger from './logger';
@@ -63,6 +64,7 @@ export default class CombinedFetcher implements PriceFetcher {
           .getPrice(pair)
           .then((price) => {
             const { source, weight } = fetcher;
+            assert(Number.isInteger(weight), `${source} weight should be integer`);
             logger.debug(`${source} ${pair}`, { price, weight });
             return Array(weight).fill(price);
           })

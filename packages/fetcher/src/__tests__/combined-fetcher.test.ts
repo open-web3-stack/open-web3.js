@@ -14,10 +14,15 @@ describe('CombinedFetcher', () => {
     kraken: 3,
     CCCAGG: 5
   };
+
   ['bittrex', 'coinbase', 'kraken'].forEach((source) => {
-    fetchers.push(new CCXTFetcher(source, weights[source]));
+    const fetcher = new CCXTFetcher(source);
+    fetcher.weight = weights[source];
+    fetchers.push(fetcher);
   });
-  fetchers.push(new CryptoCompareFetcher('CCCAGG', '', weights['CCCAGG']));
+  const cc = new CryptoCompareFetcher('CCCAGG', '');
+  cc.weight = weights['CCCAGG'];
+  fetchers.push(cc);
 
   const fetcher = new CombinedFetcher(fetchers, {
     minValidPriceSources: 3

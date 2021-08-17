@@ -1,6 +1,6 @@
 export interface PriceFetcher {
   source: string;
-  weight: number;
+  weight: number; // Weight of the price source. Used by CombinedFetcher. Default = 1
   getPrice(pair: string): Promise<string>;
 }
 

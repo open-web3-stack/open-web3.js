@@ -4,7 +4,7 @@ import VWAPFetcher from '../../vwap-fetcher';
 describe('VWAPFetcher', () => {
   it('getPrice', async () => {
     // Kraken fetcher
-    let kraken = new VWAPFetcher(new CCXTFetcher('kraken', 1, { timeout: 10_000 }));
+    let kraken = new VWAPFetcher(new CCXTFetcher('kraken', { timeout: 10_000 }));
 
     const btc_usd = await kraken.getPrice('BTC/USD');
     console.log('Kraken BTC/USD:', btc_usd);
@@ -16,7 +16,7 @@ describe('VWAPFetcher', () => {
     console.log('Kraken EUR/USD', eur_usd);
 
     // Binance fetcher
-    let binance = new VWAPFetcher(new CCXTFetcher('binance', 1, {  timeout: 10_000 }));
+    let binance = new VWAPFetcher(new CCXTFetcher('binance', {  timeout: 10_000 }));
 
     const btc_usd2 = await kraken.getPrice('BTC/USD');
     console.log('Kraken BTC/USD:', btc_usd2);

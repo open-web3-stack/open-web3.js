@@ -1,4 +1,3 @@
-import assert from 'assert';
 import axios from 'axios';
 import { PriceFetcher } from './types';
 
@@ -12,6 +11,7 @@ const baseURL = 'https://min-api.cryptocompare.com';
  * @implements {PriceFetcher}
  */
 export default class CryptoCompareFetcher implements PriceFetcher {
+  public weight = 1;
   /**
    * Creates an instance of CryptoCompareFetcher.
    * @param source
@@ -19,14 +19,7 @@ export default class CryptoCompareFetcher implements PriceFetcher {
    * @param weight Weight of the price source. Used by CombinedFetcher. Default = 1
    * @param timeout milliseconds
    */
-  constructor(
-    public readonly source: string,
-    private readonly apiKey: string,
-    public readonly weight = 1,
-    private readonly timeout = 2000
-  ) {
-    assert(Number.isInteger(weight), 'Weight should be integer');
-  }
+  constructor(public readonly source: string, private readonly apiKey: string, private readonly timeout = 2000) {}
 
   /**
    * Fetch price for a give pair.

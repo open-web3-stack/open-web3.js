@@ -1,4 +1,3 @@
-import assert from 'assert';
 import bn from 'big.js';
 import ccxt, { Exchange } from 'ccxt';
 import { PriceFetcher, TradesFetcher, Trade } from './types';
@@ -11,20 +10,15 @@ import { PriceFetcher, TradesFetcher, Trade } from './types';
  * @implements {PriceFetcher}
  */
 export default class CCXTFetcher implements PriceFetcher, TradesFetcher {
+  public weight = 1;
   private readonly exchange: Exchange;
 
   /**
    * Creates an instance of CCXTFetcher.
    * @param source Exchange id
-   * @param weight Weight of the price source. Used by CombinedFetcher. Default = 1
    * @param config Config
    */
-  constructor(
-    public readonly source: string,
-    public readonly weight = 1,
-    config?: { [key in keyof Exchange]?: Exchange[key] }
-  ) {
-    assert(Number.isInteger(weight), 'Weight should be integer');
+  constructor(public readonly source: string, config?: { [key in keyof Exchange]?: Exchange[key] }) {
     this.exchange = new ccxt[source]({ timeout: 10_000, ...config });
   }
 

@@ -14,6 +14,7 @@ const timeframe = 5 * 60 * 1_000; // 5min
 const lifetime = 60 * 60 * 1_000; // 60min
 
 export default class VWAPFetcher implements PriceFetcher {
+  public weight = 1;
   public readonly source: string;
   private readonly trades: Record<string, Trade[]> = {};
   private readonly lastFed: Record<string, number> = {};
@@ -23,17 +24,11 @@ export default class VWAPFetcher implements PriceFetcher {
    * Create new instance
    *
    * @param exchange TradesFetcher
-   * @param weight Weight of the price source. Used by CombinedFetcher. Default = 1
    * @param tolerance Time period in which the data is considered fresh
    * and there's no need to fetch new data. This helps not hitting the API
    * every seconds. Default value 5sec
    */
-  constructor(
-    private readonly exchange: TradesFetcher,
-    public readonly weight = 1,
-    private readonly tolerance = 5 * 1_000
-  ) {
-    assert(Number.isInteger(weight), 'Weight should be integer');
+  constructor(private readonly exchange: TradesFetcher, private readonly tolerance = 5 * 1_000) {
     assert(this.exchange.hasFetchTrades);
     this.source = this.exchange.source;
   }

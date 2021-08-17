@@ -1,10 +1,10 @@
-import assert from 'assert';
 import axios from 'axios';
 import { PriceFetcher } from './types';
 
 const baseURL = 'https://api.coingecko.com/api/v3';
 
 export default class CoinGeckoFetcher implements PriceFetcher {
+  public weight = 1;
   public readonly source = 'coingecko';
 
   /**
@@ -13,13 +13,7 @@ export default class CoinGeckoFetcher implements PriceFetcher {
    * @param ids IDs mapping i.e: { btc: 'bitcoin', eth: 'ethereum', dot: 'polkadot', kar: 'karura' }
    * @param timeout Request timeout
    */
-  constructor(
-    public readonly weight = 1,
-    private readonly ids: Record<string, string>,
-    private readonly timeout = 2_000
-  ) {
-    assert(Number.isInteger(weight), 'Weight should be integer');
-  }
+  constructor(private readonly ids: Record<string, string>, private readonly timeout = 2_000) {}
 
   /**
    * Fetch price for a given pair.
