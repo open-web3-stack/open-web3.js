@@ -14,6 +14,7 @@ const timeframe = 5 * 60 * 1_000; // 5min
 const lifetime = 60 * 60 * 1_000; // 60min
 
 export default class VWAPFetcher implements PriceFetcher {
+  public weight = 1;
   public readonly source: string;
   private readonly trades: Record<string, Trade[]> = {};
   private readonly lastFed: Record<string, number> = {};

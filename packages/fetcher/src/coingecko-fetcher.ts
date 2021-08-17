@@ -4,10 +4,12 @@ import { PriceFetcher } from './types';
 const baseURL = 'https://api.coingecko.com/api/v3';
 
 export default class CoinGeckoFetcher implements PriceFetcher {
+  public weight = 1;
   public readonly source = 'coingecko';
 
   /**
    * Creates an instance of CoinGecko
+   * @param weight Weight of the price source. Used by CombinedFetcher. Default = 1
    * @param ids IDs mapping i.e: { btc: 'bitcoin', eth: 'ethereum', dot: 'polkadot', kar: 'karura' }
    * @param timeout Request timeout
    */

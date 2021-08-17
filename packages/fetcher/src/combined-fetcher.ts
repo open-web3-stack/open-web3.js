@@ -1,3 +1,4 @@
+import assert from 'assert';
 import bn from 'big.js';
 import { PriceFetcher } from './types';
 import logger from './logger';
@@ -27,7 +28,6 @@ export class CombinedFetcherError extends Error {
 
 export type CombinedFetcherConfig = {
   minValidPriceSources?: number;
-  weights?: Record<string, number>;
 };
 
 /**
@@ -38,12 +38,13 @@ export type CombinedFetcherConfig = {
  * @implements {PriceFetcher}
  */
 export default class CombinedFetcher implements PriceFetcher {
+  public weight = 1;
   public readonly source: string;
+
   /**
    * Creates an instance of CombinedFetcher.
-   * @param {PriceFetcher[]} fetchers
-   * @param {number} minValidPriceSources number of min valid price sources to provide a median
-   * @memberof CombinedFetcher
+   * @param fetchers
+   * @param minValidPriceSources number of min valid price sources to provide a median
    */
   constructor(private readonly fetchers: PriceFetcher[], private readonly config?: CombinedFetcherConfig) {
     this.source = fetchers.map((x) => x.source).join(',');
@@ -52,9 +53,8 @@ export default class CombinedFetcher implements PriceFetcher {
   /**
    * Get a median from prices provided by fetchers
    *
-   * @param {string} pair
+   * @param pair Pair symbol
    * @returns {Promise<string>}
-   * @memberof CombinedFetcher
    */
   async getPrice(pair: string): Promise<string> {
     // fetch from all sources
@@ -63,8 +63,9 @@ export default class CombinedFetcher implements PriceFetcher {
         fetcher
           .getPrice(pair)
           .then((price) => {
-            const weight = this.config?.weights?.[fetcher.source] || 1;
-            logger.debug(`${fetcher.source} ${pair}`, { price, weight });
+            const { source, weight } = fetcher;
+            assert(Number.isInteger(weight), `${source} weight should be integer`);
+            logger.debug(`${source} ${pair}`, { price, weight });
             return Array(weight).fill(price);
           })
           .catch((error) => error)

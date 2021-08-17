@@ -10,13 +10,13 @@ import { PriceFetcher, TradesFetcher, Trade } from './types';
  * @implements {PriceFetcher}
  */
 export default class CCXTFetcher implements PriceFetcher, TradesFetcher {
+  public weight = 1;
   private readonly exchange: Exchange;
 
   /**
    * Creates an instance of CCXTFetcher.
-   * @param {string} source
-   * @param {{ [key in keyof Exchange]?: Exchange[key] }} [config]
-   * @memberof CCXTFetcher
+   * @param source Exchange id
+   * @param config Config
    */
   constructor(public readonly source: string, config?: { [key in keyof Exchange]?: Exchange[key] }) {
     this.exchange = new ccxt[source]({ timeout: 10_000, ...config });
@@ -24,10 +24,8 @@ export default class CCXTFetcher implements PriceFetcher, TradesFetcher {
 
   /**
    * Fetch price for a given pair.
-   *
-   * @param {string} pair
+   * @param pair Pair symbol
    * @returns {Promise<string>} (bid + ask) / 2
-   * @memberof CCXTFetcher
    */
   async getPrice(pair: string): Promise<string> {
     const ticker = await this.exchange.fetchTicker(pair);

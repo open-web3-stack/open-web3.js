@@ -8,21 +8,25 @@ import CryptoCompareFetcher from '../crypto-compare-fetcher';
 describe('CombinedFetcher', () => {
   let fetchers = [];
 
-  ['bittrex', 'coinbase', 'kraken'].forEach((source) => {
-    fetchers.push(new CCXTFetcher(source));
-  });
-  fetchers.push(new CryptoCompareFetcher('CCCAGG', ''));
-
-  const options = {
-    minValidPriceSources: 3,
-    weights: {
-      bittrex: 2,
-      coinbase: 4,
-      kraken: 3,
-      CCCAGG: 5
-    }
+  const weights = {
+    bittrex: 2,
+    coinbase: 4,
+    kraken: 3,
+    CCCAGG: 5
   };
-  const fetcher = new CombinedFetcher(fetchers, options);
+
+  ['bittrex', 'coinbase', 'kraken'].forEach((source) => {
+    const fetcher = new CCXTFetcher(source);
+    fetcher.weight = weights[source];
+    fetchers.push(fetcher);
+  });
+  const cc = new CryptoCompareFetcher('CCCAGG', '');
+  cc.weight = weights['CCCAGG'];
+  fetchers.push(cc);
+
+  const fetcher = new CombinedFetcher(fetchers, {
+    minValidPriceSources: 3
+  });
 
   it('getPrice', async () => {
     const eth_price = await fetcher.getPrice('ETH/USD');
