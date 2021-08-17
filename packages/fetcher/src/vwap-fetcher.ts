@@ -33,6 +33,7 @@ export default class VWAPFetcher implements PriceFetcher {
     public readonly weight = 1,
     private readonly tolerance = 5 * 1_000
   ) {
+    assert(Number.isInteger(weight), 'Weight should be integer');
     assert(this.exchange.hasFetchTrades);
     this.source = this.exchange.source;
   }
