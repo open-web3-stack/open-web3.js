@@ -1856,7 +1856,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/api@workspace:packages/api"
   dependencies:
-    "@open-web3/util": 0.9.4-28
+    "@open-web3/util": 0.9.4-29
   peerDependencies:
     "@polkadot/api": 5.*
   languageName: unknown
@@ -1866,7 +1866,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/app-util@workspace:packages/app-util"
   dependencies:
-    "@open-web3/util": 0.9.4-28
+    "@open-web3/util": 0.9.4-29
     rxjs: ^7.2.0
   peerDependencies:
     "@polkadot/types": 5.*
@@ -1992,7 +1992,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/dispatcher@workspace:packages/dispatcher"
   dependencies:
-    "@open-web3/util": 0.9.4-28
+    "@open-web3/util": 0.9.4-29
   languageName: unknown
   linkType: soft
 
@@ -2000,7 +2000,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/fetcher@workspace:packages/fetcher"
   dependencies:
-    "@open-web3/util": 0.9.4-28
+    "@open-web3/util": 0.9.4-29
     "@types/jest": ^26.0.23
     axios: ^0.21.1
     ccxt: ^1.50.34
@@ -2012,7 +2012,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/indexer@workspace:packages/indexer"
   dependencies:
-    "@open-web3/scanner": 0.9.4-28
+    "@open-web3/scanner": 0.9.4-29
     "@types/node": ^15.12.5
     "@types/sequelize": ^4.28.9
     pg: ^8.6.0
@@ -2038,7 +2038,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@open-web3/orml-type-definitions@0.9.4-28, @open-web3/orml-type-definitions@^0.9.4-7, @open-web3/orml-type-definitions@workspace:packages/orml-type-definitions":
+"@open-web3/orml-type-definitions@0.9.4-29, @open-web3/orml-type-definitions@^0.9.4-7, @open-web3/orml-type-definitions@workspace:packages/orml-type-definitions":
   version: 0.0.0-use.local
   resolution: "@open-web3/orml-type-definitions@workspace:packages/orml-type-definitions"
   dependencies:
@@ -2051,14 +2051,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/orml-types@workspace:packages/orml-types"
   dependencies:
-    "@open-web3/orml-type-definitions": 0.9.4-28
+    "@open-web3/orml-type-definitions": 0.9.4-29
   peerDependencies:
     "@polkadot/api": 5.*
     "@polkadot/typegen": 5.*
   languageName: unknown
   linkType: soft
 
-"@open-web3/scanner@0.9.4-28, @open-web3/scanner@workspace:packages/scanner":
+"@open-web3/scanner@0.9.4-29, @open-web3/scanner@workspace:packages/scanner":
   version: 0.0.0-use.local
   resolution: "@open-web3/scanner@workspace:packages/scanner"
   dependencies:
@@ -2068,7 +2068,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@open-web3/util@0.9.4-28, @open-web3/util@workspace:packages/util":
+"@open-web3/util@0.9.4-29, @open-web3/util@workspace:packages/util":
   version: 0.0.0-use.local
   resolution: "@open-web3/util@workspace:packages/util"
   dependencies:
