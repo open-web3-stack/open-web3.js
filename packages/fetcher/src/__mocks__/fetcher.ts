@@ -2,8 +2,8 @@ import { PriceFetcher } from '../types';
 
 const prices: { [key: string]: { [key: string]: string } } = {
   bittrex: {
-    'ETH/USD': '149.85',
-    'BTC/USD': '7303.36'
+    'ETH/USDT': '149.85',
+    'BTC/USDT': '7303.36'
   },
   coinbase: {
     'ETH/USD': '151.02',

@@ -18,14 +18,16 @@ describe('CombinedFetcher', () => {
   ['bittrex', 'coinbase', 'kraken'].forEach((source) => {
     const fetcher = new CCXTFetcher(source);
     fetcher.weight = weights[source];
-    fetchers.push(fetcher);
+    fetchers.push({ fetcher });
   });
   const cc = new CryptoCompareFetcher('CCCAGG', '');
   cc.weight = weights['CCCAGG'];
   fetchers.push(cc);
+  fetchers[0].symbolOverrides = { 'ETH/USD': 'ETH/USDT', 'BTC/USD': 'BTC/USDT' }
 
-  const fetcher = new CombinedFetcher(fetchers, {
-    minValidPriceSources: 3
+  const fetcher = new CombinedFetcher({
+    minValidPriceSources: 3,
+    fetchers
   });
 
   it('getPrice', async () => {
