@@ -26,8 +26,11 @@ export class CombinedFetcherError extends Error {
   }
 }
 
+type FetcherConfig = { fetcher: PriceFetcher; symbolOverrides?: { [symbol: string]: string } };
+
 export type CombinedFetcherConfig = {
   minValidPriceSources?: number;
+  fetchers: (PriceFetcher | FetcherConfig)[];
 };
 
 /**
@@ -40,14 +43,18 @@ export type CombinedFetcherConfig = {
 export default class CombinedFetcher implements PriceFetcher {
   public weight = 1;
   public readonly source: string;
+  private readonly fetchers: FetcherConfig[];
 
   /**
    * Creates an instance of CombinedFetcher.
    * @param fetchers
    * @param minValidPriceSources number of min valid price sources to provide a median
    */
-  constructor(private readonly fetchers: PriceFetcher[], private readonly config?: CombinedFetcherConfig) {
-    this.source = fetchers.map((x) => x.source).join(',');
+  constructor(private readonly config: CombinedFetcherConfig) {
+    this.fetchers = config.fetchers.map(
+      (fetcher) => ((fetcher as FetcherConfig).fetcher ? fetcher : { fetcher }) as FetcherConfig
+    );
+    this.source = this.fetchers.map((x) => x.fetcher.source).join(',');
   }
 
   /**
@@ -60,16 +67,16 @@ export default class CombinedFetcher implements PriceFetcher {
     // fetch from all sources
     const results = await Promise.all(
       this.fetchers.map((fetcher) =>
-        fetcher
-          .getPrice(pair)
+        fetcher.fetcher
+          .getPrice(fetcher.symbolOverrides?.[pair] || pair)
           .then((price) => {
-            const { source, weight } = fetcher;
+            const { source, weight } = fetcher.fetcher;
             assert(Number.isInteger(weight), `${source} weight should be integer`);
             logger.debug(`${fetcher.constructor.name}:${source} ${pair}`, { price, weight });
             return Array(weight).fill(price);
           })
           .catch((error) => {
-            logger.debug(`Error: ${fetcher.constructor.name}:${fetcher.source} ${pair}`, error);
+            logger.debug(`Error: ${fetcher.fetcher.constructor.name}:${fetcher.fetcher.source} ${pair}`, error);
             return error;
           })
       )
