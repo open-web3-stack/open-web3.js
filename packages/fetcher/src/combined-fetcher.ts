@@ -72,7 +72,7 @@ export default class CombinedFetcher implements PriceFetcher {
           .then((price) => {
             const { source, weight } = fetcher.fetcher;
             assert(Number.isInteger(weight), `${source} weight should be integer`);
-            logger.debug(`${fetcher.constructor.name}:${source} ${pair}`, { price, weight });
+            logger.debug(`${fetcher.fetcher.constructor.name}:${source} ${pair}`, { price, weight });
             return Array(weight).fill(price);
           })
           .catch((error) => {
