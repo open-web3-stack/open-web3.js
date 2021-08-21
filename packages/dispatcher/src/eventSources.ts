@@ -13,7 +13,7 @@ export class SetIntervalEventSource implements DispatchEventSource {
     }
   }
 
-  public readonly kind = Symbol('SetIntervalEven');
+  public readonly kind = Symbol('SetIntervalEvent');
 
   public register(callback: (event: DispatchEvent) => void) {
     const event = { kind: this.kind };
