@@ -15,11 +15,11 @@
     "check-deps": "node packages/util/src/scripts/check-deps.js yarn.lock @polkadot/"
   },
   "resolutions": {
-    "@polkadot/api-derive": "^5.2.1",
-    "@polkadot/api": "^5.2.1",
-    "@polkadot/types": "^5.2.1",
-    "@polkadot/api-util": "^5.2.1",
-    "@polkadot/rpc-core": "^5.2.1"
+    "@polkadot/api-derive": "^5.6.2-5",
+    "@polkadot/api": "^5.6.2-5",
+    "@polkadot/types": "^5.6.2-5",
+    "@polkadot/api-util": "^5.6.2-5",
+    "@polkadot/rpc-core": "^5.6.2-5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.8",
