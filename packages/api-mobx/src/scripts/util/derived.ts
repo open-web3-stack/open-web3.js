@@ -5,7 +5,7 @@
 import { TypeDef, TypeDefInfo } from '@polkadot/types/create/types';
 import { Constructor, Registry } from '@polkadot/types/types';
 
-import { ClassOfUnsafe, getTypeDef } from '@polkadot/types/create';
+import { createClass, getTypeDef } from '@polkadot/types/create';
 import { AbstractInt } from '@polkadot/types/codec/AbstractInt';
 import { Compact } from '@polkadot/types/codec/Compact';
 import { Enum } from '@polkadot/types/codec/Enum';
@@ -99,7 +99,7 @@ export function getSimilarTypes(
     return ['null'];
   }
 
-  const Clazz = ClassOfUnsafe(registry, type);
+  const Clazz = createClass(registry, type);
 
   if (isChildClass(Vec, Clazz)) {
     const subDef = getTypeDef(type).sub as TypeDef;
