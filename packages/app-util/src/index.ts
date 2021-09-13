@@ -171,14 +171,14 @@ export const configureLogger = (options: {
                   [LoggerLevel.Log]: ':eyes:',
                   [LoggerLevel.Info]: ':information_source:',
                   [LoggerLevel.Warn]: ':warning:',
-                  [LoggerLevel.Log]: ':exclamation:'
+                  [LoggerLevel.Error]: ':exclamation:'
                 };
                 const date = `<!date^${(p.timestamp.valueOf() / 1000).toFixed(
                   0
-                )}^{date_num} {time_secs}|${p.timestamp.toISOString()}>`;
-                const level = ('`' + p.level.toUpperCase() + '`').padStart(7);
+                )}^{time_secs}|${p.timestamp.toISOString()}>`;
+                const level = p.level.toUpperCase().padStart(7);
                 const mention = p.level === LoggerLevel.Warn || p.level === LoggerLevel.Error ? '<!channel>' : '';
-                return `_${date}_ ${emoji[p.level]}${level} [${p.namespaces.join(':')}]: ${p.args
+                return `_${date}_ ${emoji[p.level]}${level} [\`${p.namespaces.join(':')}\`]: ${p.args
                   .map((a) =>
                     inspect(a, { showHidden: false, depth: 5, colors: false, compact: true, breakLength: Infinity })
                   )
