@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/scanner",
-  "version": "0.9.4-36",
+  "version": "0.9.4-37",
   "description": "A monitoring library for Substrate based chain",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
