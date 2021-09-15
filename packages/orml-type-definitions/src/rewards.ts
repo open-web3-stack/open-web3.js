@@ -1,11 +1,11 @@
 export default {
   rpc: {},
   types: {
-    CompactBalance: 'Compact<Balance>',
     PoolInfo: {
-      totalShares: 'Compact<Share>',
-      rewards: 'BTreeMap<CompactBalance, CompactBalance>'
+      totalShares: 'Share',
+      rewards: 'BTreeMap<Balance, Balance>'
     },
+    CompactBalance: 'Compact<Balance>',
     PoolInfoV0: {
       totalShares: 'Compact<Share>',
       totalRewards: 'CompactBalance',
