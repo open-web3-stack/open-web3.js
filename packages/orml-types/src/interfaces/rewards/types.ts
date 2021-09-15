@@ -1,16 +1,20 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { BTreeMap, Compact, Struct, u128 } from '@polkadot/types';
+import type { BTreeMap, Compact, Struct, u128, u8 } from '@polkadot/types';
+import type { ITuple } from '@polkadot/types/types';
 import type { Balance } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name CompactBalance */
 export interface CompactBalance extends Compact<Balance> {}
 
+/** @name CurrencyId */
+export interface CurrencyId extends u8 {}
+
 /** @name PoolInfo */
 export interface PoolInfo extends Struct {
   readonly totalShares: Share;
-  readonly rewards: BTreeMap<Balance, Balance>;
+  readonly rewards: BTreeMap<CurrencyId, ITuple<[Balance, Balance]>>;
 }
 
 /** @name PoolInfoV0 */

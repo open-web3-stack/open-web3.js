@@ -5,7 +5,7 @@ import type { BitVec, Bool, Bytes, Data, I128, I16, I256, I32, I64, I8, Json, Nu
 import type { AuthorityOrigin, CallOf, DelayedOrigin, DispatchTime, ScheduleTaskIndex } from '@open-web3/orml-types/interfaces/authority';
 import type { GraduallyUpdate, StorageKeyBytes, StorageValue, StorageValueBytes } from '@open-web3/orml-types/interfaces/graduallyUpdates';
 import type { DataProviderId, OrderedSet, RpcDataProviderId, TimestampedValue, TimestampedValueOf } from '@open-web3/orml-types/interfaces/oracle';
-import type { CompactBalance, PoolInfo, PoolInfoV0, Share } from '@open-web3/orml-types/interfaces/rewards';
+import type { CompactBalance, CurrencyId, PoolInfo, PoolInfoV0, Share } from '@open-web3/orml-types/interfaces/rewards';
 import type { AccountId, AccountId20, AccountId32, AccountIdOf, AccountIndex, Address, AssetId, Balance, BalanceOf, Block, BlockNumber, BlockNumberFor, BlockNumberOf, Call, CallHash, CallHashOf, ChangesTrieConfiguration, ChangesTrieSignal, CodecHash, Consensus, ConsensusEngineId, Digest, DigestItem, EncodedJustification, ExtrinsicsWeight, Fixed128, Fixed64, FixedI128, FixedI64, FixedU128, FixedU64, H1024, H128, H160, H2048, H256, H32, H512, H64, Hash, Header, HeaderPartial, I32F32, Index, IndicesLookupSource, Justification, Justifications, KeyTypeId, KeyValue, LockIdentifier, LookupSource, LookupTarget, ModuleId, Moment, MultiAddress, MultiSigner, OpaqueCall, OracleValue, Origin, OriginCaller, PalletId, PalletVersion, PalletsOrigin, Pays, PerU16, Perbill, Percent, Permill, Perquintill, Phantom, PhantomData, PreRuntime, Releases, RuntimeDbWeight, Seal, SealV0, SignedBlock, SignedBlockWithJustification, SignedBlockWithJustifications, Slot, StorageData, StorageProof, TransactionInfo, TransactionPriority, TransactionStorageProof, U32F32, ValidatorId, ValidatorIdOf, Weight, WeightMultiplier } from '@open-web3/orml-types/interfaces/runtime';
 import type { OrmlAccountData, OrmlBalanceLock } from '@open-web3/orml-types/interfaces/tokens';
 import type { AuctionInfo, DelayedDispatchTime, DispatchId, Price } from '@open-web3/orml-types/interfaces/traits';
@@ -259,6 +259,7 @@ declare module '@polkadot/types/types/registry' {
     CoreIndex: CoreIndex;
     CoreOccupied: CoreOccupied;
     CreatedBlock: CreatedBlock;
+    CurrencyId: CurrencyId;
     Data: Data;
     DataProviderId: DataProviderId;
     DeferredOffenceOf: DeferredOffenceOf;

@@ -1,9 +1,10 @@
 export default {
   rpc: {},
   types: {
+    CurrencyId: 'u8',
     PoolInfo: {
       totalShares: 'Share',
-      rewards: 'BTreeMap<Balance, Balance>'
+      rewards: 'BTreeMap<CurrencyId, (Balance, Balance)>'
     },
     CompactBalance: 'Compact<Balance>',
     PoolInfoV0: {
