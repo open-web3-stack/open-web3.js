@@ -8,13 +8,13 @@ import type { Balance } from '@open-web3/orml-types/interfaces/runtime';
 /** @name CompactBalance */
 export interface CompactBalance extends Compact<Balance> {}
 
-/** @name CurrencyId */
-export interface CurrencyId extends u8 {}
+/** @name OrmlCurrencyId */
+export interface OrmlCurrencyId extends u8 {}
 
 /** @name PoolInfo */
 export interface PoolInfo extends Struct {
   readonly totalShares: Share;
-  readonly rewards: BTreeMap<CurrencyId, ITuple<[Balance, Balance]>>;
+  readonly rewards: BTreeMap<OrmlCurrencyId, ITuple<[Balance, Balance]>>;
 }
 
 /** @name PoolInfoV0 */
