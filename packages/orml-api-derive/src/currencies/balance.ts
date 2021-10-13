@@ -29,7 +29,8 @@ export const balance = (
           );
         }
 
-        const key1 = api.query.tokens.accounts.creator.meta.type.asDoubleMap.key1.toString();
+        // TODO: `asMap.key[0]` is probably wrong and needs fix
+        const key1 = api.query.tokens.accounts.creator.meta.type.asMap.key[0].toString();
         const arg = key1 === 'CurrencyId' ? [token, address] : [address, token];
         return api.query.tokens.accounts<OrmlAccountData>(...arg).pipe(
           map((result) => {

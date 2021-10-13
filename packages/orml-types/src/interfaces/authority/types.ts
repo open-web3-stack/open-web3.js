@@ -1,8 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Enum, Struct, u32 } from '@polkadot/types';
 import type { BlockNumber, Call, PalletsOrigin } from '@open-web3/orml-types/interfaces/runtime';
+import type { Enum, Struct, u32 } from '@polkadot/types';
 
 /** @name AuthorityOrigin */
 export interface AuthorityOrigin extends DelayedOrigin {}

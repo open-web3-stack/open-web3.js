@@ -54,27 +54,6 @@ function entrySignature(
     setImports(allDefs, imports, [...key, value]);
 
     return [[key.map(format).join(' | ')], formatType(allDefs, outputType, imports)];
-  } else if (storageEntry.type.isDoubleMap) {
-    // Find similar types of `key1` and `key2` types
-    const key1 = getSimilarTypes(allDefs, registry, storageEntry.type.asDoubleMap.key1.toString(), imports);
-    const key2 = getSimilarTypes(allDefs, registry, storageEntry.type.asDoubleMap.key2.toString(), imports);
-    const value = storageEntry.type.asDoubleMap.value.toString();
-
-    setImports(allDefs, imports, [...key1, ...key2, value]);
-
-    return [[key1.map(format).join(' | '), key2.map(format).join(' | ')], formatType(allDefs, outputType, imports)];
-  } else if (storageEntry.type.isNMap) {
-    let types: string[] = [];
-
-    storageEntry.type.asNMap.keyVec.forEach((item) => {
-      types = types.concat(getSimilarTypes(allDefs, registry, item.toString(), imports));
-    });
-
-    const value = storageEntry.type.asNMap.value.toString();
-
-    setImports(allDefs, imports, [...types, value]);
-
-    return [[types.map(format).join(' | ')], formatType(allDefs, outputType, imports)];
   }
 
   throw new Error(`entryArgs: Cannot parse args of entry ${storageEntry.name.toString()}`);
@@ -100,7 +79,7 @@ function generateForMeta(
       return Object.entries(obj).reduce((defs, [key, value]) => ({ ...defs, [`${path}/${key}`]: value }), defs);
     }, {});
 
-    const modules = meta.asLatest.modules
+    const modules = meta.asLatest.pallets
       .sort(compareName)
       .filter((mod) => !mod.storage.isNone)
       .map(({ name, storage }) => {
@@ -113,10 +92,6 @@ function generateForMeta(
 
             if (storageEntry.type.isMap) {
               entryType = `StorageMap<${args.join(', ')}, ${returnType}>`;
-            }
-
-            if (storageEntry.type.isDoubleMap) {
-              entryType = `StorageDoubleMap<${args.join(', ')}, ${returnType}>`;
             }
 
             return {
@@ -143,7 +118,7 @@ function generateForMeta(
         })),
       {
         file: '@open-web3/api-mobx',
-        types: ['StorageMap', 'StorageDoubleMap', 'BaseStorageType']
+        types: ['StorageMap', 'BaseStorageType']
       }
     ];
 

@@ -2,7 +2,7 @@ import { AnyNumber } from '@polkadot/types/types';
 import { AccountId, Hash } from '@polkadot/types/interfaces/runtime';
 import { EraIndex, ValidatorPrefs } from '@polkadot/types/interfaces/staking';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
-import { StorageDoubleMap, StorageMap, BaseStorageType } from '@open-web3/api-mobx/src';
+import { StorageMap, BaseStorageType } from '@open-web3/api-mobx/src';
 
 export interface StorageType extends BaseStorageType {
   staking: {
@@ -13,7 +13,7 @@ export interface StorageType extends BaseStorageType {
      *
      * Is it removed after `HISTORY_DEPTH` eras.
      **/
-    erasValidatorPrefs: StorageDoubleMap<EraIndex | AnyNumber, AccountId | string, ValidatorPrefs>;
+    erasValidatorPrefs: StorageMap<[EraIndex | AnyNumber, AccountId | string], ValidatorPrefs>;
     /**
      * The map from (wannabe) validator stash key to the preferences of that validator.
      **/
