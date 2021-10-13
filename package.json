@@ -14,20 +14,13 @@
     "test": "jest --testPathIgnorePatterns e2e",
     "check-deps": "node packages/util/src/scripts/check-deps.js yarn.lock @polkadot/"
   },
-  "resolutions": {
-    "@polkadot/api-derive": "^5.6.2-5",
-    "@polkadot/api": "^5.6.2-5",
-    "@polkadot/types": "^5.6.2-5",
-    "@polkadot/api-util": "^5.6.2-5",
-    "@polkadot/rpc-core": "^5.6.2-5"
-  },
   "devDependencies": {
     "@babel/core": "^7.12.8",
     "@babel/register": "^7.12.1",
     "@babel/runtime": "^7.12.5",
     "@open-web3/dev-config": "^0.1.13",
-    "@polkadot/api": "^5.1.2-7",
-    "@polkadot/typegen": "^5.1.2-7",
+    "@polkadot/api": "^6.3.1",
+    "@polkadot/typegen": "^6.3.1",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.5",
     "jest": "^26.6.3",

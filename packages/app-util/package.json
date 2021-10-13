@@ -19,9 +19,9 @@
     "rxjs": "^7.2.0"
   },
   "peerDependencies": {
-    "@polkadot/types": "5.*",
-    "@slack/webhook": "5.*",
-    "big.js": "5.*"
+    "@polkadot/types": "^6.3.1",
+    "@slack/webhook": "^6.0.0",
+    "big.js": "^6.1.1"
   },
   "peerDependenciesMeta": {
     "@polkadot/types": {
