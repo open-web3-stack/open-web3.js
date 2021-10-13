@@ -77,49 +77,4 @@ describe('api-mobx', () => {
       }
     });
   });
-
-  it('StorageDoubleMap allEntries works', (done) => {
-    autorun(() => {
-      let result = storage.staking.erasValidatorPrefs.allEntries();
-      const keys = Array.from(result.keys());
-      const values = Array.from(result.values());
-      if (keys.length > 0) {
-        console.log(keys[0]);
-        for (const rawValue of values[0]) {
-          for (const [key, value] of rawValue.entries()) {
-            console.log(key, value.toString());
-            done();
-            return;
-          }
-        }
-      }
-    });
-  }, 60000);
-
-  it('StorageDoubleMap with key1 works', (done) => {
-    autorun(() => {
-      let result = storage.staking.erasValidatorPrefs.entries(2421);
-      if (result) {
-        const keys = Array.from(result.keys());
-        const values = Array.from(result.entries());
-        const [key, value] = values[0];
-        console.log(key, value.toString());
-
-        if (keys.length > 0) {
-          console.log(keys[0]);
-          done();
-        }
-      }
-    });
-  });
-
-  it('StorageDoubleMap with key1 & key2 works', (done) => {
-    autorun(() => {
-      let result = storage.staking.erasValidatorPrefs(0, 'CtwdfrhECFs3FpvCGoiE4hwRC4UsSiM8WL899HjRdQbfYZY');
-      result && console.log(result.toJSON());
-      if (result) {
-        done();
-      }
-    });
-  });
 });

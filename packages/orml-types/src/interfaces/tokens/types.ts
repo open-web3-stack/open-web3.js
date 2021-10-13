@@ -1,8 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Struct } from '@polkadot/types';
 import type { Balance, LockIdentifier } from '@open-web3/orml-types/interfaces/runtime';
+import type { Struct } from '@polkadot/types';
 
 /** @name OrmlAccountData */
 export interface OrmlAccountData extends Struct {

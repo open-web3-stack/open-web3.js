@@ -12,10 +12,6 @@ function getStorageType(type: StorageEntryTypeLatest): keyof InterfaceTypes {
     return type.asPlain.toString() as keyof InterfaceTypes;
   } else if (type.isMap) {
     return type.asMap.value.toString() as keyof InterfaceTypes;
-  } else if (type.isDoubleMap) {
-    return type.asDoubleMap.value.toString() as keyof InterfaceTypes;
-  } else if (type.isNMap) {
-    return type.asNMap.value.toString() as keyof InterfaceTypes;
   }
   return 'Raw';
 }

@@ -1,9 +1,9 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
+import type { AccountId, Balance, BlockNumber, FixedU128 } from '@open-web3/orml-types/interfaces/runtime';
 import type { Enum, Option, Struct, u32 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
-import type { AccountId, Balance, BlockNumber, FixedU128 } from '@open-web3/orml-types/interfaces/runtime';
 
 /** @name AuctionInfo */
 export interface AuctionInfo extends Struct {
