@@ -3,8 +3,8 @@ export default {
   types: {
     OrmlAccountData: {
       free: 'Balance',
-      frozen: 'Balance',
-      reserved: 'Balance'
+      reserved: 'Balance',
+      frozen: 'Balance'
     },
     OrmlBalanceLock: {
       amount: 'Balance',
