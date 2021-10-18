@@ -7,8 +7,8 @@ import type { Struct } from '@polkadot/types';
 /** @name OrmlAccountData */
 export interface OrmlAccountData extends Struct {
   readonly free: Balance;
-  readonly frozen: Balance;
   readonly reserved: Balance;
+  readonly frozen: Balance;
 }
 
 /** @name OrmlBalanceLock */
