@@ -23,6 +23,7 @@ import { types, typesBundle } from '@acala-network/type-definitions';
 import { WsProvider } from '@polkadot/rpc-provider';
 
 const provider = new WsProvider('wss://node-6714447553777491968.jm.onfinality.io/ws');
+await provider.isReady
 
 const scanner = new Scanner({ wsProvider: provider, types, typesBundle });
 
