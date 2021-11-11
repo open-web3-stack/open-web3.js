@@ -29,9 +29,10 @@ export const balance = (
           );
         }
 
-        // TODO: `asMap.key[0]` is probably wrong and needs fix
-        const key1 = api.query.tokens.accounts.creator.meta.type.asMap.key[0].toString();
-        const arg = key1 === 'CurrencyId' ? [token, address] : [address, token];
+        const lookupId = api.query.tokens.accounts.creator.meta.type.asMap.key;
+        const [typeId] = api.registry.lookup.getSiType(lookupId).def.asTuple;
+        const keyType = api.registry.lookup.getTypeDef(typeId).type;
+        const arg = keyType === 'CurrencyId' ? [token, address] : [address, token];
         return api.query.tokens.accounts<OrmlAccountData>(...arg).pipe(
           map((result) => {
             return result.free;
