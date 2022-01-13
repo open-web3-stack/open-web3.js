@@ -2109,7 +2109,7 @@ __metadata:
     mobx: ^5.15.7
     mobx-utils: ^5.6.2
   peerDependencies:
-    "@polkadot/api": ^6.3.1
+    "@polkadot/api": ">6.3.1"
   languageName: unknown
   linkType: soft
 
@@ -2119,7 +2119,7 @@ __metadata:
   dependencies:
     "@open-web3/util": 1.0.2-2
   peerDependencies:
-    "@polkadot/api": ^6.3.1
+    "@polkadot/api": ">6.3.1"
   languageName: unknown
   linkType: soft
 
@@ -2130,9 +2130,9 @@ __metadata:
     "@open-web3/util": 1.0.2-2
     rxjs: ^7.2.0
   peerDependencies:
-    "@polkadot/types": ^6.3.1
+    "@polkadot/types": ">6.3.1"
     "@slack/webhook": ^6.0.0
-    big.js: ^6.1.1
+    big.js: ">6.1.1"
   peerDependenciesMeta:
     "@polkadot/types":
       optional: true
@@ -2149,7 +2149,7 @@ __metadata:
   dependencies:
     yargs: ^17.0.1
   peerDependencies:
-    "@polkadot/api": ^6.3.1
+    "@polkadot/api": ">6.3.1"
   bin:
     substrate-asset: ./cli/index.js
   languageName: unknown
@@ -2283,7 +2283,7 @@ __metadata:
     typescript: ^4.3.5
     winston: ^3.3.3
   peerDependencies:
-    "@polkadot/api": ^6.3.1
+    "@polkadot/api": ">6.3.1"
   languageName: unknown
   linkType: soft
 
@@ -2307,7 +2307,7 @@ __metadata:
     memoizee: ^0.4.15
     rxjs: ^7.2.0
   peerDependencies:
-    "@polkadot/api": ^6.3.1
+    "@polkadot/api": ">6.3.1"
   languageName: unknown
   linkType: soft
 
@@ -2347,8 +2347,8 @@ __metadata:
   dependencies:
     "@open-web3/orml-type-definitions": 1.0.2-2
   peerDependencies:
-    "@polkadot/api": ^6.3.1
-    "@polkadot/typegen": ^6.3.1
+    "@polkadot/api": ">6.3.1"
+    "@polkadot/typegen": ">6.3.1"
   languageName: unknown
   linkType: soft
 
