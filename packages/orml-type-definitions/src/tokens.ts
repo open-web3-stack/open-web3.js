@@ -1,5 +1,22 @@
 export default {
-  rpc: {},
+  rpc: {
+    queryExistentialDeposit: {
+      description: 'Query Existential Deposit for a given currency.',
+      params: [
+        {
+          name: 'currencyId',
+          type: 'CurrencyId'
+        },
+        {
+          name: 'at',
+          type: 'BlockHash',
+          isHistoric: true,
+          isOptional: true
+        }
+      ],
+      type: 'NumberOrHex'
+    }
+  },
   types: {
     OrmlAccountData: {
       free: 'Balance',
