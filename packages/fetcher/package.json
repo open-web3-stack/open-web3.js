@@ -16,8 +16,8 @@
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
     "@open-web3/util": "1.1.1",
-    "axios": "^0.21.1",
-    "ccxt": "^1.50.34"
+    "axios": "^0.26.1",
+    "ccxt": "^1.77.36"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
