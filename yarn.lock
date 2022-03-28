@@ -2815,7 +2815,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/api@workspace:packages/api"
   dependencies:
-    "@open-web3/util": 1.1.1
+    "@open-web3/util": 1.1.2
   peerDependencies:
     "@polkadot/api": ">6.3.1"
   languageName: unknown
@@ -2825,7 +2825,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/app-util@workspace:packages/app-util"
   dependencies:
-    "@open-web3/util": 1.1.1
+    "@open-web3/util": 1.1.2
     rxjs: ^7.2.0
   peerDependencies:
     "@polkadot/types": ">6.3.1"
@@ -2950,7 +2950,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/dispatcher@workspace:packages/dispatcher"
   dependencies:
-    "@open-web3/util": 1.1.1
+    "@open-web3/util": 1.1.2
   languageName: unknown
   linkType: soft
 
@@ -2958,7 +2958,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/fetcher@workspace:packages/fetcher"
   dependencies:
-    "@open-web3/util": 1.1.1
+    "@open-web3/util": 1.1.2
     "@types/jest": ^26.0.23
     axios: ^0.26.1
     ccxt: ^1.77.36
@@ -2970,7 +2970,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/indexer@workspace:packages/indexer"
   dependencies:
-    "@open-web3/scanner": 1.1.1
+    "@open-web3/scanner": 1.1.2
     "@types/node": ^15.12.5
     "@types/sequelize": ^4.28.9
     pg: ^8.6.0
@@ -3008,6 +3008,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@open-web3/orml-type-definitions@1.1.2, @open-web3/orml-type-definitions@workspace:packages/orml-type-definitions":
+  version: 0.0.0-use.local
+  resolution: "@open-web3/orml-type-definitions@workspace:packages/orml-type-definitions"
+  dependencies:
+    "@types/lodash.merge": ^4.6.6
+    lodash.merge: ^4.6.2
+  languageName: unknown
+  linkType: soft
+
 "@open-web3/orml-type-definitions@npm:0.9.4-38, @open-web3/orml-type-definitions@npm:^0.9.4-38":
   version: 0.9.4-38
   resolution: "@open-web3/orml-type-definitions@npm:0.9.4-38"
@@ -3016,24 +3025,6 @@ __metadata:
   checksum: 49d2d1b902621cf0e295002f62ff4f1aa5e9a75acdf490dd16fb4c944c58aa48aeac2c535ce8b5cac9e0d5acd4dd706c37b2267e4d11db126601974572559302
   languageName: node
   linkType: hard
-
-"@open-web3/orml-type-definitions@npm:1.1.1":
-  version: 1.1.1
-  resolution: "@open-web3/orml-type-definitions@npm:1.1.1"
-  dependencies:
-    lodash.merge: ^4.6.2
-  checksum: 6db7cbb7f146c17985db4424b4d3a84cef67f80e89ebec840b05f361887faa7ff85978fd3a88e32e53bd91d55e39fb212c27f89dda0d4858d7a3b3c1a42adbb3
-  languageName: node
-  linkType: hard
-
-"@open-web3/orml-type-definitions@workspace:packages/orml-type-definitions":
-  version: 0.0.0-use.local
-  resolution: "@open-web3/orml-type-definitions@workspace:packages/orml-type-definitions"
-  dependencies:
-    "@types/lodash.merge": ^4.6.6
-    lodash.merge: ^4.6.2
-  languageName: unknown
-  linkType: soft
 
 "@open-web3/orml-types@npm:^0.9.4-38":
   version: 0.9.4-38
@@ -3051,23 +3042,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/orml-types@workspace:packages/orml-types"
   dependencies:
-    "@open-web3/orml-type-definitions": 1.1.1
+    "@open-web3/orml-type-definitions": 1.1.2
   peerDependencies:
     "@polkadot/api": ">6.3.1"
     "@polkadot/typegen": ">6.3.1"
   languageName: unknown
   linkType: soft
 
-"@open-web3/scanner@npm:1.1.1":
-  version: 1.1.1
-  resolution: "@open-web3/scanner@npm:1.1.1"
-  peerDependencies:
-    "@polkadot/api": ^6.3.1
-  checksum: b9bda748c85a183417cded26742e9d01dd8fa33ae9affadf3c38a21235e781de93372de2731bae15a1c7d6725ffe0d4782f1e507ec4f8f7ffbc8fec2c5ef6ba0
-  languageName: node
-  linkType: hard
-
-"@open-web3/scanner@workspace:packages/scanner":
+"@open-web3/scanner@1.1.2, @open-web3/scanner@workspace:packages/scanner":
   version: 0.0.0-use.local
   resolution: "@open-web3/scanner@workspace:packages/scanner"
   dependencies:
@@ -3077,17 +3059,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@open-web3/util@npm:1.1.1":
-  version: 1.1.1
-  resolution: "@open-web3/util@npm:1.1.1"
-  dependencies:
-    "@yarnpkg/lockfile": ^1.1.0
-    big.js: ^6.1.1
-  checksum: f504e229a9a10a8ce14b97bc40e35d7640edc58219d0af78d714dd5b77687aed21be751bb687d212770994cfd01d2e5456f54d07c74de27681b422ffdefd3cdb
-  languageName: node
-  linkType: hard
-
-"@open-web3/util@workspace:packages/util":
+"@open-web3/util@1.1.2, @open-web3/util@workspace:packages/util":
   version: 0.0.0-use.local
   resolution: "@open-web3/util@workspace:packages/util"
   dependencies:
