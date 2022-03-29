@@ -7,6 +7,7 @@ export { defaultLogger };
 export const moduleLogger = defaultLogger.createLogger('@open-web3/util');
 
 export * from './heartbeats';
+export * from './fetch-entries';
 
 export function deferred<T>() {
   const deferred: {
