@@ -18,7 +18,7 @@
     "@polkadot/api": ">6.3.1"
   },
   "devDependencies": {
-    "@polkadot/typegen": ">6.3.1"
+    "@polkadot/typegen": "^6.3.1"
   },
   "dependencies": {
     "@open-web3/orml-type-definitions": "1.1.4"
