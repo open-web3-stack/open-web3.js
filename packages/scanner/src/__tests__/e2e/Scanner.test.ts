@@ -1,6 +1,5 @@
 import { WsProvider } from '@polkadot/rpc-provider';
 import Scanner from '../../Scanner';
-import { types } from '@acala-network/types';
 
 describe('Scanner', () => {
   let scanner: Scanner;
@@ -8,7 +7,7 @@ describe('Scanner', () => {
   beforeAll(async () => {
     jest.setTimeout(30000000);
     const provider = new WsProvider('wss://kusama-rpc.polkadot.io/');
-    scanner = new Scanner({ wsProvider: provider, types });
+    scanner = new Scanner({ wsProvider: provider });
     await provider.isReady;
   });
 
