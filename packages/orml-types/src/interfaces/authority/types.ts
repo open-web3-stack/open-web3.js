@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import type { BlockNumber, Call, PalletsOrigin } from '@open-web3/orml-types/interfaces/runtime';
-import type { Enum, Struct, u32 } from '@polkadot/types';
+import type { Enum, Struct, u32 } from '@polkadot/types-codec';
 
 /** @name AuthorityOrigin */
 export interface AuthorityOrigin extends DelayedOrigin {}
@@ -22,6 +22,7 @@ export interface DispatchTime extends Enum {
   readonly asAt: BlockNumber;
   readonly isAfter: boolean;
   readonly asAfter: BlockNumber;
+  readonly type: 'At' | 'After';
 }
 
 /** @name ScheduleTaskIndex */

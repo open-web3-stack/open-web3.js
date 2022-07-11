@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import type { AccountId, Moment, OracleValue } from '@open-web3/orml-types/interfaces/runtime';
-import type { Struct, Text, Vec, u8 } from '@polkadot/types';
+import type { Struct, Text, Vec, u8 } from '@polkadot/types-codec';
 
 /** @name DataProviderId */
 export interface DataProviderId extends u8 {}

@@ -3,25 +3,25 @@
 /* eslint-disable */
 
 const fs = require('fs');
-const lockfile = require('@yarnpkg/lockfile');
+const yaml = require('js-yaml')
 
 const [, , lockfilePath, ...packages] = process.argv;
 
-if (!lockfile || !packages || packages.length === 0) {
+if (!packages || packages.length === 0) {
   console.log('USAGE: orml-check-deps path/to/yarn.lock package-prefix-to-check');
   process.exit(1);
 }
 
 const file = fs.readFileSync(lockfilePath, 'utf8');
 
-const json = lockfile.parse(file).object;
+const json = yaml.load(file);
 
 const deps = Object.keys(json).filter(x => packages.some(p => x.startsWith(p)));
 
 const resolved = Object.create(null);
 
 for (const dep of deps) {
-  const key = /^(.*)@.*?$/.exec(dep)[1];
+  const key = /^(.*?)@npm.*?/.exec(dep)[1];
   const set = resolved[key] || new Set();
   set.add(json[dep].version);
   resolved[key] = set;

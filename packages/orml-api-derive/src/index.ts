@@ -1,4 +1,4 @@
-import { DeriveCustom } from '@polkadot/api-derive';
+import type { DeriveCustom } from '@polkadot/api-base/types';
 
 import { balance } from './currencies';
 
