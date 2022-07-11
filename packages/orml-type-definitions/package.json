@@ -18,6 +18,6 @@
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@types/lodash.merge": "^4.6.6"
+    "@types/lodash.merge": "^4.6.7"
   }
 }
