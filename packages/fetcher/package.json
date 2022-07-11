@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/fetcher",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Data fetcher library, useful for oracle server",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/open-web3.js",
   "dependencies": {
-    "@open-web3/util": "2.0.0",
+    "@open-web3/util": "2.0.1",
     "axios": "^0.27.2",
     "ccxt": "^1.90.41"
   },
