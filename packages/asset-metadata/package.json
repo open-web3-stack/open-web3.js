@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/asset-metadata",
-  "version": "2.0.0",
+  "version": "1.1.4",
   "description": "Extended API library for polkadot.js",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
