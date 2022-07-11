@@ -4,8 +4,7 @@ import { expandMetadata, GenericExtrinsic, Metadata, StorageKey, TypeRegistry, V
 import { getSpecTypes } from '@polkadot/types-known';
 import { ValidatorId } from '@polkadot/types/interfaces';
 import { EventRecord } from '@polkadot/types/interfaces/system';
-import { Registry } from '@polkadot/types/types';
-import { RegisteredTypes } from '@polkadot/types/types/registry';
+import { Registry, RegisteredTypes } from '@polkadot/types/types';
 import { isHex, isNumber, u8aToHex } from '@polkadot/util';
 import { concat, from, Observable, of, range, throwError, timer } from 'rxjs';
 import { catchError, map, mergeMap, pairwise, retryWhen, shareReplay, switchMap, take, timeout } from 'rxjs/operators';

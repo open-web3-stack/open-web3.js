@@ -1,7 +1,6 @@
 module.exports = {
   moduleNameMapper: {
     '@open-web3/api(.*)$': '<rootDir>/packages/api/src/$1',
-    '@open-web3/api-mobx(.*)$': '<rootDir>/packages/api-mobx/src/$1',
     '@open-web3/app-util(.*)$': '<rootDir>/packages/app-util/src/$1',
     '@open-web3/asset-metadata(.*)$': '<rootDir>/packages/asset-metadata/src/$1',
     '@open-web3/dispatcher(.*)$': '<rootDir>/packages/dispatcher/src/$1',
@@ -16,7 +15,6 @@ module.exports = {
   modulePathIgnorePatterns: [
     '<rootDir>/build',
     '<rootDir>/packages/api/build',
-    '<rootDir>/packages/api-mobx/build',
     '<rootDir>/packages/app-util/build',
     '<rootDir>/packages/asset-metadata/build',
     '<rootDir>/packages/dispatcher/build',
@@ -28,5 +26,5 @@ module.exports = {
     '<rootDir>/packages/scanner/build',
     '<rootDir>/packages/util/build'
   ],
-  transformIgnorePatterns: ['/node_modules/(?!@polkadot|@acala-network|@babel/runtime/helpers/esm/)']
+  transformIgnorePatterns: ['/node_modules/(?!@polkadot|@babel/runtime/helpers/esm/)']
 };
