@@ -2,8 +2,8 @@
 /* eslint-disable */
 
 import type { Balance } from '@open-web3/orml-types/interfaces/runtime';
-import type { BTreeMap, Compact, Struct, u128, u8 } from '@polkadot/types';
-import type { ITuple } from '@polkadot/types/types';
+import type { BTreeMap, Compact, Struct, u128, u8 } from '@polkadot/types-codec';
+import type { ITuple } from '@polkadot/types-codec/types';
 
 /** @name CompactBalance */
 export interface CompactBalance extends Compact<Balance> {}

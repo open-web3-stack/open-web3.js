@@ -2,8 +2,8 @@
 /* eslint-disable */
 
 import type { AccountId, Balance, BlockNumber, FixedU128 } from '@open-web3/orml-types/interfaces/runtime';
-import type { Enum, Option, Struct, u32 } from '@polkadot/types';
-import type { ITuple } from '@polkadot/types/types';
+import type { Enum, Option, Struct, u32 } from '@polkadot/types-codec';
+import type { ITuple } from '@polkadot/types-codec/types';
 
 /** @name AuctionInfo */
 export interface AuctionInfo extends Struct {
@@ -18,6 +18,7 @@ export interface DelayedDispatchTime extends Enum {
   readonly asAt: BlockNumber;
   readonly isAfter: boolean;
   readonly asAfter: BlockNumber;
+  readonly type: 'At' | 'After';
 }
 
 /** @name DispatchId */

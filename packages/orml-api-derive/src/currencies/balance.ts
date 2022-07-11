@@ -11,7 +11,7 @@ export const balance = (
 ): ((address: AccountId | string | Uint8Array, token: any) => Observable<Balance>) => {
   return memo(instanceId, (address: AccountId | string | Uint8Array, token: any): Observable<Balance> => {
     return api.rpc.system.properties().pipe(
-      mergeMap((properties) => {
+      mergeMap((properties): Observable<Balance> => {
         const currencyId = api.registry.createType('CurrencyId' as any, token);
         const nativeTokenSymbol = properties.tokenSymbol.unwrapOrDefault()[0].toString();
         const nativeCurrencyId = api.registry.createType(
@@ -34,7 +34,7 @@ export const balance = (
         const keyType = api.registry.lookup.getTypeDef(typeId).type;
         const arg = keyType === 'CurrencyId' ? [token, address] : [address, token];
         return api.query.tokens.accounts<OrmlAccountData>(...arg).pipe(
-          map((result) => {
+          map((result: OrmlAccountData) => {
             return result.free;
           })
         );

@@ -73,7 +73,7 @@ class Scanner {
           .subscribe(updateType, subMethod, params, update)
           .catch((error) => errorHandler(error));
       } catch (error) {
-        errorHandler(error);
+        errorHandler(error as Error);
       }
 
       return (): void => {
@@ -232,7 +232,7 @@ class Scanner {
         this.metadataRequest[cacheKey] = this.rpcProvider
           .send('state_getMetadata', [hashForMetadata])
           .then((rpcdata: string) => {
-            const metadata = new Metadata(registry, rpcdata);
+            const metadata = new Metadata(registry, rpcdata as any);
 
             registry.setMetadata(metadata);
 
