@@ -3009,8 +3009,8 @@ __metadata:
   resolution: "@open-web3/util@workspace:packages/util"
   dependencies:
     "@types/big.js": ^6.1.5
-    "@yarnpkg/lockfile": ^1.1.0
     big.js: ^6.2.1
+    js-yaml: ^4.1.0
   languageName: unknown
   linkType: soft
 
@@ -4068,13 +4068,6 @@ __metadata:
     prettier:
       optional: true
   checksum: 70fee2289a4f54ec1be4d46136ee9b9893e31bf5622cead5be06c3dfb83449c3dbe6f8c03404625ccf302d0628ff9e2ea1debfae609d1bfe1d065d8f57c5dba8
-  languageName: node
-  linkType: hard
-
-"@yarnpkg/lockfile@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@yarnpkg/lockfile@npm:1.1.0"
-  checksum: 05b881b4866a3546861fee756e6d3812776ea47fa6eb7098f983d6d0eefa02e12b66c3fff931574120f196286a7ad4879ce02743c8bb2be36c6a576c7852083a
   languageName: node
   linkType: hard
 
