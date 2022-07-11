@@ -22,6 +22,7 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
           GH_RELEASE_GITHUB_API_TOKEN: ${{ secrets.GH_PAT }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
         run: |
           yarn install --immutable | grep -v 'YN0013'
           yarn ${{ matrix.step }}
