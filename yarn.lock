@@ -10572,12 +10572,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment-timezone@npm:^0.5.34":
-  version: 0.5.38
-  resolution: "moment-timezone@npm:0.5.38"
+"moment-timezone@npm:^0.5.35":
+  version: 0.5.40
+  resolution: "moment-timezone@npm:0.5.40"
   dependencies:
     moment: ">= 2.9.0"
-  checksum: ff7077de41f2c41a0026cd2b310154c14df8f918331a4ebe88f5872a599deb5e463b123c96990dc447b7474a81c9f3aef7ac57c3d0dfc3bfb9af2cc5b0bca826
+  checksum: 6f6be5412b37fd937bb143efe74bf65b2c3f115fd967a6dc13b717a126ed6dd198bff6db6e179d69a089e20ac03ce7622c6b5598dd585005195554487a91b528
   languageName: node
   linkType: hard
 
@@ -12322,10 +12322,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"retry-as-promised@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "retry-as-promised@npm:5.0.0"
-  checksum: 4d17e0597f967db0516714f0f2b085e2d1e8ea592450b013a1e0cd41dad74a9c3d1eb3c45351887de4bca1c3ac5f74dd07ef9942a3fb0e4db996a83bb28cb46e
+"retry-as-promised@npm:^7.0.3":
+  version: 7.0.4
+  resolution: "retry-as-promised@npm:7.0.4"
+  checksum: 2b0dcddb06649d42b1384ec1f933c7cb4461939c28004460b0c4be0c8ae16cabaed2411aa5d46e734a320f33f4a1d480078a19b97c743c754bd32e896b3f8ea2
   languageName: node
   linkType: hard
 
@@ -12536,8 +12536,8 @@ resolve@^2.0.0-next.3:
   linkType: hard
 
 "sequelize@npm:^6.21.2":
-  version: 6.21.2
-  resolution: "sequelize@npm:6.21.2"
+  version: 6.28.2
+  resolution: "sequelize@npm:6.28.2"
   dependencies:
     "@types/debug": ^4.1.7
     "@types/validator": ^13.7.1
@@ -12546,9 +12546,9 @@ resolve@^2.0.0-next.3:
     inflection: ^1.13.2
     lodash: ^4.17.21
     moment: ^2.29.1
-    moment-timezone: ^0.5.34
+    moment-timezone: ^0.5.35
     pg-connection-string: ^2.5.0
-    retry-as-promised: ^5.0.0
+    retry-as-promised: ^7.0.3
     semver: ^7.3.5
     sequelize-pool: ^7.1.0
     toposort-class: ^1.0.1
@@ -12562,6 +12562,8 @@ resolve@^2.0.0-next.3:
       optional: true
     mysql2:
       optional: true
+    oracledb:
+      optional: true
     pg:
       optional: true
     pg-hstore:
@@ -12572,7 +12574,7 @@ resolve@^2.0.0-next.3:
       optional: true
     tedious:
       optional: true
-  checksum: 5486ec15e80cf51e49d819c2495a05a17b5a0102866ca0af054dbc4a625d2dc6200e36189261e50234625fcf4da5cbc973eb9900591a5b9e9f63c67955196f56
+  checksum: 323f60e37105a2b2203e9932fd6bad3f93138720fcb3a707a14f0bd677463602cdedcd6cfef6d8c686d70221666186f02c73dca4ceee5cd4bac369b2c4d78e7d
   languageName: node
   linkType: hard
 
