@@ -12536,8 +12536,8 @@ resolve@^2.0.0-next.3:
   linkType: hard
 
 "sequelize@npm:^6.21.2":
-  version: 6.28.2
-  resolution: "sequelize@npm:6.28.2"
+  version: 6.29.0
+  resolution: "sequelize@npm:6.29.0"
   dependencies:
     "@types/debug": ^4.1.7
     "@types/validator": ^13.7.1
@@ -12574,7 +12574,7 @@ resolve@^2.0.0-next.3:
       optional: true
     tedious:
       optional: true
-  checksum: 323f60e37105a2b2203e9932fd6bad3f93138720fcb3a707a14f0bd677463602cdedcd6cfef6d8c686d70221666186f02c73dca4ceee5cd4bac369b2c4d78e7d
+  checksum: 3b25ef91cdf828f987deca28d5b46a5771b225687485b2f34c7a0e85269952fb7bf26cf689d1e32c94908238d6968fbab4694350407f56820f879769339c62b6
   languageName: node
   linkType: hard
 
